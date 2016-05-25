@@ -1,0 +1,76 @@
+<div class='row'>
+    <div class='col-md-12 col-lg-9'>
+        <div class="card">
+            <div class="card-header" style="background-color: #0275D8;color: #eee;">
+                <span style='flex:1 0 auto'>Change account data</span>
+            </div>
+            <div class="info-panel" *ngIf='acc_error || acc_info' [ngClass]='{error: acc_error, info: acc_info}'>{{acc_info || acc_error}}</div>
+            <div class="card-block">
+                <div class='row'>
+                    <div class='col-md-12 col-lg-9'>
+                        <form [ngFormModel]="accountForm">
+                            <div class="form-group" [ngClass]="{ 'has-error' :!accountForm.controls['username'].valid && accountSubmitted}">
+                                <label for="username">Username*</label>
+                                <input type="text" class="form-control" id="username" [(ngModel)]='user.username' placeholder="username" ngControl="username">
+                                <show-error *ngIf="accountSubmitted" control="username" [errors]="['required']"></show-error>
+                            </div>
+                            <div class="form-group" [ngClass]="{ 'has-error' :!accountForm.controls['email'].valid && accountSubmitted}">
+                                <label for="email">Email*</label>
+                                <input type="email" class="form-control" id="email" [(ngModel)]='user.email' placeholder="email" ngControl="email">
+                                <show-error *ngIf="accountSubmitted" control="email" [errors]="['required','email']"></show-error>
+                            </div>
+                            <button (click)="onSubmitAccount()" class="btn btn-primary submit-form-button">Update</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header" style="background-color: #0275D8;color: #eee;">
+                <span style='flex:1 0 auto'>Change password</span>
+            </div>
+            <div class="info-panel" *ngIf='pas_error || pas_info' [ngClass]='{error: pas_error, info: pas_info}'>{{pas_info || pas_error}}</div>
+            <div class="card-block">
+                <div class='row'>
+                    <div class='col-md-12 col-lg-9'>
+                        <form [ngFormModel]="passwordForm">
+                            <div class="form-group" [ngClass]="{ 'has-error' : !oldpassword.valid && passwordSubmitted}">
+                                <label for="oldPassword">Old Password</label>
+                                <input type="password" class="form-control" id="oldPassword" #oldpassword='ngForm' placeholder="oldPassword" ngControl="oldPassword"
+                                    [(ngModel)]='model.oldPassword'>
+                                <show-error *ngIf="passwordSubmitted" control="oldPassword" [errors]="['required']"></show-error>
+                            </div>
+                            <div class="form-group" [ngClass]="{ 'has-error' :!newpassword.valid && passwordSubmitted}">
+                                <label for="newPassword">New Password</label>
+                                <input type="password" class="form-control" #newpassword='ngForm' id="newPassword" placeholder="password" ngControl="newPassword"
+                                    [(ngModel)]='model.newPassword'>
+                                <show-error *ngIf="passwordSubmitted" control="newPassword" [errors]="['minlength', 'pattern', 'required']"></show-error>
+                            </div>
+                            <div class="form-group" [ngClass]="{ 'has-error' :!confirm.valid && passwordSubmitted}">
+                                <label for="confirm">Confirm new password</label>
+                                <input type="password" class="form-control" #confirm='ngForm' id="confirm" placeholder="confirm" ngControl="confirm" [(ngModel)]='model.confirm'>
+                                <show-error *ngIf="passwordSubmitted" control="confirm" [errors]="['confirm']"></show-error>
+                            </div>
+                            <button (click)="onSubmitPassword()" class="btn btn-primary submit-form-button">Change</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header" style="background-color: #ba1820;color: #eee;">
+                <span style='flex:1 0 auto'>Delete account</span>
+            </div>
+            <div class="card-block">
+                <div class='row'>
+                    <div class='col-md-12'>
+                        <div class="form-group">
+                            <label>Once you delete your account, there is no going back. All cars associated with this account will be deleted. Please be certain.</label>
+                        </div>
+                        <button class='btn btn-default red-text' (click)='deleteProfile()'>Delete account</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

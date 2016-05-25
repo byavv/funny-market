@@ -1,0 +1,80 @@
+.control-container {  
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.control-container > div {      
+    flex: 1 0 50%;   
+}
+
+.control-container .check-box {    
+    margin: 2px 2px;
+    padding: 8px;    
+    color: #455A64!important;
+    background: #f2f2f2;
+    border: 1px solid #cfd8dc;
+    font-size: 14px;    
+    font-weight: 300;   
+    transition: all .3s ease-in-out;
+    overflow: hidden; 
+    text-decoration: none; 
+    cursor: pointer;  
+}
+
+.control-container .check-box.active{
+    background: #ddd;
+}
+
+.control-container .check-box span.content {
+   padding: 0 5px;
+}
+
+
+.control-container .check-box span.text {
+    width: calc(100% - 87px);
+    padding: 0 8px;
+}
+
+/*
+
+
+.control-container {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.control-container > div { 
+    flex: 0 1 50%; 
+}
+
+.control-container .check-box {    
+    margin: 0 2px;
+    padding: 8px;    
+    color: #455A64!important;
+    background: #f2f2f2;
+    border: 1px solid #cfd8dc;
+    font-size: 14px;    
+    font-weight: 300;   
+    transition: all .3s ease-in-out;
+    overflow: hidden; 
+    text-decoration: none; 
+    cursor: pointer;  
+}
+
+.control-container .check-box.active{
+    background: #ddd;
+}
+
+.control-container .check-box span.content {
+   padding: 0 5px;
+}
+
+
+.control-container .check-box span.text {
+    width: calc(100% - 87px);
+    padding: 0 8px;
+}
+
+
+*/

@@ -1,0 +1,23 @@
+{
+  "name": "role",
+  "base": "Role",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "can": {
+      "type": [
+        "string"
+      ],
+      "required": true,
+      "default": [
+        "read"
+      ]
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}

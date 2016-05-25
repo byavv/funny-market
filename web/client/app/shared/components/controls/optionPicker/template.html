@@ -1,0 +1,11 @@
+<div class="control-container">
+    <div *ngFor="let option of options; let i = index">
+        <div class='check-box' [class.active]="option.active" (click)="onCheck(i)">
+            <span class='content'>
+             <i class="fa" 
+                 [ngClass]="option.active ? 'fa-circle':'fa-circle-o'" aria-hidden="true"></i> 
+             <span  class="text">{{option.description}}</span>
+            </span>
+        </div>
+    </div>
+</div>

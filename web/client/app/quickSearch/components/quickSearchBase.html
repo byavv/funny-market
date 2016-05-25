@@ -1,0 +1,64 @@
+<div class="row">
+    <div class="col-md-6 col-sm-12">            
+        <form [ngFormModel]="form">                             
+            <div class="row">
+                <div class="col-md-6 col-sm-6">
+                    <div class="form-group">
+                        <label for="maker">Made by</label>
+                        <select class="form-control" 
+                        [disabled]='loading'
+                        [ngModel]="carFormModel.maker"      
+                        #makerControl='ngForm'
+                        ngControl="maker"                                
+                        name="maker" id="maker">
+                            <option value="">Any</option>
+                            <option *ngFor="let maker of carMakers" [ngValue]="maker">{{maker.name}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-6">
+                    <div class="form-group">
+                        <label for="maker">Model</label>
+                        <select class="form-control" 
+                            [disabled]='loading || !makerControl.value'  
+                            [ngModel]="carFormModel.model"               
+                            ngControl="model"
+                            name="model" id="model">
+                            <option value="">Any</option>
+                            <option *ngFor="let model of carModels" [ngValue]="model.name">{{model.name}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 col-sm-6">
+                    <div class="form-group">
+                        <label for="yearFrom">First registration</label>
+                        <select class="form-control" name="yearFrom" 
+                        [disabled]='loading'
+                        [ngModel]="carFormModel.year"
+                        ngControl="yearFrom"
+                        id="yearFrom">
+                            <option value="">Any</option>
+                            <option *ngFor="let yearFrom of yearFroms" [value]="yearFrom">{{yearFrom}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-6">
+                    <div class="form-group">
+                        <label for="priceUp">Price up to</label>
+                        <input type="number" class="form-control" name="priceUp" id="priceUp" 
+                        [disabled]='loading'
+                        ngControl="priceUp"/>
+                    </div>
+                </div>
+            </div> 
+            <div class="row">
+                <div class="col-md-2">
+                    <button type="button" class="btn btn-default" (click)="submit()">Show {{count$ | async}}</button>                        
+               </div>
+            </div>     
+        </form>
+    </div> 
+</div>
+    

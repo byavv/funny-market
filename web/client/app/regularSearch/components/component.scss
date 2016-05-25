@@ -1,0 +1,24 @@
+.central-column {
+    position: relative;
+    flex-direction: column;
+    display: flex;
+}
+
+.search-panel {
+    display: flex;
+    flex-flow: column;
+    flex: 1 0 auto;
+}
+
+.search-panel .header {
+    flex: 0 1 auto;
+}
+
+.search-panel .content {
+    flex: 1 1 auto;
+    overflow: auto;
+}
+
+.search-panel .footer {
+    flex: 0 1 auto;
+}

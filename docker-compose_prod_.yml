@@ -1,0 +1,43 @@
+# production composition
+version: '2'
+services:      
+  redis:
+    image: redis
+  mongo:
+    image: mongo  
+  web:
+    extends:
+      file: common.yml
+      service: web
+    ports:
+     - "80:3030"
+    environment:
+     - USERS_HOST=users
+     - USERS_PORT=3001
+     - NODE_ENV=production
+     - SERVICE_PORT=3030
+    command: npm start
+  broker:
+    extends:
+      file: common.yml
+      service: broker   
+    environment:
+    - SERVICE_HOST=0.0.0.0
+    - SERVICE_PORT=1883
+    - NODE_ENV=production
+  users:
+    extends:
+      file: common.yml
+      service: users 
+    environment:
+     - SERVICE_HOST=0.0.0.0
+     - SERVICE_PORT=3001
+     - NODE_ENV=production
+  logger:
+    extends:
+      file: common.yml
+      service: logger 
+    environment:
+     - SERVICE_HOST=0.0.0.0
+     - SERVICE_PORT=3002
+     - NODE_ENV=production

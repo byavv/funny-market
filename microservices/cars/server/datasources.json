@@ -1,0 +1,13 @@
+{
+  "mongo": {
+    "host": "localhost",
+    "port": 27017,
+    "database": "devDB",
+    "name": "mongo",
+    "connector": "mongodb"
+  },
+  "db": {
+    "name": "db",
+    "connector": "memory"
+  }
+}

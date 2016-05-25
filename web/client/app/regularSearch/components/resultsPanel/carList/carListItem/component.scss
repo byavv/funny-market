@@ -1,0 +1,20 @@
+.my-card {
+    margin: 0px;
+    padding: 0px;
+    > a {
+        display: block;
+        height: 100%;
+        text-decoration: none;
+    }
+}
+
+.information-block {
+    /* padding: 2px 0;*/
+    color: #263238
+}
+
+.description-block {}
+
+.description-block .description {
+    color: #90A4AE;
+}

@@ -1,0 +1,113 @@
+<!--<div class="row column-flex _container">    
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-12 col-sm-offset-0 ">
+        <div class="row row-flex image-description">
+            <div class="col-sm-12 col-md-8 my-card left">
+                <div class="carousel">
+                    <carousel>
+                        <slide *ngFor="#image of car.images; #index=index">
+                            <img class='slide-image' [src]="image.url">
+                            <div class="carousel-caption">
+                                <h4>Slide {{index}}</h4>
+                                <p>{{image.key}}</p>
+                            </div>
+                        </slide>
+                    </carousel>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-4 my-card right">
+                <div class="row" style='width: 100%'>
+                    <div class="col-md-12 col-sm-12">
+                        <div class="row">
+                            <div class="col-md-6 col-sm-6">Maker, name:</div>
+                            <div class="col-md-6 col-sm-6"><strong>{{car.makerName + ', ' + car.modelName}}</strong></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 col-sm-6">Price:</div>
+                            <div class="col-md-6 col-sm-6"><strong>{{car.price | currency:"EUR" }}</strong></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 col-sm-6">First registration:</div>
+                            <div class="col-md-6 col-sm-6"><strong>{{car.year}}</strong></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 col-sm-6">Milage: </div>
+                            <div class="col-md-6 col-sm-6"><strong>{{car.milage}} km</strong></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 col-sm-6">Engine: </div>
+                            <div class="col-md-6 col-sm-6"><strong>{{car.engineType}}</strong></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class='col-md-10 col-md-offset-1 col-sm-12 col-sm-offset-0 col-lg-8 col-lg-offset-2'>
+        <div class="row">
+            <div class="col-sm-12 my-card">
+                {{car.description}}
+            </div>
+        </div>
+    </div>
+</div>-->
+
+
+<div class="row _container">
+    <div class="col-md-10 col-md-offset-1 col-sm-12 col-sm-offset-0 top">
+        <div class="row image-description">
+            <div class="col-sm-12 col-md-8 image-container">
+                <div class="my-card">
+                    <div class="carousel">
+                        <carousel>
+                            <slide *ngFor="let image of car.images; #index=index">
+                                <img class='img-fluid' [src]="image.url">
+                                <div class="carousel-caption">
+                                    <h4>Slide {{index}}</h4>
+                                    <p>{{image.key}}</p>
+                                </div>
+                            </slide>
+                        </carousel>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-4 info-container">
+                <div class="my-card">
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12">
+                            <div class="row">
+                                <div class="col-md-6 col-sm-6">Maker, name:</div>
+                                <div class="col-md-6 col-sm-6"><strong>{{car.makerName + ', ' + car.modelName}}</strong></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 col-sm-6">Price:</div>
+                                <div class="col-md-6 col-sm-6"><strong>{{car.price | currency:"EUR" }}</strong></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 col-sm-6">First registration:</div>
+                                <div class="col-md-6 col-sm-6"><strong>{{car.year}}</strong></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 col-sm-6">Milage: </div>
+                                <div class="col-md-6 col-sm-6"><strong>{{car.milage}} km</strong></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 col-sm-6">Engine: </div>
+                                <div class="col-md-6 col-sm-6"><strong>{{car.engineType}}</strong></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class='col-md-10 col-md-offset-1 col-sm-12 col-sm-offset-0 bottom'>
+        <div class="row">
+            <div class="col-sm-12 description-container">
+                <div class="my-card">
+                     {{car.description}}
+                </div>               
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,32 @@
+<div class="card">
+    <div class="card-header" style="position: relative; display: flex;">
+        <span style='flex:1 0 auto'>Added cars</span>
+        <div [routerLink]="['MasterBase']" class="btn-group options">
+            <a href='' class="btn options-button" style='padding: 1px 6px'>
+                <i class="fa fa-plus" aria-hidden="true"></i>
+            </a>
+        </div>
+    </div>
+    <div class="card-block">
+        <div class="row">
+            <div class="col-sm-12 col-md-12" style='position:relative' style='min-height: 500px'>
+                <loader [async]='operateCars$' [active]='loading' [delay]='500'></loader>
+                <div class='car-list'>
+                    <div *ngFor="let car of  cars">
+                        <div class='car-container'>
+                            <div class='model-info'>
+                                <label>{{car.makerName}} {{car.modelName}}, {{car.year}}</label>
+                            </div>
+                            <img [src]="(car.images[0]?.url)" alt="image">
+                            <div class='command-buttons'>
+                                <a [routerLink]="['MasterBase', {id: car.id}]" class='btn btn-primary btn-sm'>Edit</a>
+                                <a href="" (click)="deleteCar(car)" class='btn btn-danger btn-sm' style="float:right">Delete</a>
+                            </div>
+                        </div>
+                    </div>
+                    <h4 *ngIf='cars.length == 0 && !loading' style='text-align: center; padding: 10px 0;'>No cars added</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,40 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "main": "server/server.js",
+  "scripts": {
+    "start": "node .",
+    "pretest": "jshint .",
+    "posttest": "nsp check"
+  },
+  "dependencies": {
+    "amqplib": "^0.4.1",
+    "async": "^2.0.0-rc.3",
+    "aws-sdk": "^2.3.5",
+    "body-parser": "^1.15.0",
+    "compression": "^1.0.3",
+    "cors": "^2.5.2",
+    "etcd-registry": "^2.1.1",
+    "helmet": "^0.14.0",
+    "loopback": "^2.22.0",
+    "loopback-boot": "^2.6.5",
+    "loopback-component-explorer": "^2.1.0",
+    "loopback-component-storage": "^1.7.0",
+    "loopback-connector-mongodb": "^1.13.3",
+    "loopback-datasource-juggler": "^2.39.0",
+    "loopback-ds-timestamp-mixin": "^3.2.4",
+    "multer": "^1.1.0",
+    "multer-s3": "^2.1.0",
+    "serve-favicon": "^2.0.1",
+    "sift": "^3.2.1"
+  },
+  "devDependencies": {
+    "jshint": "^2.5.6",
+    "nsp": "^2.1.0"
+  },
+  "repository": {
+    "type": "",
+    "url": ""
+  },
+  "description": "api"
+}

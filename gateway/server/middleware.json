@@ -1,0 +1,71 @@
+{
+  "initial:before": {
+    "loopback#token": {}
+  },
+  "initial": {
+    "compression": {},
+    "cors": {
+      "params": {
+        "origin": true,
+        "credentials": true,
+        "maxAge": 86400
+      }
+    },
+    "helmet#xssFilter": {},
+    "helmet#frameguard": {
+      "params": [
+        "deny"
+      ]
+    },
+    "helmet#hsts": {
+      "params": {
+        "maxAge": 0,
+        "includeSubdomains": true
+      }
+    },
+    "helmet#hidePoweredBy": {},
+    "helmet#ieNoOpen": {},
+    "helmet#noSniff": {},
+    "helmet#noCache": {
+      "enabled": false
+    }
+  },
+  "session": {},
+  "auth": {},
+  "parse": {
+    "body-parser#json": {
+      "methods": [
+        "POST"
+      ],
+      "paths": "/auth*"
+    },
+    "body-parser#urlencoded": {
+      "methods": [
+        "POST"
+      ],
+      "paths": "/auth*",
+      "params": {
+        "extended": true
+      }
+    }
+  },
+  "routes": {},
+  "proxies": {
+    "./middleware/proxy": {
+      "params": {
+        "proxyTable": "${proxyTable}",
+        "signedSSLOnly": false,
+        "principalPropogation": true,
+        "xForwardHeaders": true,
+        "secret": "${secret}",
+        "expires": 5000
+      }
+    }
+  },
+  "final": {
+    "loopback#urlNotFound": {}
+  },
+  "final:after": {
+    "loopback#errorHandler": {}
+  }
+}

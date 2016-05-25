@@ -1,0 +1,53 @@
+{
+  "_meta": {
+    "sources": [
+      "loopback/common/models",
+      "loopback/server/models",
+      "../common/models",
+      "./models"
+    ],
+    "mixins": [
+      "loopback/common/mixins",
+      "loopback/server/mixins",
+      "../common/mixins",
+      "../node_modules/loopback-ds-timestamp-mixin",
+      "./mixins"
+    ]
+  },
+  "CarModel": {
+    "dataSource": "mongo",
+    "public": false,
+    "$promise": {},
+    "$resolved": true
+  },
+  "Maker": {
+    "dataSource": "mongo",
+    "public": true,
+    "$promise": {},
+    "$resolved": true
+  },
+  "Car": {
+    "dataSource": "mongo",
+    "public": true,
+    "$promise": {},
+    "$resolved": true
+  },
+  "CarType": {
+    "dataSource": "mongo",
+    "public": false,
+    "$promise": {},
+    "$resolved": true
+  },
+  "CarOption": {
+    "dataSource": "mongo",
+    "public": false,
+    "$promise": {},
+    "$resolved": true
+  },
+  "EngineType": {
+    "dataSource": "mongo",
+    "public": true,
+    "$promise": {},
+    "$resolved": true
+  }
+}

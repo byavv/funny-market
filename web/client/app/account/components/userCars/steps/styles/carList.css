@@ -1,0 +1,67 @@
+.car-list > div {            
+    display: inline-block;             
+    margin-bottom: 5px;   
+}
+@media only screen and (min-width: 34em) {
+    .car-list > div { width: 50%; }
+}        
+@media only screen and (min-width: 48em) {
+    .car-list > div { width: 33.333%; }
+}
+@media only screen and (min-width: 62em) {
+    .car-list > div { width: 20%; }
+}        
+
+.car-list .car-container {
+    position: relative; 
+    background-color: #eee;
+    margin: 0 5px 0 0;
+    height: 100%;
+    border-bottom: 1px solid #ddd;
+    padding: 2px;
+}
+.car-container img {           
+    height: 100%;           
+    width: 100%;                      
+}
+.car-container > .model-info {
+    background-color: rgba(250, 250, 250, 0.75);
+    position: absolute;
+    top:2px;
+    width: calc(100% - 4px);
+    height: 35px;
+    padding: 7px 8px;         
+}
+.model-info > label {            
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    cursor: pointer;
+    display: inline-block;
+    overflow: hidden;
+}
+.car-container:hover > .model-info {
+    background-color: rgba(250, 250, 250, 0.9);
+}
+.command-buttons{
+    visibility: hidden;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 10px;
+}
+.car-container:hover > .command-buttons{
+    visibility: initial;
+}
+a.add-new{
+    background-color: #398CD3;
+    float: right;
+    color: white;
+    padding: 5px 10px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    margin: 5px 18px;
+    text-decoration: none;
+}
+        

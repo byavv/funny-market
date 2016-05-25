@@ -1,0 +1,18 @@
+<div class='my-card summary-panel-container'>
+    <div class="row">
+        <div class="col-sm-12" style='display: flex;'>
+            <div class="btn-group options hidden-md-up" style='flex: 1 1 auto; padding-right:15px;'>
+                <button type="button" class="btn options-button" style='padding: 3px 6px' (click)='searchClick.next()'>
+                    <i class="fa fa-search" aria-hidden="true"></i>                         
+                </button>
+            </div>
+            <span style='flex: 1 1 100%; padding-top: 0.3em;'>
+                 <h4 style='display:inline'>{{loading ? 'Loading...': 'Showed ' + label + ' vehicles matched'}}</h4>
+            </span>
+            <div style='flex: 1 0 auto;'>
+                <searchOptions [sort]='sort' [limit]='limit' (changed)="onChanged($event)"></searchOptions>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- scroll to top when click -->

@@ -1,0 +1,26 @@
+<section>
+    <br>
+    <div class="row">
+        <div class="col-xs-offset-2 col-xs-8 col-md-4 col-md-offset-4">
+            <div class="login-form-container">
+                <div *ngIf="!!error">
+                    {{error}}
+                </div>
+                <form [ngFormModel]="signInForm" no-validate (submit)="onSubmit(signInForm.value)">
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" class="form-control" id="username" #username="ngForm" placeholder="name" ngControl="username">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" class="form-control" id="password" #password="ngForm" placeholder="password" ngControl="password">
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary submit-form-button">Submit</button>
+                    </div>
+                </form>
+                <a [routerLink]="['SignUp']"> REGISTER </a>
+            </div>
+        </div>
+    </div>
+</section>

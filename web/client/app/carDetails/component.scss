@@ -1,0 +1,46 @@
+@mixin flex() {
+	display: -webkit-box;
+	display: -moz-box;
+	display: -ms-flexbox;
+	display: -webkit-flex;
+	display: flex;
+	flex: 1 1 auto;
+}
+
+.my-card {
+	margin-bottom: 0.3rem;
+}
+
+@media (max-width: 47.9em) {
+	.image-container {
+		padding-right: 0.9375rem!important;
+	}
+	.info-container {
+		padding-left: 0.9375rem!important;
+	}
+}
+
+.right.left  {
+	@include flex();
+}
+
+
+.image-container {
+	display: flex;
+	.my-card {
+		flex: 1;
+	}
+	padding-right: 0.3rem;
+}
+
+.descripton-container {
+	display: flex;
+}
+
+.info-container {
+	display: flex;
+	.my-card {
+		flex: 1;
+	}
+	padding-left: 0.3rem;
+}

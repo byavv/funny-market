@@ -1,0 +1,9 @@
+:host >>> .next-button{
+    width: 100%;
+    padding: 0.75rem;
+}
+
+:host >>> .block-info{
+    min-height: 150px;
+}
+

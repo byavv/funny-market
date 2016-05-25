@@ -1,0 +1,9 @@
+<div #container style='display: flex;flex-wrap: wrap;'>
+    <div *ngFor="let color of colors; let i = index" class="color">
+        <div class="color-picker" 
+            [class.active]="color.active" 
+            (click)="selectColor(i)" 
+            [style.background-color]="color.color">
+        </div>
+    </div>
+</div>

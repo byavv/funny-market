@@ -1,0 +1,9 @@
+{
+  "mongo": {
+    "host": "${mongo_host}",
+    "port": 27017,
+    "database": "devDB",
+    "name": "mongo",
+    "connector": "mongodb"
+  }
+}

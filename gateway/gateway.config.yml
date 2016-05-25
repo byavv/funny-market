@@ -1,0 +1,92 @@
+# Roles and permissions defaults:
+#
+#    - admin: ['read', 'write']
+#    - user: ['read']
+#
+
+# Grant access options
+# ex. grants access for any user whose role has permission to 'read' or 'publish' for posting data on '/sampleapi':
+#
+#       - url: /sampleapi
+#         grant: ['read','publish']   
+#         methods: ['post']  
+#
+# ex. grant for anyone. Proxy doesn't take into account user's authentication at all:
+#            
+#       - url: /sampleapi
+#         methods: *
+#         grant: '*'
+
+access:
+    - url: /api
+      methods: '*'
+      grant: '*'
+    
+  #  - url: /api/cars
+  #    methods: ['delete']
+  #    grant: ['read']
+      
+    - url: /profiles/signup
+      methods: ['post']
+      grant: '*'
+      
+    - url: /profiles/me
+      methods: ['post']
+      grant: ['read']
+    
+    - url: /tracks
+      methods: '*'
+      grant: '*'
+    
+    - url: /users
+      methods: ['post']
+      grant: ['read']
+      
+    - url: /_dashboard
+      methods: '*'
+      grant: ['write']
+      
+# Define path, client requests will be redirected to.
+# ex. 
+#    - rule: '.*/api'
+#      mapTo: 'https://my.remote.com:3004/api'
+#
+# Any request to the proxy server with '/api' path will be mapped 
+# to the server running on https://my.remote.com:3004/api
+
+proxy:
+# .*/api -> cars/api where cars is discovered url 
+    - rule: '.*/api'
+      mapTo: 'cars'
+      withPath: '/api'
+      
+    - rule: '.*/profiles'
+      mapTo: 'profile'
+      withPath: '/profiles'
+    
+    - rule: '/tracks'
+      mapTo: 'tracker'
+      withPath: '/tracks'
+    
+    - rule: '.*/users'
+      mapTo: 'profile'
+      withPath: '/users'
+      
+    - rule: '/'
+      mapTo: 'web'
+      withPath: '/'    
+      
+    - rule: '/_dashboard'
+      mapTo: 'admin'
+      withPath: '/' 
+      
+# Define rate limiting for any url, proxied by the server.
+# Uses https://github.com/jhurliman/node-rate-limiter, so
+# interval and limit options are equal to node-rate-limiter's (see link below)
+
+rate: 
+# max 5 requests per minute    
+    - paths: ['/auth*']
+      methods: ['post']
+      interval: 60000
+      limit: 5

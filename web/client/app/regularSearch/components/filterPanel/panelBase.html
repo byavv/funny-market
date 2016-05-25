@@ -1,0 +1,20 @@
+<div class="row">
+    <div class="col-md-12 col-sm-12">
+        <div class="panel panel-default busyable">
+            <loader [async]='filterController.updateFilterPanel$' [active]='!alreadyLoaded'></loader>
+            <div class="panel-heading" style="background-color: #fff">
+                <span class="link" (click)="detailedSearch()">Detailed Search
+                <i class="glyphicon glyphicon-circle-arrow-right"></i>
+            </span>
+            </div>
+            <div class="panel-body">
+                <filterWrapper #wrapper *ngFor="let filter of filters" [filter]="filter" (changed)="onFilterValueChanged($event)">
+                </filterWrapper>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12 col-sm-12 hidden-md-up">
+        <hr>
+        <button class='btn btn-primary' (click)='closePanel()' style='width: 100%'>Show ({{count}})</button>
+    </div>
+</div>

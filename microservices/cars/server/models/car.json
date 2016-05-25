@@ -1,0 +1,89 @@
+{
+  "name": "Car",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "description": {
+      "type": "string"
+    },
+    "milage": {
+      "type": "number"
+    },
+    "color": {
+      "type": "string"
+    },    
+    "price": {
+      "type": "number"
+    },
+    "year": {
+      "type": "number"
+    },
+    "engineType": {
+      "type": "string",
+      "default": "petrol",
+      "required": true
+    },
+    "gear": {
+      "type": "string"
+    },
+    "makerName": {
+      "type": "string"
+    },
+    "modelName": {
+      "type": "string"      
+    },
+    "options": {
+      "type": [
+        "string"
+      ]
+    },
+    "images": {
+      "type": [
+        "object"
+      ]
+    },
+    "userId": {
+      "type": "string"
+    }
+  },
+  "mixins": {
+    "TimeStamp": {
+      "createdAt": "added",
+      "updatedAt": "updated",
+      "required": false,
+      "validateUpsert": true
+    }
+  },
+  "validations": [],
+  "relations": {
+    "maker": {
+      "type": "belongsTo",
+      "model": "Maker",
+      "foreignKey": "makerId"
+    },
+    "carModel": {
+      "type": "belongsTo",
+      "model": "CarModel",
+      "foreignKey": "carModelId"
+    },   
+    "carType": {
+      "type": "hasOne",
+      "model": "CarType",
+      "foreignKey": "carTypeId"
+    },
+    "carOptions": {
+      "type": "hasAndBelongsToMany",
+      "model": "CarOption"
+    },
+    "engineType": {
+      "type": "belongsTo",
+      "model": "EngineType",
+      "foreignKey": "engineTypeId"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

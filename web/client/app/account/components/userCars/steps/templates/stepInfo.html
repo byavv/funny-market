@@ -1,0 +1,61 @@
+<div class="row">
+    <div class="col-md-12 col-lg-9 col-sm-12">
+        <div class="my-card">
+            <form [ngFormModel]="form" #carForm="ngForm" class="form-horizontal">
+                <div class="form-group">
+                    <div class="col-sm-6">
+                        <label for="maker">Made by</label>
+                        <select class="form-control" name="maker" id="maker" ngControl="maker" [(ngModel)]='maker' [disabled]='loading'>
+                        <option *ngFor="let maker of makers" [ngValue]="maker">{{maker.name}}</option>
+                    </select>
+                        <show-error *ngIf="submitted" control="maker" [errors]="['required']"></show-error>
+                    </div>
+                    <div class="col-sm-6"><label for="maker">Model</label>
+                        <select class="form-control" name="model" id="model" ngControl="model" [(ngModel)]='model' [disabled]="loading || !maker">
+                        <option *ngFor="let model of models" [ngValue]="model">{{model.name}}</option>
+                    </select>
+                        <show-error *ngIf="submitted" control="model" [errors]="['required']"></show-error>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-4">
+                        <label for="milage">Milage</label>
+                        <input type="milage" id="milage" type="number" class="form-control" [(ngModel)]='car.milage' placeholder="5000..." ngControl="milage">
+                        <show-error *ngIf="submitted" control="milage" [errors]="['required']"></show-error>
+                    </div>
+                    <div class="col-sm-4">
+                        <label for="year">Year</label>
+                        <input type="year" id="year" type="number" class="form-control" [(ngModel)]='car.year' placeholder="2016..." ngControl="year">
+                        <show-error *ngIf="submitted" control="year" [errors]="['required']"></show-error>
+                    </div>
+                    <div class="col-sm-4">
+                        <label for="price">Price</label>
+                        <input type="price" id="price" type="number" class="form-control" [(ngModel)]='car.price' placeholder="2016..." ngControl="price">
+                        <show-error *ngIf="submitted" control="price" [errors]="['required']"></show-error>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-12" for="description">Description</label>
+                    <div class="col-sm-12">
+                        <textarea type="description" id="description" type="text" class="form-control" [(ngModel)]='car.description' placeholder="2016..."
+                                ngControl="description">
+                        </textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-12">Color</label>
+                    <div class="col-sm-6">
+                        <colorPicker ngControl="color" [(ngModel)]='car.color' single>
+                        </colorPicker>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="col-md-12 col-lg-3 col-sm-12">
+        <button type="button" (click)="onSubmit(carForm)" class="btn btn-primary next-button">
+           <i class="fa fa-arrow-right" aria-hidden="true"></i>
+                Next add images
+        </button>
+    </div>
+</div>

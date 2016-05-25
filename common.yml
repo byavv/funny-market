@@ -1,0 +1,17 @@
+version: '2'
+services:
+  proxy:
+    build: ./gateway
+    environment:    
+     - NODE_ENV  
+    # common options
+  web:
+    build: ./web   
+    # common options
+  cars:
+    build: ./microservices/cars
+  profile:
+    build: ./microservices/profile 
+  tracker:
+    build: ./microservices/tracker   
+  

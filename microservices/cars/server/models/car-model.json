@@ -1,0 +1,29 @@
+{
+  "name": "CarModel",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "name": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {
+    "maker": {
+      "type": "belongsTo",
+      "model": "Maker",
+      "foreignKey": "makerId"
+    },
+    "cars": {
+      "type": "hasMany",
+      "model": "Car",
+      "foreignKey": "carModelId"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

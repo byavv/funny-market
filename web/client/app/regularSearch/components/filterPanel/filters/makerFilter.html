@@ -1,0 +1,33 @@
+<div class='row'>
+    <div class="col-md-12 col-sm-12">
+        <div><strong>Make, model</strong></div>
+        <span>{{viewValue}}</span>
+        <a href="" class="pull-right open-link" (click)="openFilter()">change</a>
+    </div>
+    <div *ngIf='opened' class="col-md-12 col-sm-12 box-content">
+        <div class="form-group">
+            <label for="maker">Made by</label>
+            <select class="form-control" id="maker" [ngFormControl]='makerControl' [disabled]='loading' [(ngModel)]="maker">
+                    <option value="">Any</option>
+                    <option *ngFor="let maker of carMakers" [ngValue]="maker">{{maker.name}}</option>
+                </select>
+        </div>
+        <div class="form-group">
+            <label for="model">Model</label>
+            <select class="form-control" id="model" [disabled]='loading || !maker' [ngFormControl]='modelControl' [(ngModel)]="model">
+                    <option value="">Any</option>
+                    <option *ngFor="let model of models" [ngValue]="model">{{model.name}}</option>
+                </select>
+        </div>
+        <div class="row">
+            <div class="col-md-12 col-sm-12" style='display: flex;'>
+                <button class="btn btn-primary" (click)="applyFilter()" style='flex: 1;margin-right: 5px;'>
+                        Apply
+                    </button>
+                <button class="btn btn-primary" (click)="closeFilter()" style='flex: 1;'>
+                        Cancel
+                    </button>
+            </div>
+        </div>
+    </div>
+</div>

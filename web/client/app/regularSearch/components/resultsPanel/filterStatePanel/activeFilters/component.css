@@ -1,0 +1,25 @@
+.filters-container{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+}
+.filter-item-container {  
+    padding: 0 5px 5px 0;    
+    flex: 0 1 auto;
+    min-width: 25%; 
+}
+
+.filter-item{
+    border-radius: 2px;
+    font-size: 0.9em;
+    padding: 3px;
+    border: 1px solid #cfd8dc;
+    background: #ECEFF1;
+    color: #455A64;
+    border-color: #cfd8dc;    
+}
+
+.filter-item span{
+    cursor: pointer;
+    margin-left:5px;
+}       

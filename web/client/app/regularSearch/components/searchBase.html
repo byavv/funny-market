@@ -1,0 +1,50 @@
+<div class="row" bs4-spy #bs4Spy='rSpy' style='position: relative'>   
+    <div [hidden]='!filterPanel.opened && bs4Spy.widthSm' class=" col-sm-12 col-md-4 col-lg-3 padding-shrink-right left-side-column">
+        <div class='my-card' 
+            sticky [startFrom]='70'            
+            bindWidthTo="left-side-column" 
+            [active]='!bs4Spy.widthSm'><!-- don't activate sticking when small screen -->
+            <carFilterPanel (changed)="doSearch($event)" #filterPanel></carFilterPanel>
+        </div>
+    </div>   
+    <div [hidden]='filterPanel.opened && bs4Spy.widthSm' class="col-sm-12 col-md-8 col-lg-7 padding-shrink-right padding-shrink-left central-column">       
+        <div scroll-spy #s='sSpy' [boundary]='sizeSpy.height + 55' class='search-panel'>           
+            <div class='header' size #sizeSpy='size'>
+                <state-full
+                    [state]='filterController.state$'
+                    [totalCount]='totalCount'                     
+                    (searchClick)='filterPanel.openPanel()'
+                    (changed)="doSearch($event)">
+                </state-full>               
+            </div>          
+             <div class='header' [style.opacity]="(s.collapse$ | async) ? 1 : 0" style='position: fixed;'                   
+                    sticky 
+                    [startFrom]="70" 
+                    [active]="(s.collapse$ | async) && (panelSizeSpy.height > bs4Spy.height)" 
+                    bindWidthTo="central-column">
+                <state-summary
+                    [state]='filterController.state$'
+                    [totalCount]='totalCount'                     
+                    (searchClick)='filterPanel.openPanel()'
+                    (changed)="doSearch($event)">
+                </state-summary>               
+            </div>
+             <div class='content' style='display: flex;'>                 
+                <div class="my-card" size #panelSizeSpy='size' style='flex: 1; position: relative;'>
+                    <loader [active]='loading' [async]='found$'></loader>
+                    <carsList [cars]='found$'></carsList>
+                </div>
+            </div> 
+            <div class="footer">
+                <searchPage [totalPages]="totalCount" (changed)="doSearch($event)">
+                </searchPage>
+            </div>
+        </div>
+    </div>
+    <div class='col-md-2 col-lg-2 hidden-md-down padding-shrink-left'>
+        <div class='my-card' style='position: relative'>
+            <lastAdded></lastAdded>
+        </div>
+    </div>   
+</div>
+

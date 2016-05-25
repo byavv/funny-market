@@ -1,0 +1,29 @@
+version: '2'
+services:
+  mongo:
+    image: mongo
+  proxy:
+    extends:
+      file: common.yml
+      service: proxy
+    ports:
+     - "3001:3001"
+     - "3002:3002"
+    environment:        
+     - HTTP_PORT=3001  
+     - HTTPS_PORT=3002
+    depends_on:
+      - mongo
+    command: npm start  
+  etcd:
+    image: microbox/etcd:latest   
+    command: '--name etcd'
+    ports:
+     - '4001:4001'
+  rabbitmq:    
+    build: ./broker
+    ports:
+     - '5672:5672'
+     - '15672:15672'
+     - '1883:1883'
+
