@@ -3,8 +3,8 @@ var multerS3 = require('multer-s3');
 var aws = require('aws-sdk');
 
 var s3 = new aws.S3({
-    accessKeyId: 'AKIAJKHY45HRXJI3RXKQ',
-    secretAccessKey: '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',
+    accessKeyId: 'xxxxxx',
+    secretAccessKey: 'xxxxxx',
     signatureVersion: 'v4'
 })
 
