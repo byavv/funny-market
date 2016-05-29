@@ -1,3 +1,4 @@
+[![CircleCI](https://circleci.com/gh/byavv/funny-market.svg?style=svg)](https://circleci.com/gh/byavv/funny-market)
 # Don't use me yet, under development
 
 This is a proof-of-concept application, which demonstrates Microservice Architecture Pattern using Javascript stack and Docker.

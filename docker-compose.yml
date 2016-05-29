@@ -1,20 +1,68 @@
 version: '2'
 services:
-  mongo:
+  ######## databases ##################
+  cars-db:    
     image: mongo
-  proxy:
+  profile-db:    
+    image: mongo
+  ######## microservices  #############
+  gateway:
     extends:
       file: common.yml
-      service: proxy
-    ports:
-     - "3001:3001"
-     - "3002:3002"
-    environment:        
-     - HTTP_PORT=3001  
-     - HTTPS_PORT=3002
+      service: gateway        
     depends_on:
-      - mongo
-    command: npm start  
+      - profile-db
+      - etcd
+    environment: 
+      - DBSOURCE_HOST=profile-db
+      - ETCD_HOST=etcd
+    command: npm start
+  cars:    
+    extends:
+      file: common.yml
+      service: cars   
+    depends_on:
+      - cars-db
+      - etcd
+      - rabbitmq
+    command: npm start
+    environment: 
+      - DBSOURCE_HOST=cars-db
+      - BROCKER_HOST=rabbitmq
+      - ETCD_HOST=etcd
+  profile:    
+    extends:
+      file: common.yml
+      service: profile        
+    depends_on:      
+      - etcd
+      - rabbitmq
+      - profile-db
+    environment: 
+      - DBSOURCE_HOST=profile-db
+      - ETCD_HOST=etcd
+    command: npm start
+   image:    
+    extends:
+      file: common.yml
+      service: image        
+    depends_on:      
+      - etcd
+      - rabbitmq      
+    environment:     
+      - ETCD_HOST=etcd
+    command: npm start
+  ######################################
+  web:
+    extends:
+      file: common.yml
+      service: web       
+    depends_on:      
+      - etcd
+    environment:
+      - ETCD_HOST=etcd
+    command: npm start
+  ####### logical group  ###############
   etcd:
     image: microbox/etcd:latest   
     command: '--name etcd'
@@ -26,4 +74,4 @@ services:
      - '5672:5672'
      - '15672:15672'
      - '1883:1883'
-
+  ######################################

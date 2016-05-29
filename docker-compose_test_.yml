@@ -1,42 +1,32 @@
-# test composition
 version: '2'
-services:      
-  redis:
-    image: redis
-  mongo:
-    image: mongo  
+services: 
+  gateway:
+    extends:
+      file: common.yml
+      service: gateway
+    command: npm test
+    environment:        
+      - NODE_ENV=test
+  cars:    
+    extends:
+      file: common.yml
+      service: cars 
+    command: npm test
+    environment:        
+      - NODE_ENV=test     
+  profile:    
+    extends:
+      file: common.yml
+      service: profile
+    command: npm test
+    environment:        
+      - NODE_ENV=test
   web:
     extends:
       file: common.yml
       service: web
-    ports:
-     - "80:3030"
-    environment:
-     - USERS_HOST=users
-     - USERS_PORT=3001
-     - NODE_ENV=test 
     command: npm test
-  broker:
-    extends:
-      file: common.yml
-      service: broker   
-    environment:
-    - SERVICE_HOST=0.0.0.0
-    - SERVICE_PORT=1883
-    - NODE_ENV=test
-  users:
-    extends:
-      file: common.yml
-      service: users 
-    environment:
-     - SERVICE_HOST=0.0.0.0
-     - SERVICE_PORT=3001
+    environment:        
      - NODE_ENV=test
-  logger:
-    extends:
-      file: common.yml
-      service: logger 
-    environment:
-     - SERVICE_HOST=0.0.0.0
-     - SERVICE_PORT=3002
-     - NODE_ENV=test
+  
+  
