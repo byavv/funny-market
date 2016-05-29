@@ -1,8 +1,9 @@
 import {Component, EventEmitter, Input, Output, OnInit, ViewEncapsulation} from '@angular/core';
 import {FORM_DIRECTIVES, ControlGroup, FormBuilder} from '@angular/common';
-import {ConverterProvider, convertToView, IFilterComponent, OptionsConverter} from '../../../../shared/lib/';
+import {ConverterProvider, convertToView, FilterComponent, OptionsConverter} from '../../../../shared/lib/';
 import {OptionsPickerControl} from "../../../../shared/components/controls/optionPicker/optionPicker";
 import {AppController} from '../../../../shared/services/';
+import {FilterController} from '../../../services/filterController';
 
 @Component({
     selector: 'option-filter',
@@ -36,12 +37,14 @@ import {AppController} from '../../../../shared/services/';
 @ConverterProvider({
     bindWith: OptionsConverter
 })
-export class OptionsFilterComponent implements IFilterComponent {
+export class OptionsFilterComponent extends FilterComponent {
     @Input()
     active: boolean;
     @Input()
     filterValue: any;
-    constructor(private appController: AppController) { }
+    constructor(private appController: AppController, filterController: FilterController) {
+        super(filterController)
+    }
     options = [];
     ngOnInit() {
         this.appController.init$.subscribe((value) => {
@@ -55,7 +58,7 @@ export class OptionsFilterComponent implements IFilterComponent {
                 { name: 'op2', description: 'super-option7' },
                 { name: 'op2', description: 'super-option8' },
                 { name: 'op2', description: 'super-option9' },
-                { name: 'op2', description: 'super-option10' }                
+                { name: 'op2', description: 'super-option10' }
             ]
         })
     }
@@ -68,4 +71,9 @@ export class OptionsFilterComponent implements IFilterComponent {
     get viewValue() {
         return this.filterValue;
     }
+    setValue(value) {
+        this.filterValue = value;
+        this.changed.next({ filterValue: this.filterValue, immidiate: true });
+    }
+
 }

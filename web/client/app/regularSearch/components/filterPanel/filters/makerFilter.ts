@@ -3,19 +3,21 @@ import {FORM_DIRECTIVES, Control} from '@angular/common';
 import {ROUTER_DIRECTIVES, RouteParams} from '@angular/router-deprecated';
 import {Api} from '../../../../shared/services/';
 import {Observable, Subscription} from 'rxjs';
-import {ConverterProvider, convertToView, IFilterComponent, MakerConverter}  from '../../../../shared/lib/';
+import {ConverterProvider, convertToView, FilterComponent, MakerConverter}  from '../../../../shared/lib/';
 import {AppController} from '../../../../shared/services/';
 import {isString, isBlank} from '@angular/compiler/src/facade/lang';
+import {FilterController} from '../../../services/filterController';
+
 @Component({
     selector: 'makerWrapper',
-    template: require("./makerFilter.html"),   
+    template: require("./makerFilter.html"),
     directives: [FORM_DIRECTIVES]
 })
 
 @ConverterProvider({
     bindWith: MakerConverter
 })
-export class makerFilterComponent implements IFilterComponent {
+export class MakerFilterComponent extends FilterComponent {
     @Input()
     active: boolean;
     maker;
@@ -43,18 +45,44 @@ export class makerFilterComponent implements IFilterComponent {
     oldValue: any;
     subscription: Subscription;
 
-    constructor(private apiService: Api, private appController: AppController) { }
+    constructor(private apiService: Api, private appController: AppController,
+        filterController: FilterController) {
+        super(filterController);
+    }
 
-    ngOnInit() {
+    ngAfterViewInit() {
         this.appController.init$.subscribe(value => {
             this.carMakers = value.makers;
             this._resetView();
         })
+        /* this.makerControl
+             .valueChanges
+             .distinctUntilChanged()
+             .do(() => { this.loading = true })
+             .switchMap((value: any) => (value && value.id) ? this.apiService.getMakerModels(value.id) : Observable.of([]))
+             .subscribe((models: Array<any>) => {
+                 this.loading = false;
+                 this.models = models || [];
+                 this.model = this.models.find((model) => model.name == this.filterValue.model) || '';
+                 this.filterValue = { maker: this.maker ? this.maker.name : '' }
+             })
+ 
+         this.modelControl
+             .valueChanges
+             .distinctUntilChanged()
+             .subscribe(model => {
+                 // model may be undefined or '', the latter is correct for 'any' value
+                 if (model != undefined)
+                     this.filterValue = { model: this.model ? this.model.name : '' }
+             })*/
+
+
         this.makerControl
             .valueChanges
             .distinctUntilChanged()
             .do(() => { this.loading = true })
             .switchMap((value: any) => (value && value.id) ? this.apiService.getMakerModels(value.id) : Observable.of([]))
+
             .subscribe((models: Array<any>) => {
                 this.loading = false;
                 this.models = models || [];
@@ -73,13 +101,12 @@ export class makerFilterComponent implements IFilterComponent {
     }
 
     _resetView() {
-        this.maker = this.carMakers.find(maker => maker.name == this.filterValue.maker) || '';
-        if (this.models) {
-            let model = this.models.find((model) => model.name == this.filterValue.model) || '';
-            if (model) {
-                this.model = model;
-            }
+        if (this.carMakers) {
+            this.maker = this.carMakers.find(maker => maker.name == this.filterValue.maker) || '';
         }
+      //  if (this.models) {
+      //      this.model = this.models.find((model) => model.name == this.filterValue.model) || '';
+      //  }
     }
 
     ngOnDestroy() {
@@ -112,5 +139,9 @@ export class makerFilterComponent implements IFilterComponent {
     resetFilter() {
         this.filterValue.model = this.filterValue.maker = null;
         this.changed.next({ filterValue: this.filterValue, immidiate: true })
+    }
+    setValue(value) {
+        this.filterValue = value;
+        this.changed.next({ filterValue: this.filterValue, immidiate: true });
     }
 }

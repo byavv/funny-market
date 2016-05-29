@@ -1,6 +1,6 @@
 import {ConverterBase} from "./ConverterBase";
 import {Converter} from "../decorators";
-
+import {isNumber, NumberWrapper, StringWrapper, isString, isPresent} from "@angular/compiler/src/facade/lang";
 @Converter({
     converterId: "price",
     roteParams: ["price"]
@@ -9,18 +9,19 @@ export class PriceConverter extends ConverterBase {
 
     public convert(value) {
         value = value[0];
-        let priceFrom, priceUp;
-        priceFrom = priceUp = "";
+        let priceFrom = "", priceUp = "";
         let active = false;
 
         if (this.isNumeric(value)) {
             priceFrom = priceUp = value;
         } else {
-            if (this.isString(value) && value.includes("..")) {
+            if (isString(value) && StringWrapper.contains(value, "..")) {
                 let params = value.split('..');
-                priceFrom = +params[0] || '';
-                priceUp = +params[1] || '';
-                active = true;
+                priceFrom = params[0] ? params[0] : "";
+                priceUp = params[1] ? params[1] : "";
+                if (priceFrom || priceUp) {
+                    active = true;
+                }
             }
         }
         return {
@@ -34,7 +35,7 @@ export class PriceConverter extends ConverterBase {
             if (value.priceFrom === value.priceUp) {
                 return { price: value.priceFrom };
             } else {
-                return { price: `${value.priceFrom || ''}..${value.priceUp || ''}` };
+                return { price: `${value.priceFrom || ""}..${value.priceUp || ""}` };
             }
         } else {
             return { price: 'any' };

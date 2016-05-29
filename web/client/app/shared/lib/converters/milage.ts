@@ -7,16 +7,16 @@ import {Converter} from "../decorators";
 })
 export class MilageConverter extends ConverterBase {
     public convert(value) {
-        let milageFrom = Array.isArray(value) ? +value[0] : '';
-        let milageUp = Array.isArray(value) ? +value[1] : '';
+        let milageFrom = Array.isArray(value) ? value[0] : "";
+        let milageUp = Array.isArray(value) ? value[1] : "";
         let active = false;
         if (milageFrom || milageUp) {
             active = true;
         }
         return {
             value: {
-                milageFrom: milageFrom,
-                milageUp: milageUp
+                milageFrom: milageFrom || "",
+                milageUp: milageUp || ""
             },
             active: active
         }
@@ -33,7 +33,7 @@ export class MilageConverter extends ConverterBase {
         return result;
     };
 
-     public convertToView(value) {
+    public convertToView(value) {
         var from = value.milageFrom, up = value.milageUp;
         if (from && up) {
             return `milage: ${from}...${up}`;
@@ -44,12 +44,12 @@ export class MilageConverter extends ConverterBase {
         if (up) {
             return `milage: up ${up}`;
         }
-        else{
+        else {
             return "milage: any"
         }
     }
-    
-     public resetValue() {
+
+    public resetValue() {
         return {
             milageFrom: "",
             milageUp: ""

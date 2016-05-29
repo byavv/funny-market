@@ -9,6 +9,21 @@ export interface IFilterComponent {
     viewValue: any;
     changed: EventEmitter<any>;
 }
+
+export abstract class FilterComponent {
+    //static filterId;
+    constructor(private _controller: any) {
+        var child = <any>this.constructor//<any>this["constructor"]
+        _controller.resetFilter$
+            .pluck(child.filterId)
+            .filter(value => !!value)
+            .subscribe(value => {
+                this.setValue(value);
+            })
+    }
+    abstract setValue(value);
+}
+
 export function Converter(options: IConverterOptions) {
     return (target: any) => {
         target.prototype.converterId = options.converterId;
