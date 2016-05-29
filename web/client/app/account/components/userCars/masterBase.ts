@@ -8,6 +8,7 @@ import {Car} from "../../../shared/models";
 import {UiTabs, UiPane} from '../../directives/uiTabs';
 import {LoaderComponent} from "../../../shared/components/loader/loader";
 import {isString} from "@angular/compiler/src/facade/lang";
+import {Observable} from "rxjs";
 @Component({
     selector: "carEdit",
     template: `
@@ -83,9 +84,20 @@ export class MasterBaseComponent {
     onDone() {
         this.master
             .validate$
-            .do(() => { this.loading = true; })
-            //.filter <-- todo: if there is no differencies stop save
-            .flatMap(() => this._save())
+            .do(() => { this.loading = true; })           
+            .flatMap(() => this.userBackEnd.createOrUpdate(this.master.info, this.id))
+            .flatMap((result) => {
+                let form = new FormData();
+                this.master.images.forEach((image) => {
+                    let file = new File([image.blob], image.name, { type: "image/jpeg" });
+                    form.append("images", file, file.name);
+                });
+                if (result && result.car) {
+                    return this.userBackEnd.uploadImages(form, result.car.id)
+                } else {
+                    return Observable.throw("car creation error");
+                }
+            })
             .subscribe((result) => {
                 console.log(result)
                 this.router.navigate(['../UserCars']);
@@ -93,25 +105,5 @@ export class MasterBaseComponent {
                 if (isString(err))
                     this.tab.goTo(err);
             });
-    }
-
-    ngOnDestroy() { }
-
-    private _save() {
-        try {
-            let form = new FormData();
-            Object.keys(this.master.info).forEach(key => {
-                form.append(key, this.master.info[key]);
-            })
-            this.master.images.forEach((image) => {
-                let file = new File([image.blob], image.name, { type: "image/jpeg" });
-                form.append("images", file, file.name);
-            });
-            return this.userBackEnd.createOrUpdate(form, this.id);
-        } catch (error) {
-            console.error(error);
-            throw new Error(error);
-        }
-
-    }
+    }  
 }
