@@ -4,28 +4,28 @@ services:
     extends:
       file: common.yml
       service: gateway
-    command: npm test
+    command: [npm, test]
     environment:        
       - NODE_ENV=test
   cars:    
     extends:
       file: common.yml
       service: cars 
-    command: npm test
+    command: [npm, test] 
     environment:        
       - NODE_ENV=test     
   profile:    
     extends:
       file: common.yml
       service: profile
-    command: npm test
+    command: [npm, test]
     environment:        
       - NODE_ENV=test
   web:
     extends:
       file: common.yml
       service: web
-    command: npm test
+    command: [npm, test]
     environment:        
      - NODE_ENV=test
   
