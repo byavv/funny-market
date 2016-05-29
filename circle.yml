@@ -14,10 +14,10 @@ test:
   pre:
      - git grep --color TODO | cat 
   override:     
-     - docker-compose -f docker-compose_test_.yml run -d --no-deps cars
-     - docker-compose -f docker-compose_test_.yml run -d --no-deps profile  
+     - docker-compose -f docker-compose_test_.yml run --no-deps cars
+     - docker-compose -f docker-compose_test_.yml run --no-deps profile
   post:   
-     - docker-compose -f docker-compose_test_.yml stop
+     - docker-compose stop
 
 deployment:
   dockerhub:
