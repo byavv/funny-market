@@ -8,10 +8,10 @@
 # ex. grants access for any user whose role has permission to 'read' or 'publish' for posting data on '/sampleapi':
 #
 #       - url: /sampleapi
-#         grant: ['read','publish']   
+#         grant: ['read','write']   
 #         methods: ['post']  
 #
-# ex. grant for anyone. Proxy doesn't take into account user's authentication at all:
+# ex. grant for everyone. Proxy doesn't take into account user's authentication at all:
 #            
 #       - url: /sampleapi
 #         methods: *
@@ -21,10 +21,6 @@ access:
     - url: /api
       methods: '*'
       grant: '*'
-    
-  #  - url: /api/cars
-  #    methods: ['delete']
-  #    grant: ['read']
       
     - url: /profiles/signup
       methods: ['post']
@@ -41,6 +37,10 @@ access:
     - url: /users
       methods: ['post']
       grant: ['read']
+    
+    - url: /image
+      methods: ['post']
+      grant: ['read']
       
     - url: /_dashboard
       methods: '*'
@@ -49,18 +49,18 @@ access:
 # Define path, client requests will be redirected to.
 # ex. 
 #    - rule: '.*/api'
-#      mapTo: 'https://my.remote.com:3004/api'
+#      mapTo: 'https://my.remote.com:3004/'
+#      withPath: '/api'
 #
 # Any request to the proxy server with '/api' path will be mapped 
 # to the server running on https://my.remote.com:3004/api
 
 proxy:
-# .*/api -> cars/api where cars is discovered url 
-    - rule: '.*/api'
+    - rule: '/api'
       mapTo: 'cars'
       withPath: '/api'
       
-    - rule: '.*/profiles'
+    - rule: '/profiles'
       mapTo: 'profile'
       withPath: '/profiles'
     
@@ -68,10 +68,14 @@ proxy:
       mapTo: 'tracker'
       withPath: '/tracks'
     
-    - rule: '.*/users'
+    - rule: '/users'
       mapTo: 'profile'
       withPath: '/users'
       
+    - rule: '/image'
+      mapTo: 'image'
+      withPath: '/api' 
+       
     - rule: '/'
       mapTo: 'web'
       withPath: '/'    

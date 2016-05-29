@@ -21,9 +21,11 @@ export class UsersBackEndApi {
     }
     public deleteImage(id: string, key: string) {
         return this._http
-            .post(`/api/cars/removeimage/${id}`, JSON.stringify({ key: key }))
+            .post(`/image/remove`, JSON.stringify({ key: key, carId: id }))
             .map(res => res.json());
     }
+
+
     public deleteCar(id: string) {
         return this._http
             .delete(`/api/cars/${id}`)
@@ -63,11 +65,24 @@ export class UsersBackEndApi {
             .map(res => res.json());
     }
 
-    public createOrUpdate(data: any, id?: string) {
-        return id
+    public createOrUpdate(data: any, id?: string) {        
+        return (id
+            ? this._http
+                .post(`/api/cars/update/${id}`, JSON.stringify(data))
+            : this._http
+                .post(`/api/cars/new`, JSON.stringify(data)))
+                .map(res => res.json());
+        
+      /*  return id
             ? this._http
                 .nativeRequest('POST', `/api/cars/update/${id}`, data)
             : this._http
-                .nativeRequest('POST', `/api/cars/new`, data)
+                .nativeRequest('POST', `/api/cars/new`, data)*/
     }
+
+    public uploadImages(data, carId) {
+        return this._http
+            .nativeRequest('POST', `/image/upload/${carId}`, data);
+    }
+
 }
