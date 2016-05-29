@@ -45,7 +45,7 @@ export class CarFilterPanelComponent implements OnInit, OnDestroy {
     opened = false; // when resize window panel should be closed by default
 
     @Output()
-    changed: EventEmitter<any> = new EventEmitter();   
+    changed: EventEmitter<any> = new EventEmitter();
 
     constructor(private filterController: FilterController,
         private counter: TotalCounter,
@@ -61,17 +61,6 @@ export class CarFilterPanelComponent implements OnInit, OnDestroy {
                 if (!this.alreadyLoaded) {
                     this.filters = filters;
                     this.alreadyLoaded = true;
-                } else {
-                    filters.forEach((appFilter: FilterModel) => {
-                        if (this.wrappers) {
-                            let wrapperToUpdate = this.wrappers
-                                .toArray()
-                                .find((wrapper) =>
-                                    wrapper.filter.id === appFilter.id)
-                            if (wrapperToUpdate)
-                                wrapperToUpdate.filter = appFilter;
-                        }
-                    });
                 }
             });
     }
@@ -101,9 +90,9 @@ export class CarFilterPanelComponent implements OnInit, OnDestroy {
         console.warn("This feature has not been implemented yet");
     }
     closePanel() {
-        this.opened = false;       
+        this.opened = false;
     }
     openPanel() {
-        this.opened = true;       
+        this.opened = true;
     }
 }

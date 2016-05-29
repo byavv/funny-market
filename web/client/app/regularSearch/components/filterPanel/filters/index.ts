@@ -1,4 +1,4 @@
-import {makerFilterComponent} from "./makerFilter";
+import {MakerFilterComponent} from "./makerFilter";
 import {YearFilterComponent} from "./yearFilter";
 import {PriceFilterComponent} from "./priceFilter";
 import {MilageFilterComponent} from "./milageFilter";
@@ -15,7 +15,7 @@ export * from "./engineTypeFilter";
 export * from "./optionsFilter";
 
 export var allFilters = [
-    makerFilterComponent,
+    MakerFilterComponent,
     YearFilterComponent,
     PriceFilterComponent,
     MilageFilterComponent,

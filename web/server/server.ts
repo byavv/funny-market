@@ -1,7 +1,14 @@
 import * as path from 'path';
 import * as express from 'express';
 var history = require('connect-history-api-fallback');
-var registry = require('etcd-registry')('192.168.99.100:4001');
+
+
+const host = process.env.HTTP_HOST || "0.0.0.0",
+  http_port = process.env.HTTP_PORT || 3000,
+  etcd_host = process.env.ETCD_HOST || '192.168.99.100', // etcd in prod
+  origin = process.env.ORIGIN_URL || 'http://localhost:3001';
+
+const registry = require('etcd-registry')(`${etcd_host}:4001`);
 
 import 'angular2-universal/polyfills';
 import {
@@ -10,7 +17,7 @@ import {
   expressEngine,
   REQUEST_URL,
   ORIGIN_URL,
-  BASE_URL, 
+  BASE_URL,
   NODE_ROUTER_PROVIDERS,
   NODE_PLATFORM_PIPES,
   NODE_HTTP_PROVIDERS,
@@ -36,7 +43,7 @@ function ngApp(req, res) {
   let options: BootloaderConfig = Object.assign(queryParams, {
     directives: [Html],
     platformProviders: [
-      provide(ORIGIN_URL, { useValue: 'http://localhost:3001' }),
+      provide(ORIGIN_URL, { useValue: origin }),
       provide(BASE_URL, { useValue: '/' }),
     ],
     providers: [
@@ -79,13 +86,16 @@ router.route("/search*").get(ngApp);
 app.use(history({}))
 app.use(router);
 
-let httpPort = 3030;
-app.listen(httpPort, "0.0.0.0", function () {
-  console.log(`WEB server is listening on port: ${httpPort} `)
-  registry.join('web', { port: httpPort });
+app.listen(http_port, host, function () {
+  console.log(`WEB server is listening on port: ${http_port} `)
+  registry.join('web', { port: http_port });
   setTimeout(() => {
-    registry.lookup('web', function (err, service) {
-      console.log('Service registered:', service);    
+    registry.lookup('web', (err, service) => {
+      if (service) {
+        console.log(`Web server is registered on ${service.url} `);
+      } else {
+        console.log(`Web server egistration failed`);
+      }
     });
   }, 1000);
 });

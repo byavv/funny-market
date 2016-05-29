@@ -34,7 +34,7 @@ export function configureRoutes(app) {
     let config: ExpressEngineConfig = {
         directives: [ ],
         platformProviders: [
-            provide(ORIGIN_URL, {useValue: 'http://0.0.0.0:3030'}),
+            provide(ORIGIN_URL, {useValue: 'http://0.0.0.0:3001'}),
             provide(BASE_URL, {useValue: baseUrl}),
         ],
         providers: [
