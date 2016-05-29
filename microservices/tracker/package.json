@@ -4,8 +4,7 @@
   "main": "server/server.js",
   "scripts": {
     "start": "node .",
-    "pretest": "jshint .",
-    "posttest": "nsp check"
+    "test": "mocha"   
   },
   "dependencies": {
     "amqplib": "^0.4.1",

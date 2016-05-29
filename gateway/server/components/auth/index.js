@@ -1,8 +1,8 @@
 var async = require("async"),
     _ = require("lodash"),
     NotAuthorizedError = require("../../lib/errors").err401,
-    URL = require('url');
-;
+    URL = require('url')
+    ;
 
 var authMiddlewareFactory = (options) => (req, res, next) => {
     if (options.permissions === '*') {
@@ -21,17 +21,17 @@ var authMiddlewareFactory = (options) => (req, res, next) => {
                     Role.isInRole(role.name, {
                         principalType: ACL.USER,
                         principalId: req.accessToken.userId
-                    }, callback)
+                    }, callback);
                 }, (err, result) => {
                     return next((!result || err) ? new NotAuthorizedError("User authorized, but has not permissions") : null);
                 });
-            })
+            });
         } else {
             var url = URL.parse(req.url);
             return next(new NotAuthorizedError(`Not authorized for ${req.method} request on ${url}`));
         }
     }
-}
+};
 
 var auth = module.exports = (app, componentOptions) => {
     var accessTable = app.get("access");
@@ -50,8 +50,8 @@ var auth = module.exports = (app, componentOptions) => {
                 permissions: entry.grant || "*"
             }
         });
-    })
-}
+    });
+};
 
 
 

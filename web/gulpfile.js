@@ -42,31 +42,14 @@ gulp.task("test:client", (done) => {
 gulp.task("test:client:watch", (done) => {
     startClientTests(false, done);
 });
-gulp.task('test:e2e', () => {
-    gulp.src([])
-        .pipe($.angularProtractor({
-            'configFile': 'protractor.conf.js',
-            'args': ['--baseUrl', 'http://localhost:3030'],
-            'autoStartStopServer': true,
-            'debug': true
-        }))
-        .on('error', function (e) {
-            console.log(e);
-        })
-        .on('end', () => { });
-});
 gulp.task('clean:build', (done) => {
     require('rimraf')('./build', done);
-});
-gulp.task("images", () => {
-    return gulp.src("src/client/assets/images/*")
-        .pipe(gulp.dest("dist/images"));
 });
 gulp.task("build:server", (done) => {
     var config = require("./webpack.config")().server
     webpack(config).run(onWebpackCompleted(done));
 });
-gulp.task("build:client", ["build:vendors"], (done) => {
+gulp.task("build:client", (done) => {
     var config = require("./webpack.config")().client
     webpack(config).run(onWebpackCompleted(done));
 });
@@ -74,8 +57,8 @@ gulp.task("build:vendors", (done) => {
     var config = require("./webpack.config")().vendors
     webpack(config).run(onWebpackCompleted(done));
 });
-gulp.task("build", ["clean:build"], (done) => {
-    runSequence(['build:server', 'build:client'], done)
+gulp.task("build", ["build:vendors"], (done) => {
+    runSequence(['build:server', 'build:client'], done);
 });
 gulp.task('default', () => {
     var nodemonRef;

@@ -28,7 +28,7 @@ module.exports = function (options) {
             withPath: rule.withPath
         };
     });
-    var proxyRules = new HttpProxyRules({
+    proxyRules = new HttpProxyRules({
         rules: proxyRules
     });
     return (req, res, next) => {
@@ -43,7 +43,7 @@ module.exports = function (options) {
                 });
                 console.log(`Request proxied to: ${service.name} microservice, on url:`, `${service.url}${target.withPath}`);
             }).catch((err) => {
-                return next(err)
+                return next(err);
             });
         } else {
             return next(new GateWayError("service can't be found"));
@@ -59,6 +59,6 @@ var _lookupService = (name) => {
             } else {
                 resolve(service);
             }
-        })
-    })
-}
+        });
+    });
+};

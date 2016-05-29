@@ -12,7 +12,7 @@ module.exports = (app, cb) => {
                 ], (err, roles) => {
                     if (err) throw err;
 
-                    console.log("CREATED TEST ROLES:", roles.map(role => role.name))
+                    console.log("CREATED DEFAULT ROLES:", roles.map(role => role.name));
 
                     User.find({}, (err, users) => {
                         if (!users || (users && users.length < 1)) {
@@ -44,15 +44,15 @@ module.exports = (app, cb) => {
                                     principalId: users[1].id
                                 }, (err, principal) => {
                                     if (err) throw err;
-                                    cb()
+                                    cb();
                                 });
                             });
                         }
-                    })
+                    });
                 });
             } else {
-                cb()
+                cb();
             }
-        })
+        });
     }
 };

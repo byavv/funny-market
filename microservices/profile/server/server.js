@@ -1,16 +1,13 @@
 var boot = require('loopback-boot');
 var http = require('http');
 var loopback = require('loopback');
-var path = require('path');
-var registry = require('etcd-registry');
-var services = registry('192.168.99.100:4001');
 
 var app = module.exports = loopback();
 
 var host = process.env.HTTP_HOST || "0.0.0.0",
     http_port = process.env.HTTP_PORT || 3005,
-    etcd_host = process.env.ETCD_PORT || '192.168.99.100', // etcd in prod
-    rabbit_host = process.env.BROCKER_HOST || '192.168.99.100'; // // rabbit in prod
+    etcd_host = process.env.ETCD_HOST || '192.168.99.100', // etcd in prod
+    rabbit_host = process.env.BROCKER_HOST || '192.168.99.100', // // rabbit in prod
     mongo_host = process.env.DBSOURCE_HOST || '127.0.0.1';
 
 app.set('http_port', http_port);
@@ -23,9 +20,9 @@ boot(app, __dirname, (err) => {
     if (err) throw err;
     app.start = function () {
         var httpServer = http.createServer(app).listen(http_port, host, () => {
-             console.log(`Profile server is listening on: http://${host}:${http_port}`);
-            
-            app.emit('started');            
+            console.log(`Profile server is listening on: http://${host}:${http_port}`);
+
+            app.emit('started');
             app.close = (done) => {
                 app.removeAllListeners('started');
                 app.removeAllListeners('loaded');

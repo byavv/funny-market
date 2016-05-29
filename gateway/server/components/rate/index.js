@@ -19,7 +19,7 @@ function rateMiddlewareFactory(options) {
                 res.setHeader('X-RateLimit-Remaining', remainingRequests);
                 return next();
             }
-        })
+        });
     };
 }
 
@@ -40,5 +40,5 @@ module.exports = function(app, options) {
         } else {
             throw new Error("Wrong rate limiter config");
         }
-    })
+    });
 };

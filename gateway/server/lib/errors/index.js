@@ -4,4 +4,4 @@ var err401 = require('./error_401'),
 
 module.exports = {
     err401, err500, err502
-}
+};

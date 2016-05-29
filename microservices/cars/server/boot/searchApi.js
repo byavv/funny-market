@@ -1,8 +1,3 @@
-var async = require('async');
-var path = require('path');
-var fs = require("fs");
-var util = require('util');
-
 module.exports = function (server) {
     var router = server.loopback.Router();
     var Car = server.models.Car;
