@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "main": "server/server.js",
   "scripts": {
-    "start": "node .",
-    "test": "mocha"
+    "start": "make run",
+    "test": "make test-cov"
   },
   "dependencies": {
     "amqplib": "^0.4.1",
