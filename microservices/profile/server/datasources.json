@@ -2,8 +2,12 @@
   "mongo": {
     "host": "${mongo_host}",
     "port": 27017,
-    "database": "devDB",
+    "database": "profile-db",
     "name": "mongo",
     "connector": "mongodb"
+  },
+  "memory": {
+    "name": "memory",
+    "connector": "memory"
   }
 }

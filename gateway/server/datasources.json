@@ -1,13 +1,9 @@
 {
   "db": {
-    "name": "db",
-    "connector": "memory"
-  },
-  "mongo": {
-    "host": "127.0.0.1",
+    "host": "${mongo_host}",
     "port": 27017,
-    "database": "devDB",
-    "name": "mongo",
+    "database": "profile-db",
+    "name": "db",
     "connector": "mongodb"
   }
 }

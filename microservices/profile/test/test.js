@@ -3,7 +3,7 @@ var expect = chai.expect;
 var assert = chai.assert;
 chai.should();
 
-describe('/test', function () {
+describe('carstest', function () {
 
     var server = require('../server/server');
     var request = require('supertest')(server);
@@ -17,8 +17,8 @@ describe('/test', function () {
        done();
     });
 
-    it('MOM 3', function () {
+    it('test', function () {
       //  request.post('/api/Students').send({ points: 5000 }).expect(200, done)
-      assert.lengthOf("mom", 3);
+      assert.lengthOf("YOO", 3);
     });
 });

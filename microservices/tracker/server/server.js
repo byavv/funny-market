@@ -1,22 +1,18 @@
 var boot = require('loopback-boot');
 var http = require('http');
 var loopback = require('loopback');
-var registry = require('etcd-registry');
-var services = registry('192.168.99.100:4001');
 
 var app = module.exports = loopback();
 
 var host = process.env.HTTP_HOST || "0.0.0.0",
     http_port = process.env.HTTP_PORT || 3006,
     etcd_host = process.env.ETCD_PORT || '192.168.99.100', // etcd in prod
-    rabbit_host = process.env.BROCKER_HOST || '192.168.99.100'; // // rabbit in prod
-    mongo_host = process.env.DBSOURCE_HOST || '127.0.0.1';
+    rabbit_host = process.env.BROCKER_HOST || '192.168.99.100'; // // rabbit in prod 
 
 app.set('http_port', http_port);
 app.set('etcd_host', etcd_host);
 app.set('rabbit_host', rabbit_host);
 app.set("ms_name", 'tracker');
-app.set("mongo_host", mongo_host);
 
 boot(app, __dirname, (err) => {
     if (err) throw err;
