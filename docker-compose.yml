@@ -45,7 +45,7 @@ services:
       - ETCD_HOST=etcd
     command: npm start
     restart: always    
-   image:    
+  image:    
     extends:
       file: common.yml
       service: image        

@@ -2,9 +2,7 @@ machine:
   node:
     version: 6.2.0
   services:
-     - docker
-  hosts:
-    circlehost: 127.0.0.1
+     - docker 
 dependencies:  
   pre:
      - sudo pip install docker-compose     
@@ -17,7 +15,7 @@ test:
      - docker-compose -f docker-compose_test_.yml run -d --no-deps cars
      - docker-compose -f docker-compose_test_.yml run -d --no-deps profile  
   post:   
-     - docker-compose stop
+     - docker-compose -f docker-compose_test_.yml stop
 
 deployment:
   dockerhub:
