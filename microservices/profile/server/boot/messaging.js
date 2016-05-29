@@ -28,15 +28,6 @@ module.exports = function (app, done) {
                     break;
             }
         })
-
-        /*  setInterval(() => {       
-              client.publish('cars', { some: `with_callback` }, true).then((result) => {
-                  console.log("got result", result);
-              }, (err) => {
-                  console.log("got error", err);
-              })
-          }, 1000)*/
-
     }, (err) => {
         console.log("ERROR")
     }).catch(console.log)
