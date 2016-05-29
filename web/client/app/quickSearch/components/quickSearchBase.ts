@@ -13,7 +13,7 @@ import {FilterStateModel} from '../../shared/models';
     directives: [FORM_DIRECTIVES],
     styles: [require('./component.css')]
 })
-export class QuickSearchComponent implements OnInit, OnDestroy {
+export class QuickSearchComponent implements  OnDestroy {
     carFormModel: any = {
         maker: "",
         model: "",
@@ -43,7 +43,7 @@ export class QuickSearchComponent implements OnInit, OnDestroy {
         })
     }
 
-    ngOnInit() {
+    ngAfterViewInit() {
         for (let i = 1980; i <= new Date().getFullYear(); i++) {
             this.yearFroms.push(i)
         }
@@ -57,8 +57,7 @@ export class QuickSearchComponent implements OnInit, OnDestroy {
 
         this.form
             .find("maker")
-            .valueChanges
-            .filter(value => value)
+            .valueChanges            
             .do(() => {
                 this.loading = true;
                 this.carFormModel.model = '';
@@ -78,8 +77,7 @@ export class QuickSearchComponent implements OnInit, OnDestroy {
 
         this.form
             .find("model")
-            .valueChanges
-            .filter(value => value)
+            .valueChanges            
             .do(() => { this.loading = true; })
             .switchMap((value) => this._operateCount())
             .subscribe(this.count$, (err) => {
@@ -88,8 +86,7 @@ export class QuickSearchComponent implements OnInit, OnDestroy {
 
         this.form
             .find("priceUp")
-            .valueChanges
-            .filter(value => value)
+            .valueChanges           
             .debounceTime(500)
             .do(() => { this.loading = true; })
             .switchMap((value) => this._operateCount())
@@ -97,8 +94,7 @@ export class QuickSearchComponent implements OnInit, OnDestroy {
 
         this.form
             .find("yearFrom")
-            .valueChanges
-            .filter(value => value)
+            .valueChanges           
             .do(() => { this.loading = true; })
             .switchMap((value) => this._operateCount())
             .subscribe(this.count$);

@@ -27,6 +27,21 @@ module.exports = function (app, done) {
                             callback({ err: err, result: info });
                         })
                     break;
+                case 'track.update':
+                    if (message.value && message.value.carId)
+                        Track.findOne({ where: { carId: message.value.carId } }, (err, track) => {
+                            if (err || !track) {
+                                callback({ err: err ? err : "Not tracked" });
+                            } else {
+                                track.updateAttributes({
+                                    image: message.value.image,
+                                    description: message.value.description ? message.value.description : track.description
+                                }, (err, tr) => {
+                                    callback({ result: tr });
+                                })
+                            }
+                        })
+                    break;
                 default:
                     callback({ err: "wrong operation", result: null });
                     break;

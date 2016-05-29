@@ -12,6 +12,7 @@ export class FilterController {
     private _converters: Array<ConverterBase> = [];
     updateFilterPanel$: ReplaySubject<Array<FilterModel>> = new ReplaySubject<Array<FilterModel>>();
     updateFilterState$: ReplaySubject<FilterStateModel> = new ReplaySubject<FilterStateModel>();
+    resetFilter$: ReplaySubject<any> = new ReplaySubject<any>();
     state$: Observable<any> = Observable.zip(this.updateFilterPanel$, this.updateFilterState$);
 
     constructor(private appController: AppController) {

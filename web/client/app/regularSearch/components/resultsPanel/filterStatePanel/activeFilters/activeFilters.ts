@@ -34,13 +34,17 @@ export class ActiveFiltersComponent {
         return this._appliedFilters;
     }
 
-    constructor(private appController: AppController) {
+    constructor(private appController: AppController, private filterController: FilterController) {
         this._converters = appController.converters;
     }
 
     resetFilter(filterId) {
-        var converter = this._converters.find((converter) => converter.converterId === filterId)
-        this.reset.next(converter.resetValue());
+        var converter = this._converters.find((converter) => converter.converterId === filterId);
+        var o = {
+            [filterId]: converter.resetValue(),           
+        }
+        this.filterController.resetFilter$.next(o)
+        //this.reset.next(converter.resetValue());
     }
     ngOnDestroy() {
         if (this._subscription) {

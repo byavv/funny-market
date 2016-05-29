@@ -23,8 +23,6 @@ import {ShowError} from '../../directives/showError';
             color: #fff;
             background-color: #df3e3e;
         }
-      
-       
     `]
 })
 

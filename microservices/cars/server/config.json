@@ -1,8 +1,8 @@
 {
   "restApiRoot": "/api",
   "host": "0.0.0.0",
-  "port": 3002,
-  "microservice": "cars",
+  "port": 3002,  
+  "mongo_host":"localhost",
   "remoting": {
     "context": {
       "enableHttpContext": false

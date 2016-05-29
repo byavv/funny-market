@@ -27,10 +27,10 @@ import {SizeSpy} from "../directives/rectSpy"
         StateFullComponent,
         PaginationComponent,
         LoaderComponent,
-        ScrollSpy,  
-        Responsive,     
+        ScrollSpy,
+        Responsive,
         LastAddedComponent,
-        StickyPanel,       
+        StickyPanel,
         ResizeSpy,
         SizeSpy,
         StateSummaryPanel
@@ -41,11 +41,8 @@ import {SizeSpy} from "../directives/rectSpy"
 export class CarsSearchComponent implements OnReuse, OnInit {
     found$: Subject<Array<any>> = new Subject<Array<any>>();
     totalCount: number;
-    width: number;
-    top: number;
     loading: boolean;
-   // init: boolean;
-    toogled = false;
+
     constructor(
         private apiService: Api,
         private router: Router,
@@ -59,12 +56,12 @@ export class CarsSearchComponent implements OnReuse, OnInit {
         return true;
     }
     routerOnReuse(instruction: ComponentInstruction) {
-        this.appController.init$.subscribe(() => {           
+        this.appController.init$.subscribe(() => {
             this._search(this.filterController.updateStateFromRoute(instruction.params));
         })
     }
     ngOnInit() {
-        this.appController.init$.subscribe(() => {          
+        this.appController.init$.subscribe(() => {
             this._search(this.filterController.updateStateFromRoute(this.params.params));
         })
     }
@@ -78,10 +75,12 @@ export class CarsSearchComponent implements OnReuse, OnInit {
                 this.totalCounter.next(this.totalCount);
             }, (err) => { console.error(err) })
     }
+    
     doSearch(value) {
         if (value) {
             this.filterController.filterState = value;
-        }
-        this.router.navigate(['SearchList', this.filterController.convertToRouteParams()]);
-    }
+            this.router.navigate(['SearchList', this.filterController.convertToRouteParams()]);
+        }       
+    }   
+   
 }

@@ -13,3 +13,5 @@ carserver.once('loaded', function() {
 usertsserver.once('loaded', function() {
     usertsserver.start();
 });
+
+//loopback-boot loopback-component-explorer loopback-connector-mongodb loopback-datasource-juggler

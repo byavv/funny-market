@@ -1,17 +1,41 @@
 version: '2'
 services:
-  proxy:
+  gateway:
     build: ./gateway
-    environment:    
-     - NODE_ENV  
-    # common options
+    ports:
+     - "3000:3000"     
+    environment:        
+     - HTTP_PORT=3000       
   web:
-    build: ./web   
-    # common options
+    build: ./web
+    ports:
+     - "3003:3003"     
+    environment:        
+     - HTTP_PORT=3003      
   cars:
     build: ./microservices/cars
+    ports:
+     - "3001:3001"     
+    environment:        
+     - HTTP_PORT=3001  
+  image:
+    build: ./microservices/image
+    ports:
+     - "3005:3005"     
+    environment:        
+     - HTTP_PORT=3005         
   profile:
-    build: ./microservices/profile 
+    build: ./microservices/profile
+    ports:
+     - "3002:3002"     
+    environment:        
+     - HTTP_PORT=3002     
   tracker:
-    build: ./microservices/tracker   
+    build: ./microservices/tracker
+    ports:
+     - "3004:3004"     
+    environment:        
+     - HTTP_PORT=3004   
+    
+    # restart: always      
   

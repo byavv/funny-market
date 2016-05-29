@@ -1,14 +1,15 @@
+"use strict"
 var multer = require('multer');
 var multerS3 = require('multer-s3');
 var aws = require('aws-sdk');
 
-var s3 = new aws.S3({
-    accessKeyId: 'AKIAJKHY45HRXJI3RXKQ',
-    secretAccessKey: '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',
-    signatureVersion: 'v4'
-})
-
 module.exports = function (options) {
+    //  var {accessKeyId, secretAccessKey} = options.awsKey;    
+    var s3 = new aws.S3({
+        accessKeyId: options.awsKey.accessKeyId,
+        secretAccessKey: options.awsKey.secretAccessKey,
+        signatureVersion: 'v4'
+    });
     var upload = multer({
         storage: multerS3({
             s3: s3,

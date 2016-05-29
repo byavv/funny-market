@@ -5,7 +5,8 @@
   "scripts": {
     "start": "node ./build/srv/server.js",
     "pretest": "jshint .",
-    "posttest": "nsp check"
+    "posttest": "nsp check",
+    "test": "gulp test:client"
   },
   "dependencies": {
     "@angular/common": "^2.0.0-rc.1",

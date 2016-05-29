@@ -14,7 +14,7 @@
     },
     "color": {
       "type": "string"
-    },    
+    },
     "price": {
       "type": "number"
     },
@@ -33,7 +33,7 @@
       "type": "string"
     },
     "modelName": {
-      "type": "string"      
+      "type": "string"
     },
     "options": {
       "type": [
@@ -68,7 +68,7 @@
       "type": "belongsTo",
       "model": "CarModel",
       "foreignKey": "carModelId"
-    },   
+    },
     "carType": {
       "type": "hasOne",
       "model": "CarType",

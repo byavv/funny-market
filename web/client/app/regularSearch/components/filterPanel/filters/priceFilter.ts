@@ -1,6 +1,8 @@
-import {Component, EventEmitter, Input, Output, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, Output, AfterViewInit, OnInit} from '@angular/core';
 import {Control, ControlGroup} from '@angular/common';
-import {ConverterProvider, convertToView, IFilterComponent, PriceConverter}  from "../../../../shared/lib/";
+import {ConverterProvider, convertToView, FilterComponent, IFilterComponent, PriceConverter}  from "../../../../shared/lib/";
+import {PatternInput} from "../../../../shared/directives/patternInput";
+import {FilterController} from '../../../services/filterController';
 
 @Component({
     selector: 'priceWrapper',
@@ -13,23 +15,19 @@ import {ConverterProvider, convertToView, IFilterComponent, PriceConverter}  fro
                          <div><strong>Price</strong></div> 
                      </div>              
                      <div class="col-md-6 col-sm-12 padding-shrink-right">
-                         <input class="form-control" 
-                             type="number" min="0"
-                             name="priceFrom" 
-                             id="priceFrom"
-                             #priceFrom="ngForm"
+                         <input class="form-control" pattern="[0-9]"
+                             type="text"
+                             name="priceFrom"             
                              placeholder="From"  
                              ngControl="priceFrom" 
                              [(ngModel)]="filterValue.priceFrom"/> 
                      </div>                  
                      <div class="col-md-6 col-sm-12 padding-shrink-left">
-                         <input class="form-control"
-                             type="number" min="0" 
-                             name="priceUp" 
-                             id="priceUp"
-                             #priceUp="ngForm"
-                             placeholder="Up" 
-                             ngControl='priceUp'
+                         <input class="form-control" pattern="[0-9]"
+                             type="text"
+                             name="priceUp"            
+                             placeholder="Up"
+                             ngControl="priceUp"
                              [(ngModel)]="filterValue.priceUp"/> 
                      </div>                 
                  </div>               
@@ -37,12 +35,12 @@ import {ConverterProvider, convertToView, IFilterComponent, PriceConverter}  fro
         </div>                 
     </div>  
   `,
-    directives: []
+    directives: [PatternInput]
 })
 @ConverterProvider({
     bindWith: PriceConverter
 })
-export class PriceFilterComponent implements IFilterComponent, OnInit {
+export class PriceFilterComponent extends FilterComponent implements IFilterComponent {
     @Input()
     active: boolean;
     @Input()
@@ -55,14 +53,14 @@ export class PriceFilterComponent implements IFilterComponent, OnInit {
     pricesUp: Array<number> = [];
     pricesFrom: Array<number> = [];
 
-    constructor() {
+    constructor(filterController: FilterController) {
+        super(filterController)
         this.form = new ControlGroup({
             priceFrom: this.priceFrom,
             priceUp: this.priceUp
         });
     }
-
-    ngOnInit() {
+    ngAfterViewInit() {
         this.form.valueChanges
             .distinctUntilChanged()
             .debounceTime(500)
@@ -70,8 +68,10 @@ export class PriceFilterComponent implements IFilterComponent, OnInit {
                 this.changed.next({ filterValue: value, immidiate: true });
             })
     }
-
     viewValue() {
         return this.filterValue;
+    }
+    setValue(value) {
+        this.filterValue = value;
     }
 }

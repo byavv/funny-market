@@ -15,37 +15,37 @@
     ]
   },
   "CarModel": {
-    "dataSource": "mongo",
+    "dataSource": "db",
     "public": false,
     "$promise": {},
     "$resolved": true
   },
   "Maker": {
-    "dataSource": "mongo",
+    "dataSource": "db",
     "public": true,
     "$promise": {},
     "$resolved": true
   },
   "Car": {
-    "dataSource": "mongo",
+    "dataSource": "db",
     "public": true,
     "$promise": {},
     "$resolved": true
   },
   "CarType": {
-    "dataSource": "mongo",
+    "dataSource": "db",
     "public": false,
     "$promise": {},
     "$resolved": true
   },
   "CarOption": {
-    "dataSource": "mongo",
+    "dataSource": "db",
     "public": false,
     "$promise": {},
     "$resolved": true
   },
   "EngineType": {
-    "dataSource": "mongo",
+    "dataSource": "db",
     "public": true,
     "$promise": {},
     "$resolved": true

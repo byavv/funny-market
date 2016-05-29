@@ -111,7 +111,7 @@
    height: 24px;
    display: block;  
    background-size:100% auto;
-   background-image: url("/build/cl/assets/images/trash.png");
+   background-image: url("/build/cl/assets/img/trash.png");
 }
 .info-button{   
     float: right;

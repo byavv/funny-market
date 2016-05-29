@@ -5,7 +5,8 @@
   "scripts": {
     "start": "node .",
     "pretest": "jshint .",
-    "posttest": "nsp check"
+    "posttest": "nsp check",
+    "test": "mocha"
   },
   "dependencies": {
     "amqplib": "^0.4.1",

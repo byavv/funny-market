@@ -41,12 +41,7 @@ module.exports = function (app) {
       } else {
         return res.status(200).send(profile);
       }
-    })
-  })
-
-  router.post("/update", (req, res) => {
-
+    });
   });
-
   app.use(router);
-}
+};

@@ -32,20 +32,7 @@
   },
   "session": {},
   "auth": {},
-  "parse": {
-    "./middleware/upload": {
-      "methods": [
-        "POST"
-      ],
-      "paths": [
-        "/api/cars*"      
-      ],
-      "params": {
-        "bucket": "carmarket",
-        "maxCount": 20,
-        "field": "images"
-      }
-    },
+  "parse": {    
     "body-parser#json": {
       "params": {
         "limit": "5mb"
