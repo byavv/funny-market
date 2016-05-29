@@ -1,8 +1,7 @@
-FROM node:6.0.0
-MAINTAINER [aksenchyk.v@gmail.com]
-ADD . /app
+FROM node:6.2.0
+MAINTAINER V.V. Aksenchyk <aksenchyk.v@gmail.com>
 WORKDIR /app
-ENV NPM_CONFIG_LOGLEVEL info
-ENV NODE_VERSION 6.0.0
-RUN npm install --quiet 
+ADD . /app
+RUN apt-get install make && \
+    npm install --ignore-scripts --quiet
 CMD ["npm","start"]
