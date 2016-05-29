@@ -4,7 +4,7 @@ import {Observable, Subscription} from 'rxjs';
     selector: 'loader',
     template: `
     <div class='loader-container' *ngIf='active'>
-        <div class='spinner'></div>
+        <div *ngIf='spinner' class='spinner'></div>
     </div>`,
     styles: [require('./component.css')]
 })
@@ -16,8 +16,10 @@ export class LoaderComponent implements OnInit, OnDestroy {
     delay: number = 0;
     @Input()
     active: boolean = false;
+    @Input()
+    spinner: boolean = true;
     @Output()
-    completed: EventEmitter<any> = new EventEmitter();
+    completed: EventEmitter<any> = new EventEmitter();    
     constructor() { }
     ngOnInit() {
         if (this.async)

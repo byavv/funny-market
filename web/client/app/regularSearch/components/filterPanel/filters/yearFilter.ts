@@ -1,17 +1,18 @@
 import {Component, EventEmitter, Output, Input, AfterViewInit} from '@angular/core';
 import {CORE_DIRECTIVES, Control, FORM_DIRECTIVES, ControlGroup} from '@angular/common';
-import {ConverterProvider, convertToView, IFilterComponent, YearConverter} from "../../../../shared/lib/";
+import {ConverterProvider, convertToView, FilterComponent, YearConverter} from "../../../../shared/lib/";
+import {FilterController} from '../../../services/filterController';
 
 @Component({
     selector: 'yearWrapper',
     template: ` 
     <div class='row'>
-        <div class="col-md-12 col-sm-12">   
+        <div class="col-md-12 col-sm-12">    
+            <div><strong>First registration (date)</strong></div>  
+        </div>
+        <div class="col-md-12 col-sm-12">                      
             <form [ngFormModel]="form" >    
-                <div class="row">            
-                     <div class="col-md-12 col-sm-12">   
-                         <div><strong>First registration (date)</strong></div> 
-                     </div>  
+                <div class="row">
                      <div class="col-md-6 col-sm-12 padding-shrink-right">
                         <select class="form-control" 
                             name="yearFrom" 
@@ -48,7 +49,7 @@ import {ConverterProvider, convertToView, IFilterComponent, YearConverter} from 
 @ConverterProvider({
     bindWith: YearConverter
 })
-export class YearFilterComponent implements IFilterComponent {
+export class YearFilterComponent extends FilterComponent {
     @Input()
     active: boolean;
     @Input()
@@ -60,7 +61,8 @@ export class YearFilterComponent implements IFilterComponent {
     form: ControlGroup;
     yearsUp: Array<number> = [];
     yearsFrom: Array<number> = [];
-    constructor() {
+    constructor(filterController: FilterController) {
+        super(filterController)
         this.yearFrom = new Control("");
         this.yearUp = new Control("");
         this.form = new ControlGroup({
@@ -79,7 +81,9 @@ export class YearFilterComponent implements IFilterComponent {
                 this.changed.next({ filterValue: value, immidiate: true });
             })
     }
-
+    setValue(value) {
+        this.filterValue = value;
+    }
     get viewValue() {
         return this.filterValue;
     }

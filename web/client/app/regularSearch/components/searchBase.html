@@ -3,7 +3,7 @@
         <div class='my-card' 
             sticky [startFrom]='70'            
             bindWidthTo="left-side-column" 
-            [active]='!bs4Spy.widthSm'><!-- don't activate sticking when small screen -->
+            [active]='!bs4Spy.widthSm'>
             <carFilterPanel (changed)="doSearch($event)" #filterPanel></carFilterPanel>
         </div>
     </div>   
@@ -30,8 +30,8 @@
                 </state-summary>               
             </div>
              <div class='content' style='display: flex;'>                 
-                <div class="my-card" size #panelSizeSpy='size' style='flex: 1; position: relative;'>
-                    <loader [active]='loading' [async]='found$'></loader>
+                <div class="my-card" size #panelSizeSpy='size' style='flex: 1; position: relative;'>                   
+                    <loader [active]='loading' (completed)='loading=false' [spinner]='false' [async]='found$'></loader>
                     <carsList [cars]='found$'></carsList>
                 </div>
             </div> 
