@@ -32,8 +32,7 @@ module.exports = function (app) {
         });
       },
       (user, callback) => {
-        user.profile.create({}, callback);
-        //  Profile.create({ userId: user.id }, callback);
+        user.profile.create({}, callback);       
       },
     ], (err, profile) => {
       if (err) {

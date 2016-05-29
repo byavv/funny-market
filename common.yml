@@ -17,13 +17,7 @@ services:
     ports:
      - "3001:3001"     
     environment:        
-     - HTTP_PORT=3001  
-  image:
-    build: ./microservices/image
-    ports:
-     - "3005:3005"     
-    environment:        
-     - HTTP_PORT=3005         
+     - HTTP_PORT=3001            
   profile:
     build: ./microservices/profile
     ports:
@@ -35,7 +29,12 @@ services:
     ports:
      - "3004:3004"     
     environment:        
-     - HTTP_PORT=3004   
-    
-    # restart: always      
+     - HTTP_PORT=3004
+  image:
+    build: ./microservices/image
+    ports:
+     - "3005:3005"     
+    environment:        
+     - HTTP_PORT=3005 
+  
   

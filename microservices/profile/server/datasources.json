@@ -1,13 +1,14 @@
 {
-  "mongo": {
+  "db": {
+    "name": "db",
+    "connector": "mongodb",
     "host": "${mongo_host}",
     "port": 27017,
-    "database": "profile-db",
-    "name": "mongo",
-    "connector": "mongodb"
-  },
-  "memory": {
-    "name": "memory",
-    "connector": "memory"
+    "server": {
+      "auto_reconnect": true,
+      "reconnectTries": 100,
+      "reconnectInterval": 1000
+    },
+    "database": "profile-db"
   }
 }

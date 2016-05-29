@@ -1,4 +1,4 @@
-FROM node
+FROM node:latest
 ADD . /
-RUN npm install --ignore-scripts
-CMD node .
+RUN npm install --ignore-scripts --quiet
+CMD ["npm","start"]

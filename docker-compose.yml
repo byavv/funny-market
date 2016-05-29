@@ -17,6 +17,7 @@ services:
       - DBSOURCE_HOST=profile-db
       - ETCD_HOST=etcd
     command: npm start
+    restart: always    
   cars:    
     extends:
       file: common.yml
@@ -30,6 +31,7 @@ services:
       - DBSOURCE_HOST=cars-db
       - BROCKER_HOST=rabbitmq
       - ETCD_HOST=etcd
+    restart: always    
   profile:    
     extends:
       file: common.yml
@@ -42,6 +44,7 @@ services:
       - DBSOURCE_HOST=profile-db
       - ETCD_HOST=etcd
     command: npm start
+    restart: always    
    image:    
     extends:
       file: common.yml
@@ -52,6 +55,7 @@ services:
     environment:     
       - ETCD_HOST=etcd
     command: npm start
+    restart: always    
   ######################################
   web:
     extends:
@@ -62,6 +66,7 @@ services:
     environment:
       - ETCD_HOST=etcd
     command: npm start
+    restart: always    
   ####### logical group  ###############
   etcd:
     image: microbox/etcd:latest   

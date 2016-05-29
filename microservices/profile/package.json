@@ -1,34 +1,38 @@
 {
-  "name": "users",
+  "name": "profile",
   "version": "1.0.0",
   "main": "server/server.js",
   "scripts": {
     "start": "node .",
-    "pretest": "jshint .",
-    "posttest": "nsp check",
     "test": "mocha"
   },
   "dependencies": {
     "amqplib": "^0.4.1",
-    "async": "^2.0.0-rc.3",
+    "async": "^2.0.0-rc.5",
     "compression": "^1.0.3",
     "cors": "^2.5.2",
     "etcd-registry": "^2.1.1",
     "helmet": "^0.14.0",
-    "loopback": "^2.22.0",
-    "loopback-boot": "^2.6.5",
-    "loopback-component-explorer": "^2.1.0",
-    "loopback-connector-mongodb": "^1.15.1",
-    "loopback-datasource-juggler": "^2.39.0",
+    "loopback": "^2.28.0",
+    "loopback-boot": "^2.18.1",
+    "loopback-component-explorer": "^2.5.0",
+    "loopback-connector-mongodb": "^1.15.2",
+    "loopback-datasource-juggler": "^2.46.0",
     "serve-favicon": "^2.0.1"
   },
   "devDependencies": {
+    "chai": "^3.5.0",
+    "istanbul": "^0.4.3",
     "jshint": "^2.5.6",
-    "nsp": "^2.1.0"
+    "mocha": "^2.5.3",
+    "mocha-lcov-reporter": "^1.2.0",
+    "nsp": "^2.1.0",
+    "sinon": "^1.17.4",
+    "supertest": "^1.2.0"
   },
   "repository": {
     "type": "",
     "url": ""
   },
-  "description": "users"
+  "description": "profile microservice"
 }

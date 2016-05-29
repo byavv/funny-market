@@ -1,7 +1,6 @@
 var boot = require('loopback-boot');
 var http = require('http');
 var loopback = require('loopback');
-
 var app = module.exports = loopback();
 
 var host = process.env.HTTP_HOST || "0.0.0.0",
@@ -21,7 +20,6 @@ boot(app, __dirname, (err) => {
     app.start = function () {
         var httpServer = http.createServer(app).listen(http_port, host, () => {
             console.log(`Profile server is listening on: http://${host}:${http_port}`);
-
             app.emit('started');
             app.close = (done) => {
                 app.removeAllListeners('started');
