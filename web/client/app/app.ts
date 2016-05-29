@@ -36,7 +36,7 @@ import {LoaderComponent} from "./shared/components/loader/loader";
   { path: '/', name: 'Home', component: QuickSearchComponent, useAsDefault: true },
   { path: '/login', name: 'Login', component: LoginComponent },
   { path: '/signup', name: 'SignUp', component: SignUpComponent },
-  { path: '/search/:maker/*year/*price/', name: 'SearchList', component: CarsSearchComponent },
+  { path: '/search/:maker/:year/:price/', name: 'SearchList', component: CarsSearchComponent },
   { path: '/details/:id', name: 'Details', component: CarDetailsComponent },
   { path: '/settings/...', name: 'Settings', component: PersonalBase },
 ])
