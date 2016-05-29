@@ -24,8 +24,8 @@
     }
   },
   "aws": {
-    "accessKeyId": "AKIAIRHAT4GOLAMBNK3Q",
-    "secretAccessKey": "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"
+    "accessKeyId": "xxxxxx",
+    "secretAccessKey": "xxxxxxxx"
   },
   "legacyExplorer": false
 }
