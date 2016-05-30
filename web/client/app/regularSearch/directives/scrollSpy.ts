@@ -12,12 +12,11 @@ export class ScrollSpy implements AfterContentInit {
     private _domAdapter: DomAdapter;
     collapsed: boolean = false;
     @Input()
-    boundary: number = 50;
-
-   
+    boundary: number = 50;   
     overBoundary: boolean = false;
     collapse$: Subject<any> = new Subject();
     constructor(private element: ElementRef, private renderer: Renderer, @Inject(DOCUMENT) private _doc) {
+        console.log(_doc)
        this._domAdapter = getDOM();
        //let oldRoots = getDOM().querySelectorAll(this._doc, '[id^=root]');
     }

@@ -19,7 +19,7 @@ export class LoaderComponent implements OnInit, OnDestroy {
     @Input()
     spinner: boolean = true;
     @Output()
-    completed: EventEmitter<any> = new EventEmitter();    
+    completed: EventEmitter<any> = new EventEmitter();
     constructor() { }
     ngOnInit() {
         if (this.async)
