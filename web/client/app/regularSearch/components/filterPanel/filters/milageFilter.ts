@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, Output, AfterViewInit, OnInit, ViewEncapsulation} from '@angular/core';
 import { Control, ControlGroup} from '@angular/common';
 import {ConverterProvider, convertToView, FilterComponent, MilageConverter} from "../../../../shared/lib/";
-import {PatternInput} from "../../../../shared/directives/patternInput";
+import {PatternInput, DebounceInput} from "../../../../shared/directives";
 import {FilterController} from '../../../services/filterController';
 
 @Component({
@@ -15,27 +15,35 @@ import {FilterController} from '../../../services/filterController';
             <form [ngFormModel]="form" >    
                  <div class="row">                                 
                      <div class="col-md-6 col-sm-12 padding-shrink-right" >
-                         <input class="form-control" pattern="[0-9]"
-                             type="text"
-                             name="milageFrom"
-                             ngControl="milageFrom" 
-                             placeholder="From"
-                             [(ngModel)]="filterValue.milageFrom"/> 
+                         <input-wrapper 
+                            [delay]='500' 
+                            css='form-control'
+                            pattern="[0-9]" 
+                            id='milageFrom' 
+                            placeholder='From' 
+                            only="[0-9]"                             
+                            ngControl="milageFrom" 
+                            [(ngModel)]="filterValue.milageFrom">
+                         </input-wrapper>
                      </div>                  
-                     <div class="col-md-6 col-sm-12 padding-shrink-left" >
-                         <input class="form-control" pattern="[0-9]"
-                             type="text" 
-                             name="milageUp"
-                             placeholder="Up"
-                             ngControl='milageUp'
-                             [(ngModel)]="filterValue.milageUp"/> 
+                     <div class="col-md-6 col-sm-12 padding-shrink-left">                     
+                         <input-wrapper 
+                             [delay]='500' 
+                             css='form-control'
+                             pattern="[0-9]" 
+                             id='milageUp' 
+                             placeholder='Up' 
+                             only="[0-9]"                             
+                             ngControl="milageUp" 
+                             [(ngModel)]="filterValue.milageUp">
+                         </input-wrapper>
                      </div>                 
                  </div>               
             </form>
         </div>                 
     </div> 
   `,
-    directives: [PatternInput]
+    directives: [PatternInput, DebounceInput]
 })
 @ConverterProvider({
     bindWith: MilageConverter
@@ -63,8 +71,7 @@ export class MilageFilterComponent extends FilterComponent {
     }
     ngAfterViewInit() {
         this.form.valueChanges
-            .distinctUntilChanged()
-            .debounceTime(500)
+            .distinctUntilChanged()           
             .subscribe(value => {
                 this.changed.next({ filterValue: value, immidiate: true });
             })
