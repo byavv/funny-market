@@ -7,63 +7,43 @@ import {NumberWrapper} from '@angular/compiler/src/facade/lang';
     selector: '[bs4-spy]',
     exportAs: "rSpy"
 })
-export class ResizeSpy implements OnInit, OnDestroy {
-    private _domAdapter: DomAdapter;  
-    private _sub1;
-    private _sub2;
-    private _sub3;
-    private _sub4;
-    private _windowSize$: BehaviorSubject<any> = new BehaviorSubject({});
+export class ResizeSpy implements OnInit {
+    private _domAdapter: DomAdapter;
     width$: ReplaySubject<number> = new ReplaySubject<number>();
-    width$2: ReplaySubject<number> = new ReplaySubject<number>();
-
-    widthSm$: ReplaySubject<boolean> = new ReplaySubject<boolean>();
-    widthSm: boolean = true;
-    widthMd$: ReplaySubject<boolean> = new ReplaySubject<boolean>();
-    widthLg$: ReplaySubject<boolean> = new ReplaySubject<boolean>();
     height$: ReplaySubject<number> = new ReplaySubject<number>();
+
+    widthSm: boolean = true;
+    widthMd: boolean = true;
+    widthLg: boolean = true;
+    widthExl: boolean = true;
     height: number;
+    width: number;
+
     constructor(private element: ElementRef, private renderer: Renderer) {
-         this._domAdapter = getDOM();
+        this._domAdapter = getDOM();
     }
     ngOnInit() {
-
         let window: Window = this._domAdapter.getGlobalEventTarget('window');
-        this.height = window.innerHeight;
-      
-        // this.height
-        this.widthSm = this.getWindowSize(window.innerWidth, window.innerHeight).widthSm;
-
-
-        // this._windowSize$.next(this.getWindowSize())
+        this.measure(window.innerWidth, window.innerHeight);
         this.renderer.listenGlobal('window', 'resize', (evt: any) => {
-            console.log(evt);
-
-            let dimensions = this.getWindowSize(evt.target.innerWidth, evt.target.innerHeight);
-            this.width$.next(dimensions.width);
-            // this.height$.next(dimensions.height);
-            this.widthSm = dimensions.widthSm;
-            this.height = dimensions.height;
-            //this.widthSm$.next(dimensions.widthSm);
-            // this.widthMd$.next(dimensions.widthMd);
-            //  this.widthLg$.next(dimensions.widthLg);
-
-
-            // this._windowSize$.next(this.getWindowSize())
+            this.measure(evt.target.innerWidth, evt.target.innerHeight)
         });
     }
-    ngOnDestroy() {
-
+    private measure(width, height) {
+        let dimensions = this._getWindowSize(width, height);
+        this.width$.next(dimensions.width);
+        this.height$.next(dimensions.height);
+        this.widthSm = dimensions.widthSm;
+        this.widthMd = dimensions.widthMd;
+        this.widthLg = dimensions.widthLg;
+        this.widthExl = dimensions.widthExl;
+        this.height = dimensions.height;
+        this.width = dimensions.width;
     }
-    getWindowSize(width, height) {
-
-        //var width = window.innerWidth;
-
-
+    private _getWindowSize(width, height) {
         return {
             height: height,
             width: width,
-
             widthExs: width ? width < 544 : false,
             widthSm: width ? (width >= 544) && (width < 768) : false,
             widthMd: width ? (width >= 768) && (width < 992) : false,

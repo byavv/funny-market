@@ -1,41 +1,47 @@
 import {Component, EventEmitter, Input, Output, AfterViewInit, OnInit} from '@angular/core';
 import {Control, ControlGroup} from '@angular/common';
 import {ConverterProvider, convertToView, FilterComponent, IFilterComponent, PriceConverter}  from "../../../../shared/lib/";
-import {PatternInput} from "../../../../shared/directives/patternInput";
+import {PatternInput, DebounceInput} from "../../../../shared/directives";
 import {FilterController} from '../../../services/filterController';
 
 @Component({
     selector: 'priceWrapper',
     template: ` 
     <div class='row'>
+        <div class="col-md-12 col-sm-12">   
+             <div><strong>Price</strong></div> 
+        </div>  
         <div class="col-md-12 col-sm-12">  
             <form [ngFormModel]="form" >    
-                 <div class="row">
-                     <div class="col-md-12 col-sm-12">   
-                         <div><strong>Price</strong></div> 
-                     </div>              
+                 <div class="row">                                 
                      <div class="col-md-6 col-sm-12 padding-shrink-right">
-                         <input class="form-control" pattern="[0-9]"
-                             type="text"
-                             name="priceFrom"             
-                             placeholder="From"  
+                         <input-wrapper 
+                             [delay]='500' 
+                             css='form-control'
+                             pattern="[0-9]"                              
+                             placeholder='From' 
+                             only="[0-9]"                             
                              ngControl="priceFrom" 
-                             [(ngModel)]="filterValue.priceFrom"/> 
+                             [(ngModel)]="filterValue.priceFrom">
+                         </input-wrapper>
                      </div>                  
                      <div class="col-md-6 col-sm-12 padding-shrink-left">
-                         <input class="form-control" pattern="[0-9]"
-                             type="text"
-                             name="priceUp"            
-                             placeholder="Up"
-                             ngControl="priceUp"
-                             [(ngModel)]="filterValue.priceUp"/> 
+                         <input-wrapper 
+                             [delay]='500' 
+                             css='form-control'
+                             pattern="[0-9]"                              
+                             placeholder='Up' 
+                             only="[0-9]"                             
+                             ngControl="priceUp" 
+                             [(ngModel)]="filterValue.priceUp">
+                         </input-wrapper>
                      </div>                 
                  </div>               
             </form>
         </div>                 
     </div>  
   `,
-    directives: [PatternInput]
+    directives: [PatternInput, DebounceInput]
 })
 @ConverterProvider({
     bindWith: PriceConverter
@@ -62,8 +68,7 @@ export class PriceFilterComponent extends FilterComponent implements IFilterComp
     }
     ngAfterViewInit() {
         this.form.valueChanges
-            .distinctUntilChanged()
-            .debounceTime(500)
+            .distinctUntilChanged()           
             .subscribe(value => {
                 this.changed.next({ filterValue: value, immidiate: true });
             })

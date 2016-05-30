@@ -54,35 +54,13 @@ export class MakerFilterComponent extends FilterComponent {
         this.appController.init$.subscribe(value => {
             this.carMakers = value.makers;
             this._resetView();
-        })
-        /* this.makerControl
-             .valueChanges
-             .distinctUntilChanged()
-             .do(() => { this.loading = true })
-             .switchMap((value: any) => (value && value.id) ? this.apiService.getMakerModels(value.id) : Observable.of([]))
-             .subscribe((models: Array<any>) => {
-                 this.loading = false;
-                 this.models = models || [];
-                 this.model = this.models.find((model) => model.name == this.filterValue.model) || '';
-                 this.filterValue = { maker: this.maker ? this.maker.name : '' }
-             })
- 
-         this.modelControl
-             .valueChanges
-             .distinctUntilChanged()
-             .subscribe(model => {
-                 // model may be undefined or '', the latter is correct for 'any' value
-                 if (model != undefined)
-                     this.filterValue = { model: this.model ? this.model.name : '' }
-             })*/
-
-
+        })  
+        
         this.makerControl
             .valueChanges
             .distinctUntilChanged()
             .do(() => { this.loading = true })
             .switchMap((value: any) => (value && value.id) ? this.apiService.getMakerModels(value.id) : Observable.of([]))
-
             .subscribe((models: Array<any>) => {
                 this.loading = false;
                 this.models = models || [];
@@ -104,9 +82,9 @@ export class MakerFilterComponent extends FilterComponent {
         if (this.carMakers) {
             this.maker = this.carMakers.find(maker => maker.name == this.filterValue.maker) || '';
         }
-      //  if (this.models) {
-      //      this.model = this.models.find((model) => model.name == this.filterValue.model) || '';
-      //  }
+        if (this.models) {
+            this.model = this.models.find((model) => model.name == this.filterValue.model) || '';
+        }
     }
 
     ngOnDestroy() {

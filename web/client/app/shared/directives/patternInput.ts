@@ -1,5 +1,6 @@
-import {Directive, ElementRef, Renderer, Optional, Attribute} from '@angular/core';
-import {StringWrapper} from '@angular/compiler/src/facade/lang';
+import { Directive, ElementRef, Renderer, Optional, Attribute } from '@angular/core';
+import { StringWrapper } from '@angular/compiler/src/facade/lang';
+
 @Directive({
     selector: '[pattern]',
     inputs: [
@@ -11,10 +12,10 @@ import {StringWrapper} from '@angular/compiler/src/facade/lang';
     }
 })
 export class PatternInput {
-    private expression: RegExp;
+    private _expression: RegExp;
     private _regex: string;
     set regex(value) {
-        this.expression = new RegExp(value);
+        this._expression = new RegExp(value);
         this._regex = value;
     };
     get regex() {
@@ -23,13 +24,13 @@ export class PatternInput {
     nopaste: boolean = true;
     constructor(private element: ElementRef, private renderer: Renderer, @Optional() @Attribute('nopaste') nopaste?: string) {
         this.nopaste = nopaste != null;
-        this.regex = '[A-Za-z0-9]'; //default
+        this.regex = '[A-Za-z0-9]';
     }
     onKeydown(event: any) {
-        if (this.expression && !this.expression.test(StringWrapper.fromCharCode(event.keyCode))) {
-            this.renderer.setElementStyle(this.element.nativeElement, "background", "indianred")
+        if (this._expression && !this._expression.test(StringWrapper.fromCharCode(event.keyCode))) {
+            this.renderer.setElementStyle(event.target, "background", "indianred")
             setTimeout(() => {
-                this.renderer.setElementStyle(this.element.nativeElement, "background", "white")
+                this.renderer.setElementStyle(event.target, "background", "white")
             }, 150)
             event.preventDefault();
         }
