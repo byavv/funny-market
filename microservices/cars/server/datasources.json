@@ -4,11 +4,11 @@
     "connector": "mongodb",
     "host": "${mongo_host}",
     "port": 27017,
+    "database": "carsDb",
     "server": {
       "auto_reconnect": true,
       "reconnectTries": 100,
       "reconnectInterval": 1000
-    },
-    "database": "cars-db"
+    }
   }
 }
