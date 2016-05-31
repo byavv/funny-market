@@ -8,9 +8,6 @@ export class SortPipe implements PipeTransform {
             .replace('-', '\f151')
             .replace('+', '\f151');          
         value = value.replace(/[+-]/, ' ');
-        return value + type
-
+        return value + type;
     }
-
-
 }

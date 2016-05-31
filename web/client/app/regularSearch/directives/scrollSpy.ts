@@ -1,7 +1,5 @@
 import { Directive, OnInit, Inject, ElementRef, Renderer, AfterContentInit, ContentChild, Input} from '@angular/core';
-import {DOCUMENT} from '@angular/platform-browser';
 import {getDOM, DomAdapter} from '@angular/platform-browser/src/dom/dom_adapter';
-import {global} from '@angular/compiler/src/facade/lang';
 import {Subject} from 'rxjs';
 
 @Directive({
@@ -10,19 +8,19 @@ import {Subject} from 'rxjs';
 })
 export class ScrollSpy implements AfterContentInit {
     private _domAdapter: DomAdapter;
+    private _doc: HTMLDocument
     collapsed: boolean = false;
     @Input()
-    boundary: number = 50;   
+    boundary: number = 50;
     overBoundary: boolean = false;
     collapse$: Subject<any> = new Subject();
-    constructor(private element: ElementRef, private renderer: Renderer, @Inject(DOCUMENT) private _doc) {
-        console.log(_doc)
-       this._domAdapter = getDOM();
-       //let oldRoots = getDOM().querySelectorAll(this._doc, '[id^=root]');
+    constructor(private element: ElementRef, private renderer: Renderer) {
+        this._domAdapter = getDOM();
+        this._doc = this._domAdapter.defaultDoc();
     }
     ngAfterContentInit() {
         this.renderer.listenGlobal('window', 'scroll', (evt) => {
-            var scrollTop =  document.documentElement.scrollTop ||  document.body.scrollTop;
+            var scrollTop = this._doc.documentElement.scrollTop || this._doc.body.scrollTop;
             if (scrollTop > this.boundary) {
                 if (!this.overBoundary) {
                     this.collapse$.next(true);

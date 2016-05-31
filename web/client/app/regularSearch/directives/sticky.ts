@@ -2,19 +2,16 @@ import { Directive, OnInit, ElementRef, Renderer, Output, Input, EventEmitter} f
 import {Subscription, Subject, Observable} from 'rxjs';
 import {getDOM, DomAdapter} from '@angular/platform-browser/src/dom/dom_adapter';
 import {global, NumberWrapper} from '@angular/compiler/src/facade/lang';
-
 @Directive({
     selector: '[sticky]',
 })
 export class StickyPanel implements OnInit {
     private _doc: HTMLDocument;
     private _domAdapter: DomAdapter;
-    // private _ruler: Ruler;
     height: number = 0;
     width: number = 0;
     top: number = 0;
     _active: boolean = true;
-   // _win;
     @Input()
     startFrom: number = 65;
     @Input()
@@ -35,8 +32,8 @@ export class StickyPanel implements OnInit {
 
     ignoreElementSize = false;
     constructor(public element: ElementRef, private renderer: Renderer) {
-       this._domAdapter = getDOM();
-       this._doc = document
+        this._domAdapter = getDOM();
+        this._doc = this._domAdapter.defaultDoc();
     }
 
     ngOnInit() {
