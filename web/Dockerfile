@@ -1,9 +1,7 @@
-FROM node:5.10.1
-MAINTAINER V.V. <aksenchyk.v@gmail.com>
-ADD . /app
+FROM node:6.2.0
+MAINTAINER V.V. Aksenchyk <aksenchyk.v@gmail.com>
 WORKDIR /app
-ENV NPM_CONFIG_LOGLEVEL info
-ENV NODE_VERSION 5.10.1
+ADD . /app
 RUN \    
     npm install -g typings gulp --quiet \
     && npm install \

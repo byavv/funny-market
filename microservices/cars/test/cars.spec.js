@@ -51,7 +51,7 @@ describe('CAR API TESTS', function () {
           action: 'track',
           value: {
             carId: `${result.body.car.id}`,
-            image: '/build/cl/assets/img/default.png',
+            image: '/static/assets/img/default.png',
             description: `${result.body.car.makerName}, ${result.body.car.modelName}`
           }
         }), true);

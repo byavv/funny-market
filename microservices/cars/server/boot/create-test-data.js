@@ -46,7 +46,7 @@ module.exports = function (app, cb) {
                             var cars = [];
                             for (var i = 0; i < 200; i++) {
                                 var car = {
-                                    images: [{ url: "/build/cl/assets/img/bmw.jpg", key: 'key' }],
+                                    images: [{ url: "/static/assets/img/bmw.jpg", key: 'key' }],
                                     milage: getRandomInt(0, 250000),
                                     year: getRandomInt(1980, 2015),
                                     price: getRandomInt(500, 25000),
@@ -64,7 +64,7 @@ module.exports = function (app, cb) {
 
                             for (var i = 0; i < 200; i++) {
                                 var car = {
-                                    images: [{ url: "/build/cl/assets/img/audi.jpg", key: 'key' }],
+                                    images: [{ url: "/static/assets/img/audi.jpg", key: 'key' }],
                                     milage: getRandomInt(0, 250000),
                                     year: getRandomInt(1980, 2015),
                                     price: getRandomInt(500, 25000),
@@ -82,7 +82,7 @@ module.exports = function (app, cb) {
 
                             for (var i = 0; i < 200; i++) {
                                 var car = {
-                                    images: [{ url: "/build/cl/assets/img/tesla.jpg", key: 'key' }],
+                                    images: [{ url: "/static/assets/img/tesla.jpg", key: 'key' }],
                                     milage: getRandomInt(0, 250000),
                                     year: getRandomInt(1980, 2015),
                                     price: getRandomInt(500, 25000),

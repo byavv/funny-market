@@ -1,7 +1,7 @@
 var webpackMerge = require('webpack-merge'),
     path = require('path'),
     webpack = require('webpack'),
-    nodeExternals = require('webpack-node-externals')   
+    nodeExternals = require('webpack-node-externals')
     ;
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 
@@ -34,6 +34,11 @@ var common = {
                         2375, // 2375 -> Duplicate string index signature
                     ]
                 },
+            },          
+            {
+                test: /\.js$|\.css$/,
+                include: /node_modules/,
+                loaders: ['strip-sourcemap-loader']
             }
         ],
     },
@@ -45,13 +50,13 @@ var common = {
 var client_in_browser_ui_config = {
     target: 'web',
     entry: {
-        main: ['./client/bootstrap.ts']       
+        main: ['./client/bootstrap.ts']
     },
     output: {
-        path: __dirname + '/build/cl',
+        path: __dirname + '/build/client',
         filename: "[name].js",
         pathinfo: false,
-        publicPath: '/build/cl/',
+        publicPath: '/build/client/',
     },
     node: {
         global: true,
@@ -65,7 +70,7 @@ var client_in_browser_ui_config = {
             context: __dirname,
             sourceType: 'var',
             get manifest() {
-                return require(path.join(__dirname, "build/cl", "vendors-manifest.json"));
+                return require(path.join(__dirname, "build/client", "vendors-manifest.json"));
             }
         }),
         new webpack.DefinePlugin({
@@ -74,7 +79,7 @@ var client_in_browser_ui_config = {
         new webpack.ProvidePlugin({
             _: "lodash"
         }),
-        new CopyWebpackPlugin([{ from: 'client/assets', to: 'assets' }]),        
+        new CopyWebpackPlugin([{ from: 'client/assets', to: 'assets' }]),
     ]
 };
 
@@ -85,7 +90,7 @@ var vendors_config = {
         vendors: ['./client/vendors.ts']
     },
     output: {
-        path: __dirname + '/build/cl',
+        path: __dirname + '/build/client',
         filename: "[name].js",
         library: "vendors",
         libraryTarget: 'var'
@@ -94,7 +99,7 @@ var vendors_config = {
     plugins: [
         new webpack.DllPlugin({
             name: "vendors",
-            path: path.join(__dirname, "build/cl", "vendors-manifest.json"),
+            path: path.join(__dirname, "build/client", "vendors-manifest.json"),
         })
     ]
 };
@@ -105,7 +110,7 @@ var server_config = {
         server: ['./server/server']
     },
     output: {
-        path: __dirname + '/build/srv',
+        path: __dirname + '/build/server',
         filename: "[name].js",
         devtoolModuleFilenameTemplate: '[absolute-resource-path]',
         devtoolFallbackModuleFilenameTemplate: '[absolute-resource-path]?[hash]'
@@ -121,7 +126,7 @@ var server_config = {
 };
 
 
-module.exports = function(env) {
+module.exports = function (env) {
     var environment = env || process.env.NODE_ENV || "development";
     var productionTools = {
         plugins: [
@@ -151,10 +156,10 @@ module.exports = function(env) {
         server = webpackMerge(common, server_config, {/*production specific config */ });
         vendors = webpackMerge(common, vendors_config, Object.assign({}, productionTools));
     }
- 
+
     return {
         server: server,
         client: client,
-        vendors: vendors     
+        vendors: vendors
     }
 }

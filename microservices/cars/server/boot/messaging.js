@@ -25,7 +25,6 @@ module.exports = function (app, done) {
                         case 'cars.delete.image':
                             var carId = message.value.carId;
                             var key = message.value.key;
-                            console.log("WOW", carId, key)
                             Car.findById(carId, (err, carInst) => {
                                 if (err) return callback({ err: err });
                                 let image = carInst.images.find(image => image.key == key);
@@ -59,7 +58,7 @@ module.exports = function (app, done) {
                                         action: 'track.update',
                                         value: {
                                             carId: `${carInst.id}`,
-                                            image: carInst.images ? carInst.images[0].url : '/build/cl/assets/img/default.png',
+                                            image: carInst.images ? carInst.images[0].url : '/static/assets/img/default.png',
                                             description: `${carInst.makerName}, ${carInst.modelName}`
                                         }
                                     })
@@ -72,8 +71,12 @@ module.exports = function (app, done) {
                     };
                 });
             })
-            .then(done)
-            .catch(done);
+            .then(() => {
+                done()
+            })
+            .catch((err) => {
+                done(err)
+            });
 
         app.close = () => {
             client.close();
