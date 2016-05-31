@@ -15,7 +15,7 @@ module.exports = function (Car) {
                     action: 'track',
                     value: {
                         carId: `${car.id}`,
-                        image: '/build/cl/assets/img/default.png',
+                        image: '/static/assets/img/default.png',
                         description: `${car.makerName}, ${car.modelName}`
                     }
                 })

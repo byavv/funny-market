@@ -20,7 +20,7 @@ import { isString } from '@angular/compiler/src/facade/lang';
             flex: 0 1 16.6666666%;           
         }
         .color-picker.active{
-            background-image: url('/build/cl/assets/img/check.png');
+            background-image: url('/static/assets/img/check.png');
             background-repeat: no-repeat;
             background-position: center;
         }

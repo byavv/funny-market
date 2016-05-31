@@ -44,9 +44,8 @@ let root = path.join(path.resolve(__dirname, '..'));
 // Compress assets
 app.use(compression());
 
-// Definition static resources folder '/build/cl' and map to '/static' path
-//app.use('/static', express.static(path.join(root, 'build', 'cl'), { index: false }));
-app.use('/build', express.static(path.join(root, 'build'), { index: false }));
+// Definition static resources folder '/build/client' and map to '/static' path
+app.use('/static', express.static(path.join(root, 'build', 'client'), { index: false }));
 app.use(require("serve-favicon")(path.join(__dirname, "./views/favicon.ico")));
 app.engine('.html', expressEngine);
 app.set("views", path.join(__dirname, "./views"));
