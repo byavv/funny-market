@@ -3,6 +3,7 @@ import {FilterController} from '../../services/filterController';
 import {FilterWrapperComponent} from './filterWrapper'
 import * as filters from './filters';
 import {TotalCounter} from '../../services/totalCounter';
+import {Api} from "../../../shared/services";
 import {FilterModel, FilterStateModel} from "../../../shared/models";
 import {LoaderComponent} from "../../../shared/components/loader/loader";
 import {Subscription} from "rxjs";
@@ -49,6 +50,7 @@ export class CarFilterPanelComponent implements OnInit, OnDestroy {
 
     constructor(private filterController: FilterController,
         private counter: TotalCounter,
+        private apiService: Api,
         @ViewQuery("wrapper") private wrappers: QueryList<FilterWrapperComponent>) { }
 
     ngOnInit() {
@@ -78,7 +80,12 @@ export class CarFilterPanelComponent implements OnInit, OnDestroy {
         } else {
             this.pendingFilterState = Object.assign(this.pendingFilterState, newValue.filterValue);
         }
-        this.counter.getCount(Object.assign(this.filterController.filterState, this.pendingFilterState))
+        if (this.opened) {
+            this.apiService.getCarsCount(Object.assign(this.filterController.filterState, this.pendingFilterState))
+                .subscribe((result: any) => {
+                    this.counter.next(+result.count);
+                })
+        }
     }
 
     _doSerch() {

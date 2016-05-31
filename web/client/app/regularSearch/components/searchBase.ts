@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Api} from '../../shared/services';
 import {RouteParams, Router, OnReuse, ComponentInstruction} from '@angular/router-deprecated';
-import {Subject} from "rxjs";
+import {Subject, Observable} from "rxjs";
 
 import {AppController} from "../../shared/services";
 import {CarFilterPanelComponent} from './filterPanel/panelBase';
@@ -14,7 +14,6 @@ import {StateSummaryPanel} from './resultsPanel/filterStatePanel/stateSummary';
 import {LastAddedComponent} from './lastAddedPanel/components/lastAdded';
 import {ScrollSpy} from "../directives/scrollSpy";
 import {ResizeSpy} from '../directives/resizeSpy';
-import {Responsive} from "../directives/responsive";
 import {StickyPanel} from "../directives/sticky";
 import {SizeSpy} from "../directives/rectSpy"
 
@@ -28,7 +27,6 @@ import {SizeSpy} from "../directives/rectSpy"
         PaginationComponent,
         LoaderComponent,
         ScrollSpy,
-        Responsive,
         LastAddedComponent,
         StickyPanel,
         ResizeSpy,
@@ -67,20 +65,27 @@ export class CarsSearchComponent implements OnReuse, OnInit {
     }
     private _search(filter) {
         this.loading = true;
-        this.apiService
-            .searchCars(filter)
-            .subscribe((result) => {
-                this.totalCount = +result.count;
-                this.found$.next(result.cars);
-                this.totalCounter.next(this.totalCount);
-            }, (err) => { console.error(err) })
+        Observable.zip(
+            this.apiService
+                .searchCars(filter),
+            this.apiService
+                .getCarsCount(filter),
+            (cars, count) => [cars, count])
+            .subscribe((result: any) => {
+                if (result) {
+                    this.totalCount = +result[1].count;
+                    this.totalCounter.next(this.totalCount);
+                    this.found$.next(result[0]);
+                }
+            }, err => {
+                console.log(err);
+            })
     }
-    
+
     doSearch(value) {
         if (value) {
             this.filterController.filterState = value;
             this.router.navigate(['SearchList', this.filterController.convertToRouteParams()]);
-        }       
-    }   
-   
+        }
+    }
 }

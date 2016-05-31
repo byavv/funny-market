@@ -16,7 +16,8 @@
     border: 1px solid #cfd8dc;
     background: #ECEFF1;
     color: #455A64;
-    border-color: #cfd8dc;    
+    border-color: #cfd8dc;   
+    text-align: center; 
 }
 
 .filter-item span{
