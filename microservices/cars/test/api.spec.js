@@ -25,14 +25,12 @@ describe('SEARCH API TESTS', function () {
 
     it('should find cars in database', function (done) {
         superagent
-            .post('http://localhost:3010/api/search')
+            .post('http://localhost:3010/api/cars/search')
             .set('Content-Type', 'application/json')
             .end(function (err, result) {
                 if (err) { return done(err); }
                 assert.equal(result.status, 200);
-                result.body.should.be.a('object');
-                result.body.should.have.property('cars');
-                result.body.should.have.property('count')
+                result.body.should.be.a('array'); 
                 done();
             });
     });
