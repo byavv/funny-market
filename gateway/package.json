@@ -1,5 +1,5 @@
 {
-  "name": "gate",
+  "name": "gateway",
   "version": "1.0.0",
   "main": "server/server.js",
   "scripts": {
@@ -46,5 +46,5 @@
     "type": "",
     "url": ""
   },
-  "description": "gate"
+  "description": "api gateway server"
 }
