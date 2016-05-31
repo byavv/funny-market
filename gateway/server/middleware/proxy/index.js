@@ -2,8 +2,7 @@ var debug = require('debug')('proxy');
 var httpProxy = require('http-proxy');
 var HttpProxyRules = require('http-proxy-rules');
 var GateWayError = require("../../lib/errors").err502;
-var registry = require('etcd-registry')('http://192.168.99.100:4001');
-
+var registry = require('etcd-registry');
 /**
  * Creates simple reverse proxy according to the config table, finds target 
  * service in etcd key-value storage and maps request to the result.
@@ -14,6 +13,7 @@ var registry = require('etcd-registry')('http://192.168.99.100:4001');
  * @returns {Function} The express middleware handler
  */
 module.exports = function (options) {
+    var services = registry(`http://${options.etcd_host}:4001`);
     var proxy = httpProxy.createProxyServer({});
     proxy.on('proxyReq', function (proxyReq, req, res, options) {
         if (req.accessToken && req.accessToken.userId) {
@@ -31,6 +31,17 @@ module.exports = function (options) {
     proxyRules = new HttpProxyRules({
         rules: proxyRules
     });
+    var _lookupService = (name) => {
+        return new Promise((resolve, reject) => {
+            services.lookup(name, (err, service) => {
+                if (err || !service) {
+                    reject(err || new GateWayError(`Service ${name} is not found or unevailable`));
+                } else {
+                    resolve(service);
+                }
+            });
+        });
+    };
     return (req, res, next) => {
         var target = proxyRules.match(req);
         if (target) {
@@ -51,14 +62,3 @@ module.exports = function (options) {
     };
 };
 
-var _lookupService = (name) => {
-    return new Promise((resolve, reject) => {
-        registry.lookup(name, (err, service) => {
-            if (err || !service) {
-                reject(err || new GateWayError(`Service ${name} is not found or unevailable`));
-            } else {
-                resolve(service);
-            }
-        });
-    });
-};

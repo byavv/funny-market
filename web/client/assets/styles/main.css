@@ -8,6 +8,7 @@ html {
     font-size: 1em;
     line-height: 1.42857143;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    overflow-y: scroll;
 }
 
 h1 {

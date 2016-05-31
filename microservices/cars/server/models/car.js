@@ -58,12 +58,12 @@ module.exports = function (Car) {
      */
     Car.createNew = function (car, userId, cb) {
         if (!userId) {
-            throw new Error("Request does't contain authority information");
+            cb(new Error("Request does't contain authority information"));
         }
         car.userId = userId;
         car.images = [];
         Car.create(car, (err, carInst) => {
-            if (err) throw err;
+            if (err) cb(err);
             cb(null, carInst);
         })
     };
@@ -94,10 +94,10 @@ module.exports = function (Car) {
      */
     Car.updateCurrent = function (id, car, cb) {
         Car.findById(id, (err, carInst) => {
-            if (err) throw err;
+            if (err || !carInst) return cb(err || "Not found");
             Object.assign(carInst, car);
             Car.updateAll({ id: id }, carInst, (err, info) => {
-                if (err) throw err;
+                if (err) return cb(err);
                 cb(null, carInst);
             })
         });
@@ -121,7 +121,7 @@ module.exports = function (Car) {
      * X-PRINCIPLE header is added by proxy when user authorization passed
      */
     Car.getCarsByPrinciple = function (userId, cb) {
-        if (!userId) throw new Error("Principle doesn't set");
+        if (!userId) return cb(new Error("Principle doesn't set"));
         Car.find({ where: { userId: userId } }, (err, cars) => {
             cb(err, cars);
         })
@@ -137,4 +137,124 @@ module.exports = function (Car) {
         returns: { type: 'array', root: true },
         http: { path: '/getusercars', verb: 'post', errorStatus: 400 }
     });
+
+    Car.search = function (query, cb) {
+        Car.find(query).then((cars) => {
+            return cb(null, cars)
+        }).catch((err) => {
+            return cb(err)
+        })
+    }
+
+    Car.remoteMethod(
+        'search',
+        {
+            accepts: [
+                {
+                    arg: 'query',
+                    type: 'object',
+                    http: (ctx) => {
+                        var filterQuery = _createFilterQuery(ctx.req.body);
+                        var optionsQuery = _createOptionsQuery(ctx.req.body);
+                        var fields = {
+                            fields: {
+                                id: true,
+                                makerName: true,
+                                modelName: true,
+                                description: true,
+                                images: true,
+                                price: true,
+                                year: true,
+                                milage: true
+                            }
+                        }
+                        return Object.assign({ where: filterQuery }, optionsQuery, fields);
+                    }
+                }
+            ],
+            returns: { type: 'array', root: true },
+            http: { path: '/search', verb: 'post', errorStatus: 400 }
+        }
+    );
+
+
+    Car.count = function (query, cb) {
+        Car.count(query).then((count) => {
+            return cb(null, count)
+        }).catch((err) => {
+            return cb(err)
+        })
+    }
+
+    Car.remoteMethod(
+        'count',
+        {
+            accepts: [
+                {
+                    arg: 'query',
+                    type: 'object',
+                    http: (ctx) => {
+                        return _createFilterQuery(ctx.req.body);
+                    }
+                }
+            ],
+            returns: { arg: 'count', type: 'number'},
+            http: { path: '/count', verb: 'post', errorStatus: 400 }
+        }
+    );
+
+    function _createOptionsQuery(request) {
+        var query = {};
+        if (request.sort) {
+            var sort = request.sort;
+            var sort = sort.replace('+', " ASC");
+            var sort = sort.replace("-", " DESC");
+            Object.assign(query, { order: sort })
+        }
+        if (request.limit) {
+            Object.assign(query, { limit: +request.limit })
+        }
+        if (request.limit && request.page) {
+            Object.assign(query, { skip: (+request.limit) * (+request.page - 1) })
+        }
+        return query;
+    }
+
+    function _createFilterQuery(request) {
+        var query = [];
+        if (request) {
+            if (request.model) {
+                query.push({ modelName: request.model });
+            }
+            if (request.maker) {
+                query.push({ makerName: request.maker });
+            }
+            if (request.priceFrom) {
+                query.push({ price: { gte: +request.priceFrom } });
+            }
+            if (request.priceUp) {
+                query.push({ price: { lte: +request.priceUp } });
+            }
+            if (request.yearFrom) {
+                query.push({ year: { gte: +request.yearFrom } });
+            }
+            if (request.yearUp) {
+                query.push({ year: { lte: +request.yearUp } });
+            }
+            if (request.colors && request.colors.length > 0) {
+                query.push({ color: { inq: request.colors } });
+            }
+            if (request.milageUp) {
+                query.push({ milage: { lte: +request.milageUp } });
+            }
+            if (request.milageFrom) {
+                query.push({ milage: { gte: +request.milageFrom } });
+            }
+            if (request.engineTypes && request.engineTypes.length > 0) {
+                query.push({ engineType: { inq: request.engineTypes } });
+            }
+        }
+        return query.length > 0 ? { and: query } : {};
+    }
+
 };
