@@ -1,5 +1,6 @@
 "use strict"
-var async = require('async');
+const async = require('async')
+    , debug = require('debug')('cars')
 
 module.exports = function (Car) {
     var app;
@@ -11,15 +12,7 @@ module.exports = function (Car) {
         if (ctx.instance) {
             var car = ctx.instance;
             if (app.rabbit && car) {
-                /* app.rabbit.publish('tracker', {
-                     action: 'track',
-                     value: {
-                         carId: `${car.id}`,
-                         image: '/static/assets/img/default.png',
-                         description: `${car.makerName}, ${car.modelName}`
-                     }
-                 })*/
-                app.rabbit.request('ms.1', {
+                app.rabbit.publish('ms.1', {
                     type: 'track',
                     routingKey: "tracker",
                     body: {
@@ -27,10 +20,7 @@ module.exports = function (Car) {
                         image: '/static/assets/img/default.png',
                         description: `${car.makerName}, ${car.modelName}`
                     }
-                }).then(function (final) {
-                    console.log(final.body);
-                    final.ack();
-                });
+                })
             }
         }
         next();
@@ -44,7 +34,7 @@ module.exports = function (Car) {
     })
 
     Car.observe('before delete', function (ctx, next) {
-        console.log('Deleted %s matching %j',
+        debug('Deleted %s matching %j',
             ctx.Model.pluralModelName,
             ctx.where);
 
@@ -52,34 +42,18 @@ module.exports = function (Car) {
             if (cars) {
                 cars.forEach((car) => {
                     if (app.rabbit) {
-                        app.rabbit.request('ms.1', {
+                        app.rabbit.publish('ms.1', {
                             routingKey: "image",
                             type: "delete",
                             body: car.images
-                        }).then((final) => {
-                            console.log(final.body);
-                            final.ack();
-                        });
-
-                        app.rabbit.request('ms.1', {
+                        })
+                        app.rabbit.publish('ms.1', {
                             type: "delete",
                             routingKey: "tracker",
                             body: {
                                 carId: `${car.id}`
                             }
-                        }).then((final) => {
-                            console.log(final.body);
-                            final.ack();
-                        });
-
-
-                        /*  app.rabbit.publish('image', { action: 'image.delete', value: car.images });
-                          app.rabbit.publish('tracker', {
-                              action: 'track.delete',
-                              value: {
-                                  carId: `${car.id}`
-                              }
-                          })*/
+                        })
                     }
                 })
             }
@@ -97,6 +71,7 @@ module.exports = function (Car) {
         car.images = [];
         Car.create(car, (err, carInst) => {
             if (err) cb(err);
+            debug("CAR CREATED", carInst)
             cb(null, carInst);
         })
     };
@@ -131,6 +106,7 @@ module.exports = function (Car) {
             Object.assign(carInst, car);
             Car.updateAll({ id: id }, carInst, (err, info) => {
                 if (err) return cb(err);
+                debug("CAR UPDATED", carInst)
                 cb(null, carInst);
             })
         });

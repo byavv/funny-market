@@ -4,13 +4,15 @@
   "main": "server/server.js",
   "scripts": {
     "start": "make run",
-    "test": "make test-cov"
+    "test": "make test-cov",
+    "dev": "make dev"
   },
   "dependencies": {
     "amqplib": "^0.4.1",
     "async": "^2.0.0-rc.5",
     "compression": "^1.0.3",
     "cors": "^2.5.2",
+    "debug": "^2.2.0",
     "etcd-registry": "^2.1.1",
     "helmet": "^0.14.0",
     "loopback": "^2.28.0",

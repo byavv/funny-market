@@ -1,13 +1,14 @@
-var rabbit = require('wascally');
+const rabbit = require('wascally')
+    , debug = require("debug")("tracker");
 
 module.exports = function (app, done) {
     var Track = app.models.track;
 
     function handle() {
         rabbit.handle('track', (message) => {
-            console.log("TRACK CAR", message.body)
+            debug("TRACK CAR", message.body)
             Track.create(message.body, (err, track) => {
-                err ? message.reject() : message.reply(track);
+                err ? message.reject() : message.ack();
             })
         });
         rabbit.handle('update', (message) => {
@@ -20,16 +21,16 @@ module.exports = function (app, done) {
                             image: message.body.image,
                             description: message.body.description ? message.body.description : track.description
                         }, (err, tr) => {
-                            err ? message.reject() : message.reply(tr);
+                            err ? message.reject() : message.ack();
                         })
                     }
                 })
         });
         rabbit.handle('delete', (message) => {
-            console.log("DELETE FROM TRACKING", message.body)
+            debug("DELETE FROM TRACKING", message.body)
             if (message.body && message.body.carId)
                 Track.destroyAll({ carId: message.body.carId }, (err, info) => {
-                    err ? message.reject() : message.reply(info);
+                    err ? message.reject() : message.ack();
                 })
         });
     }
@@ -40,7 +41,7 @@ module.exports = function (app, done) {
     })
         .then(() => {
             app.rabbit = rabbit;
-            console.log("Rabbit client started")
+            debug("Rabbit client started")
         })
         .then(handle)
         .then(done);

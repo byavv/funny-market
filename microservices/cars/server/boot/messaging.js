@@ -1,4 +1,6 @@
-var rabbit = require('wascally');
+'use strict'
+const rabbit = require('wascally')
+    , debug = require('debug')('cars');
 
 module.exports = function (app, done) {
     var Car = app.models.Car;
@@ -16,33 +18,26 @@ module.exports = function (app, done) {
             var carId = message.body.carId;
             var key = message.body.key;
             Car.findById(carId, (err, carInst) => {
-                if (err) return callback({ err: err });
+                if (err) { message.nack(); return; }
                 let image = carInst.images.find(image => image.key == key);
                 if (image) {
                     carInst.images.splice(carInst.images.indexOf(image), 1);
                     Car.updateAll({ id: carId }, carInst, (err, info) => {
-                        if (err) {
-                            message.nack();
-                        } else {
-                            message.reply(info);
-                        }
+                        err
+                            ? message.nack()
+                            : message.ack();
                     });
                 } else {
-                    message.nack();
+                    message.reject();
                 }
             })
         });
-
-        rabbit.handle('*', (message) => {
-            console.log("ALL", message)
-        })
         rabbit.handle('update.images', (message) => {
-            console.log("YYYYYOW")
-            var carId = message.body.carId;
-            var files = message.body.files;
+            const carId = message.body.carId;
+            const files = message.body.files;
             Car.findById(carId, (err, carInst) => {
-                if (err) throw err;
-                var images = (files || []).map((file) => {
+                if (err) { message.nack(); return; }
+                const images = (files || []).map((file) => {
                     return {
                         url: file.location,
                         key: file.key
@@ -50,23 +45,19 @@ module.exports = function (app, done) {
                 });
                 carInst.images = carInst.images.concat(images);
                 Car.updateAll({ id: carId }, carInst, (err, info) => {
-                    if (err) {
-                        message.nack();
-                    } else {
-                        message.reply(info);
-                    }
-                    rabbit.request('ms.1', {
-                        type: 'update',
-                        routingKey: "tracker",
-                        body: {
-                            carId: `${carInst.id}`,
-                            image: carInst.images ? carInst.images[0].url : '/static/assets/img/default.png',
-                            description: `${carInst.makerName}, ${carInst.modelName}`
-                        }
-                    }).then(function (final) {
-                        console.log(final.body);
-                        final.ack();
-                    });
+                    err
+                        ? message.nack()
+                        : rabbit.publish('ms.1', {
+                            type: 'update',
+                            routingKey: "tracker",
+                            body: {
+                                carId: `${carInst.id}`,
+                                image: carInst.images ? carInst.images[0].url : '/static/assets/img/default.png',
+                                description: `${carInst.makerName}, ${carInst.modelName}`
+                            }
+                        }).then(() => {
+                            message.ack();
+                        });
                 })
             });
         });
@@ -78,7 +69,7 @@ module.exports = function (app, done) {
     })
         .then(() => {
             app.rabbit = rabbit;
-            console.log("Rabbit client started");
+            debug("Rabbit client started");
         })
         .then(handle)
         .then(done);

@@ -1,7 +1,8 @@
 "use strict"
-var rabbit = require('wascally');
-var async = require('async');
-var aws = require('aws-sdk');
+const rabbit = require('wascally')
+    , async = require('async')
+    , aws = require('aws-sdk')
+    , debug = require('debug')('image');
 
 module.exports = function (app, done) {
     const s3 = new aws.S3({
@@ -11,18 +12,17 @@ module.exports = function (app, done) {
     });
     function handle() {
         rabbit.handle('delete', (message) => {
-            console.log("DELETE IMAGES", message.body)
-            let images = message.body || [];
-            async.each(images, (image, clb) => {
+            const images = message.body || [];
+            async.each(images, (image, callback) => {
                 let params = {
                     Bucket: 'carmarket',
                     Key: image.key,
                 };
                 s3.deleteObject(params, (err, data) => {
-                    clb(err, data)
+                    callback(err, data)
                 });
             }, (err, res) => {
-                err ? message.reject() : message.reply("OK");
+                err ? message.nack() : message.ack();
             });
         });
     }
@@ -33,7 +33,7 @@ module.exports = function (app, done) {
         .then(handle)
         .then(() => {
             app.rabbit = rabbit;
-            console.log("Rabbit client started");
+            debug("Rabbit client started");
         })
         .then(done);
 

@@ -1,10 +1,12 @@
-var rabbit = require('wascally');
+"use strict"
+
+const rabbit = require('wascally')
+    , debug = require('debug')("profile")
+
 
 module.exports = function (app, done) {
     function handle() {
-        rabbit.handle('update', (message) => {
-            message.reply(track);
-        });
+
     }
     require('../lib/topology')(rabbit, {
         name: app.get('ms_name'),
@@ -12,7 +14,7 @@ module.exports = function (app, done) {
     })
         .then(() => {
             app.rabbit = rabbit;
-            console.log("Rabbit client started");
+            debug("Rabbit client started");
         })
         .then(handle)
         .then(done);

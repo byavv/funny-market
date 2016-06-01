@@ -1,6 +1,6 @@
 MAKEFLAGS = -j1
 REPORTER = spec
-MSNAME = cars
+MSNAME = image
 TESTS = test/*.spec.js
 BIN = node_modules/.bin
 

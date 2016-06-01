@@ -1,7 +1,9 @@
-var boot = require('loopback-boot');
-var http = require('http');
-var loopback = require('loopback');
-var app = module.exports = loopback();
+"use strtict"
+const boot = require('loopback-boot')
+    , http = require('http')
+    , loopback = require('loopback')
+    , app = module.exports = loopback()
+    , debug = require('debug')('cars');
 
 var http_port = process.env.HTTP_PORT || 3044,
     etcd_host = process.env.ETCD_HOST || "192.168.99.100",
