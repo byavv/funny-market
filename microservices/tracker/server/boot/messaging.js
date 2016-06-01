@@ -5,13 +5,14 @@ module.exports = function (app, done) {
     var Track = app.models.track;
 
     function handle() {
-        rabbit.handle('track', (message) => {
+        rabbit.handle('tracker.track', (message) => {
             debug("TRACK CAR", message.body)
             Track.create(message.body, (err, track) => {
                 err ? message.reject() : message.ack();
             })
         });
-        rabbit.handle('update', (message) => {
+        rabbit.handle('tracker.update', (message) => {
+            debug("UPDATE TRACKING", message.body)
             if (message.body && message.body.carId)
                 Track.findOne({ where: { carId: message.body.carId } }, (err, track) => {
                     if (err || !track) {
@@ -26,7 +27,7 @@ module.exports = function (app, done) {
                     }
                 })
         });
-        rabbit.handle('delete', (message) => {
+        rabbit.handle('tracker.delete', (message) => {
             debug("DELETE FROM TRACKING", message.body)
             if (message.body && message.body.carId)
                 Track.destroyAll({ carId: message.body.carId }, (err, info) => {
@@ -34,17 +35,17 @@ module.exports = function (app, done) {
                 })
         });
     }
-
-    require('../lib/topology')(rabbit, {
-        name: app.get('ms_name'),
-        host: app.get("rabbit_host")
-    })
-        .then(() => {
-            app.rabbit = rabbit;
-            debug("Rabbit client started")
+    if (process.env.NODE_ENV != 'test')
+        require('../lib/topology')(rabbit, {
+            name: app.get('ms_name'),
+            host: app.get("rabbit_host")
         })
-        .then(handle)
-        .then(done);
+            .then(handle)
+            .then(() => {
+                app.rabbit = rabbit;
+                debug("Rabbit client started");
+            })
+            .then(done);
 
     app.close = () => {
         rabbit.closeAll();

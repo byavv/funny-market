@@ -8,16 +8,17 @@ module.exports = function (app, done) {
     function handle() {
 
     }
-    require('../lib/topology')(rabbit, {
-        name: app.get('ms_name'),
-        host: app.get("rabbit_host")
-    })
-        .then(() => {
-            app.rabbit = rabbit;
-            debug("Rabbit client started");
+    if (process.env.NODE_ENV != 'test')
+        require('../lib/topology')(rabbit, {
+            name: app.get('ms_name'),
+            host: app.get("rabbit_host")
         })
-        .then(handle)
-        .then(done);
+            .then(() => {
+                app.rabbit = rabbit;
+                debug("Rabbit client started");
+            })
+            .then(handle)
+            .then(done);
 
     app.close = () => {
         rabbit.closeAll();

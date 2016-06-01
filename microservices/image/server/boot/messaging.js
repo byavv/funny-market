@@ -11,7 +11,7 @@ module.exports = function (app, done) {
         signatureVersion: 'v4'
     });
     function handle() {
-        rabbit.handle('delete', (message) => {
+        rabbit.handle('image.delete', (message) => {
             const images = message.body || [];
             async.each(images, (image, callback) => {
                 let params = {
@@ -19,6 +19,7 @@ module.exports = function (app, done) {
                     Key: image.key,
                 };
                 s3.deleteObject(params, (err, data) => {
+                    debug("IMAGES DELETED", images, data)
                     callback(err, data)
                 });
             }, (err, res) => {
@@ -26,16 +27,17 @@ module.exports = function (app, done) {
             });
         });
     }
-    require('../lib/topology')(rabbit, {
-        name: app.get('ms_name'),
-        host: app.get("rabbit_host")
-    })
-        .then(handle)
-        .then(() => {
-            app.rabbit = rabbit;
-            debug("Rabbit client started");
+    if (process.env.NODE_ENV != 'test')
+        require('../lib/topology')(rabbit, {
+            name: app.get('ms_name'),
+            host: app.get("rabbit_host")
         })
-        .then(done);
+            .then(handle)
+            .then(() => {
+                app.rabbit = rabbit;
+                debug("Rabbit client started");
+            })
+            .then(done);
 
     app.close = () => {
         rabbit.closeAll();

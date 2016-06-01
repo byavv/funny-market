@@ -31,14 +31,16 @@ module.exports = function (User) {
             },
             (userId, callback) => {
                 if (app.rabbit) {
-                    app.rabbit.request('ms.1', {
-                        routingKey: "cars",
-                        type: 'delete.all',
+                    app.rabbit.request('ex.cars', {
+                        routingKey: "requests",
+                        type: 'cars.delete.all',
                         body: userId
                     }).then((final) => {
-                        debug("ALL BOUND CARS DELETED");
+                        debug("ALL BOUND CARS WAS DELETED: ", final.body);
                         callback(null, final.body);
                         final.ack();
+                    }).catch((err) => {
+                        callback(err);
                     });
                 } else {
                     callback(new Error("Operation can't be completed, broker is not available"));

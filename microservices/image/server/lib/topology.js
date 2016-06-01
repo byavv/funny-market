@@ -5,23 +5,25 @@ module.exports = function (rabbit, options) {
             user: 'guest',
             pass: 'guest',
             server: [options.host],
-            port: 5672,            
-            replyQueue: options.name + '_reply',
-            vhost: '%2f',
-
+            timeout: 2000,
+            port: 5672,
+            vhost: '%2f'
         },
-        // define the exchanges
+        // setup all exchanges, process might use
         exchanges: [
-            { name: 'ms.1', type: 'topic', persistent: true }
+            { name: 'ex.cars', type: 'direct', persistent: true, autoDelete: true },
+            { name: 'ex.image', type: 'direct', persistent: true, autoDelete: true },
+            { name: 'ex.tracker', type: 'direct', persistent: true, autoDelete: true },
+            { name: 'ex.profile', type: 'direct', persistent: true, autoDelete: true }
         ],
         // setup the queues, only subscribing to the one this service
         // will consume messages from
         queues: [
-            { name: `${options.name}_q`, subscribe: true, durable: true }
+            { name: `image.q.messages`, subscribe: true, durable: true, autoDelete: true }
         ],
         // binds exchanges and queues to one another
         bindings: [
-            { exchange: 'ms.1', target: `${options.name}_q`, keys: [`${options.name}`] }
+            { exchange: 'ex.image', target: 'image.q.messages', keys: ['messages'] }
         ]
     });
 };

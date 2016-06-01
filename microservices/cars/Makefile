@@ -26,6 +26,6 @@ clean:
 run: 
 	node .
 
-dev: 
+dev: 	
 	@DEBUG=${MSNAME} \
 	node .

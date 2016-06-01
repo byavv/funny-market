@@ -12,9 +12,9 @@ module.exports = function (Car) {
         if (ctx.instance) {
             var car = ctx.instance;
             if (app.rabbit && car) {
-                app.rabbit.publish('ms.1', {
-                    type: 'track',
-                    routingKey: "tracker",
+                app.rabbit.publish('ex.tracker', {
+                    type: 'tracker.track',
+                    routingKey: "messages",
                     body: {
                         carId: `${car.id}`,
                         image: '/static/assets/img/default.png',
@@ -34,22 +34,19 @@ module.exports = function (Car) {
     })
 
     Car.observe('before delete', function (ctx, next) {
-        debug('Deleted %s matching %j',
-            ctx.Model.pluralModelName,
-            ctx.where);
-
+        debug(`Deleted ${ctx.Model.pluralModelName} matching ${JSON.stringify(ctx.where)}`);
         Car.find({ where: ctx.where }, function (err, cars) {
             if (cars) {
                 cars.forEach((car) => {
                     if (app.rabbit) {
-                        app.rabbit.publish('ms.1', {
-                            routingKey: "image",
-                            type: "delete",
+                        app.rabbit.publish('ex.image', {
+                            routingKey: "messages",
+                            type: "image.delete",
                             body: car.images
                         })
-                        app.rabbit.publish('ms.1', {
-                            type: "delete",
-                            routingKey: "tracker",
+                        app.rabbit.publish('ex.tracker', {
+                            type: "tracker.delete",
+                            routingKey: "messages",
                             body: {
                                 carId: `${car.id}`
                             }
@@ -155,35 +152,33 @@ module.exports = function (Car) {
         })
     }
 
-    Car.remoteMethod(
-        'search',
-        {
-            accepts: [
-                {
-                    arg: 'query',
-                    type: 'object',
-                    http: (ctx) => {
-                        var filterQuery = _createFilterQuery(ctx.req.body);
-                        var optionsQuery = _createOptionsQuery(ctx.req.body);
-                        var fields = {
-                            fields: {
-                                id: true,
-                                makerName: true,
-                                modelName: true,
-                                description: true,
-                                images: true,
-                                price: true,
-                                year: true,
-                                milage: true
-                            }
+    Car.remoteMethod('search', {
+        accepts: [
+            {
+                arg: 'query',
+                type: 'object',
+                http: (ctx) => {
+                    var filterQuery = _createFilterQuery(ctx.req.body);
+                    var optionsQuery = _createOptionsQuery(ctx.req.body);
+                    var fields = {
+                        fields: {
+                            id: true,
+                            makerName: true,
+                            modelName: true,
+                            description: true,
+                            images: true,
+                            price: true,
+                            year: true,
+                            milage: true
                         }
-                        return Object.assign({ where: filterQuery }, optionsQuery, fields);
                     }
+                    return Object.assign({ where: filterQuery }, optionsQuery, fields);
                 }
-            ],
-            returns: { type: 'array', root: true },
-            http: { path: '/search', verb: 'post', errorStatus: 400 }
-        }
+            }
+        ],
+        returns: { type: 'array', root: true },
+        http: { path: '/search', verb: 'post', errorStatus: 400 }
+    }
     );
 
 
@@ -195,21 +190,19 @@ module.exports = function (Car) {
         })
     }
 
-    Car.remoteMethod(
-        'count',
-        {
-            accepts: [
-                {
-                    arg: 'query',
-                    type: 'object',
-                    http: (ctx) => {
-                        return _createFilterQuery(ctx.req.body);
-                    }
+    Car.remoteMethod('count', {
+        accepts: [
+            {
+                arg: 'query',
+                type: 'object',
+                http: (ctx) => {
+                    return _createFilterQuery(ctx.req.body);
                 }
-            ],
-            returns: { arg: 'count', type: 'number' },
-            http: { path: '/count', verb: 'post', errorStatus: 400 }
-        }
+            }
+        ],
+        returns: { arg: 'count', type: 'number' },
+        http: { path: '/count', verb: 'post', errorStatus: 400 }
+    }
     );
 
     function _createOptionsQuery(request) {

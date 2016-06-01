@@ -20,9 +20,9 @@ module.exports = function (server) {
       s3.deleteObject(params, function (err, data) {
         if (err) throw err;
         if (server.rabbit) {
-          server.rabbit.publish('ms.1', {
-            type: 'delete.image',
-            routingKey: "cars",
+          server.rabbit.publish('ex.cars', {
+            type: 'cars.delete.image',
+            routingKey: "messages",
             body: { carId: req.body.carId, key: req.body.key }
           }).then(() => {
             debug(`DELETED ${req.body.key} IMAGE`);
@@ -41,9 +41,9 @@ module.exports = function (server) {
     var carId = req.params.carId;
     if (!carId) return res.sendStatus(400);
 
-    server.rabbit.publish('ms.1', {
-      type: 'update.images',
-      routingKey: "cars",
+    server.rabbit.publish('ex.cars', {
+      type: 'cars.update.images',
+      routingKey: "messages",
       body: { carId: carId, files: files }
     }).then(() => {
       return res.status(200).send({ message: "upload success" });
