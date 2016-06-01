@@ -60,7 +60,7 @@
                 <div class="my-card">
                     <div class="carousel">
                         <carousel>
-                            <slide *ngFor="let image of car.images; #index=index">
+                            <slide *ngFor="let image of car.images; let index=index">
                                 <img class='img-fluid' [src]="image.url">
                                 <div class="carousel-caption">
                                     <h4>Slide {{index}}</h4>

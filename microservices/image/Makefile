@@ -1,6 +1,6 @@
 MAKEFLAGS = -j1
 REPORTER = spec
-MSNAME = cars
+MSNAME = image
 TESTS = test/*.spec.js
 BIN = node_modules/.bin
 
@@ -26,6 +26,6 @@ clean:
 run: 
 	node .
 
-dev: 	
+dev: 
 	@DEBUG=${MSNAME} \
 	node .

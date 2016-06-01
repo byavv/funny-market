@@ -4,8 +4,8 @@
   "main": "server/server.js",
   "scripts": {
     "start": "node .",
-    "pretest": "jshint .",
-    "posttest": "nsp check"
+    "dev": "make dev",
+    "test": "make test-cov"
   },
   "dependencies": {
     "amqplib": "^0.4.1",
@@ -13,6 +13,7 @@
     "aws-sdk": "^2.3.16",
     "compression": "^1.0.3",
     "cors": "^2.5.2",
+    "debug": "^2.2.0",
     "etcd-registry": "^2.1.1",
     "helmet": "^0.14.0",
     "loopback": "^2.22.0",
@@ -21,11 +22,18 @@
     "loopback-datasource-juggler": "^2.39.0",
     "multer": "^1.1.0",
     "multer-s3": "^2.3.2",
-    "serve-favicon": "^2.0.1"
+    "serve-favicon": "^2.0.1",
+    "wascally": "^0.2.10"
   },
   "devDependencies": {
+    "chai": "^3.5.0",
+    "istanbul": "^0.4.3",
     "jshint": "^2.5.6",
-    "nsp": "^2.1.0"
+    "mocha": "^2.5.3",
+    "mocha-lcov-reporter": "^1.2.0",
+    "nsp": "^2.1.0",
+    "sinon": "^1.17.4",
+    "supertest": "^1.2.0"
   },
   "repository": {
     "type": "",

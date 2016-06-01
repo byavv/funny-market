@@ -1,87 +1,87 @@
-"use strict"
-var Client = require('../lib/rabbit');
+'use strict'
+const rabbit = require('wascally')
+    , debug = require('debug')('cars');
 
 module.exports = function (app, done) {
-    var microserviceName = app.get('ms_name');
-    var rabbit_host = app.get("rabbit_host");
-
     var Car = app.models.Car;
-
-    if (process.env.NODE_ENV != 'test') {
-        var client = new Client({
-            host: `amqp://${rabbit_host}`,
-            name: microserviceName
+    function handle() {
+        rabbit.handle('cars.delete.all', (message) => {
+            debug(`Deleting cars for user: ${message.body}`)
+            Car.destroyAll({ userId: message.body }, (err, info, count) => {
+                if (err) {
+                    message.nack();
+                } else {
+                    message.reply(info);
+                }
+            })
         });
-        client.open()
-            .then((rabbit) => {
-                app.rabbit = rabbit;
-                rabbit.subscribe((message, callback) => {
-                    switch (message.action) {
-                        case 'cars.delete.all':
-                            Car.destroyAll({ userId: message.value }, (err, info, count) => {
-                                callback({ err: err, result: info });
-                            })
-                            break;
-                        case 'cars.delete.image':
-                            var carId = message.value.carId;
-                            var key = message.value.key;
-                            Car.findById(carId, (err, carInst) => {
-                                if (err) return callback({ err: err });
-                                let image = carInst.images.find(image => image.key == key);
-                                if (image) {
-                                    carInst.images.splice(carInst.images.indexOf(image), 1);
-                                    Car.updateAll({ id: carId }, carInst, (err, info) => {
-                                        if (err) return callback({ err: err });
-                                        callback({ result: info });
-                                    });
-                                } else {
-                                    callback({ err: "nothing to delete" });
-                                }
-                            })
-                            break;
-                        case 'cars.update.images':
-                            var carId = message.value.carId;
-                            var files = message.value.files;
-                            Car.findById(carId, (err, carInst) => {
-                                if (err) throw err;
-                                var images = (files || []).map((file) => {
-                                    return {
-                                        url: file.location,
-                                        key: file.key
-                                    }
-                                });
-                                carInst.images = carInst.images.concat(images);
-                                Car.updateAll({ id: carId }, carInst, (err, info) => {
-                                    if (err) throw err;
-                                    callback({ err: err, result: info });
-                                    rabbit.publish('tracker', {
-                                        action: 'track.update',
-                                        value: {
-                                            carId: `${carInst.id}`,
-                                            image: carInst.images ? carInst.images[0].url : '/static/assets/img/default.png',
-                                            description: `${carInst.makerName}, ${carInst.modelName}`
-                                        }
-                                    })
-                                })
-                            });
-                            break;
-                        default:
-                            callback({ err: "wrong operation" });
-                            break;
-                    };
+        rabbit.handle('cars.delete.image', (message) => {
+            var carId = message.body.carId;
+            var key = message.body.key;
+            Car.findById(carId, (err, carInst) => {
+                if (err || !carInst) { message.nack(); return; }
+                let image = carInst.images.find(image => image.key == key);
+                if (image) {
+                    carInst.images.splice(carInst.images.indexOf(image), 1);
+                    Car.updateAll({ id: carId }, carInst, (err, info) => {
+                        err
+                            ? message.nack()
+                            : message.ack();
+                    });
+                } else {
+                    message.reject();
+                }
+            })
+        });
+        rabbit.handle('cars.update.images', (message) => {
+            const carId = message.body.carId;
+            const files = message.body.files;
+            Car.findById(carId, (err, carInst) => {
+                if (err || !carInst) { message.nack(); return; }
+                const images = (files || []).map((file) => {
+                    return {
+                        url: file.location,
+                        key: file.key
+                    }
                 });
-            })
-            .then(() => {
-                done()
-            })
-            .catch((err) => {
-                done(err)
+                carInst.images = carInst.images.concat(images);
+                Car.updateAll({ id: carId }, carInst, (err, info) => {
+                    err
+                        ? message.nack()
+                        : rabbit.publish('ex.tracker', {
+                            type: 'tracker.update',
+                            routingKey: "messages",
+                            body: {
+                                carId: `${carInst.id}`,
+                                image: carInst.images ? carInst.images[0].url : '/static/assets/img/default.png',
+                                description: `${carInst.makerName}, ${carInst.modelName}`
+                            }
+                        }).then(() => {
+                            message.ack();
+                        });
+                })
             });
+        });
+        rabbit.handle('cars.snd.test', (message) => {
+            console.log(message.body)
+            message.ack();
+        })
 
-        app.close = () => {
-            client.close();
-        };
-    } else {
-        done()
+
+    }
+    if (process.env.NODE_ENV != 'test')
+        require('../lib/topology')(rabbit, {
+            name: app.get('ms_name'),
+            host: app.get("rabbit_host")
+        })
+            .then(handle)
+            .then(() => {
+                app.rabbit = rabbit;
+                debug("Rabbit client started");
+            })
+            .then(done);
+
+    app.close = () => {
+        rabbit.closeAll();
     };
-};
+}

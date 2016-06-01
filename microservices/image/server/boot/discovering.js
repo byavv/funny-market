@@ -4,8 +4,7 @@ var registry = require('etcd-registry');
  */
 module.exports = function (app) {
     if (process.env.NODE_ENV != 'test') {
-        var etcd_host = app.get('etcd_host');
-        console.log("ETCD", etcd_host)
+        var etcd_host = app.get('etcd_host');       
         var http_port = app.get('http_port');
         var microserviceName = app.get('ms_name');
 
@@ -14,8 +13,7 @@ module.exports = function (app) {
             services = registry(`${etcd_host}:4001`);
             services.join(microserviceName, { port: http_port });
             setTimeout(() => {
-                services.lookup(microserviceName, (err, service) => {
-                    console.log(err)
+                services.lookup(microserviceName, (err, service) => {                   
                     if (service) {
                         console.log(`Service on ${service.url} registered as ${microserviceName}`);
                     } else {
@@ -25,7 +23,7 @@ module.exports = function (app) {
             }, 3000);
         });
 
-        app.close = (done) => {
+        app.close = () => {
             services.leave(microserviceName);
             console.log(`Service ${microserviceName} stopped`);
         };

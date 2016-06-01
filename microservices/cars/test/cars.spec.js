@@ -47,9 +47,10 @@ describe('CAR API TESTS', function () {
         assert.equal(result.status, 200);
         assert.equal(result.body.car.makerName, 'SUPERCAR');
         assert.equal(result.body.car.userId, 'user-id');
-        assert.equal(app.rabbit.publish.calledWith('tracker', {
-          action: 'track',
-          value: {
+        assert.equal(app.rabbit.publish.calledWith('ex.tracker', {
+          type: 'tracker.track',
+          routingKey: "messages",
+          body: {
             carId: `${result.body.car.id}`,
             image: '/static/assets/img/default.png',
             description: `${result.body.car.makerName}, ${result.body.car.modelName}`

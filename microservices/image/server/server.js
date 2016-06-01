@@ -1,7 +1,9 @@
-var boot = require('loopback-boot');
-var http = require('http');
-var loopback = require('loopback');
-var app = module.exports = loopback();
+"use strtict"
+const boot = require('loopback-boot')
+    , http = require('http')
+    , loopback = require('loopback')
+    , app = module.exports = loopback()
+    , debug = require('debug')('image');
 
 var host = process.env.HTTP_HOST || "0.0.0.0",
     http_port = process.env.HTTP_PORT || 3008,
@@ -18,8 +20,7 @@ app.set("ms_name", 'image');
 boot(app, __dirname, (err) => {
     if (err) throw err;
     app.start = function () {
-        var httpServer = http.createServer(app).listen(http_port, host, () => {
-            console.log(`Image server is listening on: http://${host}:${http_port}`);
+        var httpServer = http.createServer(app).listen(http_port, () => {
             app.emit('started');
             app.close = (done) => {
                 app.removeAllListeners('started');

@@ -1,4 +1,6 @@
-var async = require('async');
+"use strict"
+const async = require('async')
+    , debug = require('debug')('profile');
 
 module.exports = function (User) {
     var app;
@@ -29,9 +31,19 @@ module.exports = function (User) {
             },
             (userId, callback) => {
                 if (app.rabbit) {
-                    app.rabbit.publish('cars', { action: 'cars.delete.all', value: userId }, callback);
+                    app.rabbit.request('ex.cars', {
+                        routingKey: "requests",
+                        type: 'cars.delete.all',
+                        body: userId
+                    }).then((final) => {
+                        debug("ALL BOUND CARS WAS DELETED: ", final.body);
+                        callback(null, final.body);
+                        final.ack();
+                    }).catch((err) => {
+                        callback(err);
+                    });
                 } else {
-                    callback(new Error("Operation cant be completed, brocker is not available"));
+                    callback(new Error("Operation can't be completed, broker is not available"));
                 }
             }], (err, result) => {
                 return done(err, result);

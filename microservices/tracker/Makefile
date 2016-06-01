@@ -1,9 +1,8 @@
 MAKEFLAGS = -j1
 REPORTER = spec
-MSNAME = cars
 TESTS = test/*.spec.js
 BIN = node_modules/.bin
-
+MSNAME = tracker
 QMAKE_CLEAN = ./coverage ./tmp/* ./build/*
 ISTANBUL_CMD = istanbul
 MOCHA_CMD = node_modules/mocha/bin/_mocha
@@ -24,8 +23,8 @@ clean:
 	rm -rf $(QMAKE_CLEAN)
 		
 run: 
-	node .
+	node .	
 
-dev: 	
+dev: 
 	@DEBUG=${MSNAME} \
 	node .

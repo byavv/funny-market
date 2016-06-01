@@ -4,13 +4,15 @@
   "main": "server/server.js",
   "scripts": {
     "start": "make run",
-    "test": "make test-cov"
+    "test": "make test-cov",
+    "dev": "make dev"
   },
   "dependencies": {
     "amqplib": "^0.4.1",
     "async": "^2.0.0-rc.5",
     "compression": "^1.0.3",
     "cors": "^2.5.2",
+    "debug": "^2.2.0",
     "etcd-registry": "^2.1.1",
     "helmet": "^0.14.0",
     "loopback": "^2.28.0",
@@ -18,7 +20,8 @@
     "loopback-component-explorer": "^2.5.0",
     "loopback-connector-mongodb": "^1.15.2",
     "loopback-datasource-juggler": "^2.46.0",
-    "serve-favicon": "^2.0.1"
+    "serve-favicon": "^2.0.1",
+    "wascally": "^0.2.10"
   },
   "devDependencies": {
     "chai": "^3.5.0",
