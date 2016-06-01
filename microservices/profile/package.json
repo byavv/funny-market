@@ -18,7 +18,8 @@
     "loopback-component-explorer": "^2.5.0",
     "loopback-connector-mongodb": "^1.15.2",
     "loopback-datasource-juggler": "^2.46.0",
-    "serve-favicon": "^2.0.1"
+    "serve-favicon": "^2.0.1",
+    "wascally": "^0.2.10"
   },
   "devDependencies": {
     "chai": "^3.5.0",

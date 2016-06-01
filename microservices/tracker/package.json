@@ -4,7 +4,7 @@
   "main": "server/server.js",
   "scripts": {
     "start": "node .",
-    "test": "mocha"   
+    "test": "mocha"
   },
   "dependencies": {
     "amqplib": "^0.4.1",
@@ -19,7 +19,8 @@
     "loopback-datasource-juggler": "^2.39.0",
     "loopback-ds-timestamp-mixin": "^3.2.4",
     "node-uuid": "^1.4.7",
-    "serve-favicon": "^2.0.1"
+    "serve-favicon": "^2.0.1",
+    "wascally": "^0.2.10"
   },
   "devDependencies": {
     "jshint": "^2.5.6",

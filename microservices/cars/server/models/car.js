@@ -11,14 +11,26 @@ module.exports = function (Car) {
         if (ctx.instance) {
             var car = ctx.instance;
             if (app.rabbit && car) {
-                app.rabbit.publish('tracker', {
-                    action: 'track',
-                    value: {
+                /* app.rabbit.publish('tracker', {
+                     action: 'track',
+                     value: {
+                         carId: `${car.id}`,
+                         image: '/static/assets/img/default.png',
+                         description: `${car.makerName}, ${car.modelName}`
+                     }
+                 })*/
+                app.rabbit.request('ms.1', {
+                    type: 'track',
+                    routingKey: "tracker",
+                    body: {
                         carId: `${car.id}`,
                         image: '/static/assets/img/default.png',
                         description: `${car.makerName}, ${car.modelName}`
                     }
-                })
+                }).then(function (final) {
+                    console.log(final.body);
+                    final.ack();
+                });
             }
         }
         next();
@@ -40,13 +52,34 @@ module.exports = function (Car) {
             if (cars) {
                 cars.forEach((car) => {
                     if (app.rabbit) {
-                        app.rabbit.publish('image', { action: 'image.delete', value: car.images });
-                        app.rabbit.publish('tracker', {
-                            action: 'track.delete',
-                            value: {
+                        app.rabbit.request('ms.1', {
+                            routingKey: "image",
+                            type: "delete",
+                            body: car.images
+                        }).then((final) => {
+                            console.log(final.body);
+                            final.ack();
+                        });
+
+                        app.rabbit.request('ms.1', {
+                            type: "delete",
+                            routingKey: "tracker",
+                            body: {
                                 carId: `${car.id}`
                             }
-                        })
+                        }).then((final) => {
+                            console.log(final.body);
+                            final.ack();
+                        });
+
+
+                        /*  app.rabbit.publish('image', { action: 'image.delete', value: car.images });
+                          app.rabbit.publish('tracker', {
+                              action: 'track.delete',
+                              value: {
+                                  carId: `${car.id}`
+                              }
+                          })*/
                     }
                 })
             }
@@ -198,7 +231,7 @@ module.exports = function (Car) {
                     }
                 }
             ],
-            returns: { arg: 'count', type: 'number'},
+            returns: { arg: 'count', type: 'number' },
             http: { path: '/count', verb: 'post', errorStatus: 400 }
         }
     );

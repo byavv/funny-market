@@ -1,57 +1,43 @@
 "use strict"
-var Client = require('../lib/rabbit');
+var rabbit = require('wascally');
 var async = require('async');
 var aws = require('aws-sdk');
+
 module.exports = function (app, done) {
-    var microserviceName = app.get('ms_name');
-    var rabbit_host = app.get("rabbit_host");
-
-    if (process.env.NODE_ENV != 'test') {
-
-        const s3 = new aws.S3({
-            accessKeyId: app.get('aws').accessKeyId,
-            secretAccessKey: app.get('aws').secretAccessKey,
-            signatureVersion: 'v4'
-        });
-
-        const client = new Client({
-            host: `amqp://${rabbit_host}`,
-            name: microserviceName
-        });
-
-        client.open()
-            .then((rabbit) => {
-                app.rabbit = rabbit;
-                rabbit.subscribe((message, callback) => {
-                    switch (message.action) {
-                        case 'image.delete':
-                            console.log("DELETE IMAGES", message.value)
-                            let images = message.value || [];
-                            async.each(images, (image, clb) => {
-                                let params = {
-                                    Bucket: 'carmarket',
-                                    Key: image.key,
-                                };
-                                s3.deleteObject(params, (err, data) => {
-                                    clb(err, data)
-                                });
-                            }, (err, res) => {
-                                callback({ err: err, result: res });
-                            });
-                            break;
-                        default:
-                            callback({ err: "wrong operation" });
-                            break;
-                    }
+    const s3 = new aws.S3({
+        accessKeyId: app.get('aws').accessKeyId,
+        secretAccessKey: app.get('aws').secretAccessKey,
+        signatureVersion: 'v4'
+    });
+    function handle() {
+        rabbit.handle('delete', (message) => {
+            console.log("DELETE IMAGES", message.body)
+            let images = message.body || [];
+            async.each(images, (image, clb) => {
+                let params = {
+                    Bucket: 'carmarket',
+                    Key: image.key,
+                };
+                s3.deleteObject(params, (err, data) => {
+                    clb(err, data)
                 });
-            })
-            .then(done)
-            .catch(done);
+            }, (err, res) => {
+                err ? message.reject() : message.reply("OK");
+            });
+        });
+    }
+    require('../lib/topology')(rabbit, {
+        name: app.get('ms_name'),
+        host: app.get("rabbit_host")
+    })
+        .then(handle)
+        .then(() => {
+            app.rabbit = rabbit;
+            console.log("Rabbit client started");
+        })
+        .then(done);
 
-        app.close = () => {
-            client.close();
-        };
-    } else {
-        done()
+    app.close = () => {
+        rabbit.closeAll();
     };
-};
+}

@@ -29,7 +29,19 @@ module.exports = function (User) {
             },
             (userId, callback) => {
                 if (app.rabbit) {
-                    app.rabbit.publish('cars', { action: 'cars.delete.all', value: userId }, callback);
+
+                    app.rabbit.request('ms.1', {
+                        routingKey: "cars",
+                        type: 'delete.all',
+                        body: userId
+                    }).then(function (final) {
+                        console.log(final.body);
+                        callback()
+                        final.ack();
+                    });
+
+
+                    // app.rabbit.publish('cars', { action: 'cars.delete.all', value: userId }, callback);
                 } else {
                     callback(new Error("Operation cant be completed, brocker is not available"));
                 }

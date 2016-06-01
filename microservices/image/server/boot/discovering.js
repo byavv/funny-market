@@ -25,7 +25,7 @@ module.exports = function (app) {
             }, 3000);
         });
 
-        app.close = (done) => {
+        app.close = () => {
             services.leave(microserviceName);
             console.log(`Service ${microserviceName} stopped`);
         };
