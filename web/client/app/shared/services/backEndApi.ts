@@ -9,38 +9,38 @@ export class Api {
   constructor(private _http: ExtHttp) { }
 
   public getCarsCount(query): Rx.Observable<any> {
-    return this._http
-      .post("/api/cars/count", JSON.stringify(query))
+    return this._http      
+      .post("/public/cars/count", JSON.stringify(query))
       .map(res => res.json());
   }
 
   public getMakerModels(makerId): Rx.Observable<any> {
-    return this._http
-      .get(`/api/makers/${makerId}/carModels`)
+    return this._http     
+      .get(`/public/makers/${makerId}/carModels`)
       .map(res => res.json());
   }
 
   public getMakers(): Rx.Observable<any> {
-    return this._http
-      .get("/api/makers")
+    return this._http     
+      .get("/public/makers")
       .map(res => res.json());
   }
 
   public searchCars(query): Rx.Observable<any> {
-    return this._http
-      .post(`/api/cars/search`, JSON.stringify(query))
+    return this._http     
+      .post(`/public/cars/search`, JSON.stringify(query))
       .map(res => res.json());
   }
 
   public getCar(id): Rx.Observable<any> {
-    return this._http
-      .get(`/api/cars/${id}`)
+    return this._http     
+      .get(`/public/cars/${id}`)
       .map(res => res.json());
   }
 
   public getEngineTypes(): Rx.Observable<any> {
-    return this._http
-      .get("/api/enginetypes", null)
+    return this._http    
+      .get("/public/enginetypes", null)
       .map(res => res.json());
   }
 }

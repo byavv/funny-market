@@ -31,24 +31,7 @@
     }
   },
   "session": {},
-  "auth": {},
-  "parse": {
-    "body-parser#json": {
-      "methods": [
-        "POST"
-      ],
-      "paths": "/auth*"
-    },
-    "body-parser#urlencoded": {
-      "methods": [
-        "POST"
-      ],
-      "paths": "/auth*",
-      "params": {
-        "extended": true
-      }
-    }
-  },
+  "auth": {},  
   "routes": {},
   "proxies": {
     "./middleware/proxy": {

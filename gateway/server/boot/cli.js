@@ -8,7 +8,7 @@ const readline = require('readline')
 ;
 /**
  * Simplest client possible, handy for development. Only three command available: 
- * 'stat' to see microservices topology,
+ * 'stat' to see microservices topology and current status,
  * 'lookup' to print proxy's lookup table
  * 'cl' to clear console.
  */
@@ -63,7 +63,7 @@ module.exports = (app) => {
                 console.log("'cl', to clear console");
                 break;
             default:
-                console.warn(`${line.trim()} is not a command, type 'help' to see the list of commands `)
+                line ? console.warn(`${line.trim()} is not a command, type 'help' to see the list of commands `) : null
                 break;
         }
         rl.prompt();

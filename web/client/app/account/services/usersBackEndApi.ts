@@ -9,14 +9,14 @@ export class UsersBackEndApi {
     constructor(private _http: ExtHttp) { }
 
     public getUserCars(): Observable<any> {
-        return this._http
-            .post("/api/cars/getusercars", null)
+        return this._http           
+            .post("/profiles/cars/getusercars", null)
             .map(res => res.json());
     }
 
     public postNewCar(data: any) {
-        return this._http
-            .post("/api/cars/new", JSON.stringify(data))
+        return this._http           
+            .post("/profiles/cars/new", JSON.stringify(data))
             .map(res => res.json());
     }
     public deleteImage(id: string, key: string) {
@@ -27,8 +27,8 @@ export class UsersBackEndApi {
 
 
     public deleteCar(id: string) {
-        return this._http
-            .delete(`/api/cars/${id}`)
+        return this._http           
+            .delete(`/profiles/cars/${id}`)
             .map(res => res.json());
     }
     public deleteUserWithProfile() {
@@ -65,19 +65,13 @@ export class UsersBackEndApi {
             .map(res => res.json());
     }
 
-    public createOrUpdate(data: any, id?: string) {        
-        return (id
+    public createOrUpdate(data: any, id?: string) {       
+          return (id
             ? this._http
-                .post(`/api/cars/update/${id}`, JSON.stringify(data))
+                .post(`/profiles/cars/update/${id}`, JSON.stringify(data))
             : this._http
-                .post(`/api/cars/new`, JSON.stringify(data)))
-                .map(res => res.json());
-        
-      /*  return id
-            ? this._http
-                .nativeRequest('POST', `/api/cars/update/${id}`, data)
-            : this._http
-                .nativeRequest('POST', `/api/cars/new`, data)*/
+                .post(`/profiles/cars/new`, JSON.stringify(data)))
+            .map(res => res.json());      
     }
 
     public uploadImages(data, carId) {

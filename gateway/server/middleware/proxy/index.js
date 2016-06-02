@@ -30,7 +30,7 @@ module.exports = function (options) {
     let proxyRules = {};
     let proxyTable = options.proxyTable || [];
     proxyTable.forEach((rule) => {
-        debug(`map path: ${rule.rule} \u2192 /${rule.mapTo}${rule.withPath}`)
+        debug(`localion: ${rule.rule} \u2192 $(${rule.mapTo})${rule.withPath}`)
     });
     proxyTable.forEach((rule) => {
         proxyRules[rule.rule] = {

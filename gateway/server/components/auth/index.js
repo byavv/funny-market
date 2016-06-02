@@ -17,19 +17,23 @@ var authMiddlewareFactory = (options) => (req, res, next) => {
                 fields: { 'name': true, 'id': false }
             }, (err, roles) => {
                 if (err) throw err;
-                if (!roles) return next(new NotAuthorizedError("Permission can't be granted"));
+                if (!roles) return res.status(401).send("Permission can't be granted")
                 async.some(roles, (role, callback) => {
                     Role.isInRole(role.name, {
                         principalType: ACL.USER,
                         principalId: req.accessToken.userId
                     }, callback);
                 }, (err, result) => {
-                    return next((!result || err) ? new NotAuthorizedError("User authorized, but has not permissions") : null);
+                    if (err) throw err;
+                    return !result // user is not in any appropriate role, which contains required permisison
+                        ? res.status(401).send("User authorized, but doesn't have required permissions. Verify that sufficient permissions have been granted")
+                        : next();
                 });
             });
         } else {
             let url = URL.parse(req.url);
-            return next(new NotAuthorizedError(`Not authorized for ${req.method} request on ${url}`));
+            debug(`Authorization failed for ${req.method} request on ${url.path}`);
+            return res.status(401).send(`Not authorized`);
         }
     }
 };
