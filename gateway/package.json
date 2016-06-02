@@ -2,19 +2,21 @@
   "name": "gateway",
   "version": "1.0.0",
   "main": "server/server.js",
+  "license": "MIT",
   "scripts": {
     "start": "node .",
     "pretest": "jshint .",
     "test": "mocha"
   },
   "engines": {
-    "node": ">= 5.4.1 < 6"
+    "node": ">= 6"
   },
   "jshintConfig": {
     "esversion": 6
   },
   "dependencies": {
     "async": "^2.0.0-rc.2",
+    "better-console": "^0.2.4",
     "body-parser": "^1.15.0",
     "compression": "^1.0.3",
     "cors": "^2.5.2",
@@ -31,6 +33,7 @@
     "loopback-component-explorer": "^2.5.0",
     "loopback-connector-mongodb": "^1.15.2",
     "loopback-datasource-juggler": "^2.46.0",
+    "ping": "^0.1.10",
     "serve-favicon": "^2.0.1",
     "yamljs": "^0.2.6"
   },

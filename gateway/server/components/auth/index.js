@@ -1,7 +1,8 @@
-var async = require("async"),
-    _ = require("lodash"),
-    NotAuthorizedError = require("../../lib/errors").err401,
-    URL = require('url')
+"use strict"
+const async = require("async")
+    , NotAuthorizedError = require("../../lib/errors").err401
+    , URL = require('url')
+    , debug = require("debug")("proxy")
     ;
 
 var authMiddlewareFactory = (options) => (req, res, next) => {
@@ -9,8 +10,8 @@ var authMiddlewareFactory = (options) => (req, res, next) => {
         return next(null);
     } else {
         if (!!req.accessToken && Array.isArray(options.permissions)) {
-            var Role = req.app.models.role;
-            var ACL = req.app.models.ACL;
+            let Role = req.app.models.role;
+            let ACL = req.app.models.ACL;
             Role.find({
                 where: { can: { inq: options.permissions } },
                 fields: { 'name': true, 'id': false }
@@ -27,7 +28,7 @@ var authMiddlewareFactory = (options) => (req, res, next) => {
                 });
             });
         } else {
-            var url = URL.parse(req.url);
+            let url = URL.parse(req.url);
             return next(new NotAuthorizedError(`Not authorized for ${req.method} request on ${url}`));
         }
     }
@@ -40,7 +41,7 @@ var auth = module.exports = (app, componentOptions) => {
     accessTable.forEach((entry) => {
         var regExp = new RegExp(entry.url);
         if (componentOptions.debug) {
-            console.log("secured path: ", regExp, "permissions:", entry.grant);
+            debug(`secured path: ${regExp} [${entry.grant}]`);
         }
         app.middlewareFromConfig(authMiddlewareFactory, {
             methods: (entry.methods != '*') ? entry.methods : null,

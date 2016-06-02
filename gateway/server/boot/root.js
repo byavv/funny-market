@@ -1,14 +1,16 @@
+"use strict"
 module.exports = function (app) {
-    var router = app.loopback.Router();
-    var User = app.models.User;
+    const router = app.loopback.Router();
+    const User = app.models.User;
 
-    var loginPath = app.get("loginPath") || "/login";
-    var logoutPath = app.get("logoutPath") || "/logout";
+    const loginPath = app.get("loginPath") || "/login";
+    const logoutPath = app.get("logoutPath") || "/logout";
 
     router.post(loginPath, (req, res, next) => {
-        var email = req.body.email;
-        var password = req.body.password;
-        var username = req.body.username;
+        let email = req.body.email
+            , password = req.body.password
+            , username = req.body.username
+            ;
 
         if ((email || username) && password) {
             User.login({
@@ -41,6 +43,5 @@ module.exports = function (app) {
             return res.sendStatus(400);
         }
     });
-
     app.use('/auth', router);
 };

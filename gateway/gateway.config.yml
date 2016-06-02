@@ -21,6 +21,10 @@ access:
     - url: /api
       methods: '*'
       grant: '*'
+    
+    - url: /profiles
+      methods: '*'
+      grant: ['read']
       
     - url: /profiles/signup
       methods: ['post']
