@@ -18,7 +18,7 @@ export class AuthApi {
 
     public signUp(form): Observable<any> {
         return this._http
-            .post("/profiles/signup", JSON.stringify(form))
+            .post("/auth/signup", JSON.stringify(form))
             .map(res => res.json());
     }
 

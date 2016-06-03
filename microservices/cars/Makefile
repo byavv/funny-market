@@ -11,11 +11,13 @@ MOCHA_CMD = node_modules/mocha/bin/_mocha
 .PHONY: test test-cov
 
 test:
+	@DEBUG=test 
 	@NODE_ENV=test \
 	node $(MOCHA_CMD) test \
 	$(TESTS)
 	
 test-cov:
+	@DEBUG=test 
 	@NODE_ENV=test \
 	$(ISTANBUL_CMD) cover $(MOCHA_CMD) -- -R $(REPORTER) \
 	$(TESTS)	

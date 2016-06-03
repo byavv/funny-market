@@ -1,7 +1,9 @@
-var async = require("async"),
-    _ = require("lodash"),
+/*jslint node: true */
+"use strict";
+const async = require("async"),
     NotAuthorizedError = require("../../lib/errors").err401,
-    URL = require('url')
+    URL = require('url'),
+    debug = require("debug")("proxy")
     ;
 
 var authMiddlewareFactory = (options) => (req, res, next) => {
@@ -9,26 +11,31 @@ var authMiddlewareFactory = (options) => (req, res, next) => {
         return next(null);
     } else {
         if (!!req.accessToken && Array.isArray(options.permissions)) {
-            var Role = req.app.models.role;
-            var ACL = req.app.models.ACL;
+            let Role = req.app.models.role;
+            let ACL = req.app.models.ACL;
             Role.find({
                 where: { can: { inq: options.permissions } },
                 fields: { 'name': true, 'id': false }
             }, (err, roles) => {
                 if (err) throw err;
-                if (!roles) return next(new NotAuthorizedError("Permission can't be granted"));
+                if (!roles || roles.length === 0) {
+                    return res.status(401).send("Permission can't be granted");
+                }
                 async.some(roles, (role, callback) => {
                     Role.isInRole(role.name, {
                         principalType: ACL.USER,
                         principalId: req.accessToken.userId
                     }, callback);
                 }, (err, result) => {
-                    return next((!result || err) ? new NotAuthorizedError("User authorized, but has not permissions") : null);
+                    if (err) throw err;
+                    // user is not in any appropriate role, which contains required permisison
+                    return !result ? res.status(401).send("User authorized, but doesn't have required permissions. Verify that sufficient permissions have been granted") : next();
                 });
             });
         } else {
-            var url = URL.parse(req.url);
-            return next(new NotAuthorizedError(`Not authorized for ${req.method} request on ${url}`));
+            let url = URL.parse(req.url);
+            debug(`Authorization failed for ${req.method} request on ${url.path}`);
+            return res.status(401).send(`Not authorized`);
         }
     }
 };
@@ -39,9 +46,7 @@ var auth = module.exports = (app, componentOptions) => {
     User.settings.ttl = componentOptions.access_expired || 1209600;
     accessTable.forEach((entry) => {
         var regExp = new RegExp(entry.url);
-        if (componentOptions.debug) {
-            console.log("secured path: ", regExp, "permissions:", entry.grant);
-        }
+        debug(`secured path: ${regExp} [${entry.grant}]`);
         app.middlewareFromConfig(authMiddlewareFactory, {
             methods: (entry.methods != '*') ? entry.methods : null,
             phase: 'auth',

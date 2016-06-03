@@ -17,22 +17,28 @@
 #         methods: *
 #         grant: '*'
 
-access:
-    - url: /api
+# NOTE! Bear in mind express middleware order, which does matter!
+
+access:     
+    - url: /public
       methods: '*'
-      grant: '*'
+      grant: '*' 
       
-    - url: /profiles/signup
-      methods: ['post']
-      grant: '*'
+    - url: /profiles
+      methods: '*'
+      grant: ['read'] 
       
-    - url: /profiles/me
+    - url: /auth*
       methods: ['post']
-      grant: ['read']
+      grant: '*'  
+      
+    - url: /tracks
+      methods: ['get']
+      grant: '*'
     
     - url: /tracks
-      methods: '*'
-      grant: '*'
+      methods: ['post']
+      grant: ['read']
     
     - url: /users
       methods: ['post']
@@ -56,13 +62,29 @@ access:
 # to the server running on https://my.remote.com:3004/api
 
 proxy:
-    - rule: '/api'
+    - rule: '/public/cars'
       mapTo: 'cars'
-      withPath: '/api'
+      withPath: '/api/cars'
       
+    - rule: '/public/makers'
+      mapTo: 'cars'
+      withPath: '/api/makers'
+    
+    - rule: '/public/enginetypes'
+      mapTo: 'cars'
+      withPath: '/api/enginetypes'      
+ 
+    - rule: '/profiles/cars'
+      mapTo: 'cars'
+      withPath: '/api/cars'
+      
+    - rule: '/auth'
+      mapTo: 'profile'
+      withPath: '/auth'
+        
     - rule: '/profiles'
       mapTo: 'profile'
-      withPath: '/profiles'
+      withPath: '/profiles' 
     
     - rule: '/tracks'
       mapTo: 'tracker'

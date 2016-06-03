@@ -23,7 +23,5 @@
     }
   },
   "legacyExplorer": false,
-  "debug": true,
-  "loginPath": "/login",
-  "logoutPath": "/logout"
+  "secret": "mysupersecret"  
 }
