@@ -1,16 +1,16 @@
-"use strict"
-const readline = require('readline')
-    , ping = require('ping')
-    , debug = require('debug')('proxy')
-    , registry = require('etcd-registry')
-    , async = require('async')
-    , console = require('better-console');
-;
+/*jslint node: true */
+"use strict";
+const readline = require('readline'),
+    ping = require('ping'),
+    debug = require('debug')('proxy'),
+    registry = require('etcd-registry'),
+    async = require('async'),
+    console = require('better-console')
+    ;
 /**
- * Simplest client possible, handy for development. Only three command available: 
+ * Simplest client possible, handy for development. Only two command available: 
  * 'stat' to see microservices topology and current status,
  * 'lookup' to print proxy's lookup table
- * 'cl' to clear console.
  */
 module.exports = (app) => {
     const rl = readline.createInterface(process.stdin, process.stdout);
@@ -21,11 +21,11 @@ module.exports = (app) => {
     rl.on('line', (line) => {
         switch (line.trim()) {
             case 'stat':
-                const services = registry(`http://${app.get("etcd_host")}:4001`);
                 let ind = 0;
                 async.map(hosts, (host, callback) => {
-                    services.lookup(host, (err, service) => {
-                        if (err || !service) {
+                    app.lookup(host).then((service) => {
+                        console.log("LOOK", service);
+                        if (!service) {
                             callback(null, { "NAME": host, "HOST": 'N/A', "STATUS": 'not registered' });
                         } else {
                             ping.sys.probe(service.hostname, (isAlive) => {
@@ -39,36 +39,31 @@ module.exports = (app) => {
                     console.log('\n');
                 });
                 break;
-            case 'cl':
-                console.clear();
-                break;
             case 'lookup':
                 let lookupTable = proxyTable.map((rule) => {
-                    let auth = accessTable.find(entry => rule.rule.match(new RegExp(entry.url)))
+                    let auth = accessTable.find(entry => rule.rule.match(new RegExp(entry.url)));
                     return {
                         "ENTRY": rule.rule,
                         "": "  \u2192  ",
                         'PASS': `$(${rule.mapTo})${rule.withPath}`,
                         'AUTH': `${auth ? auth.grant : '*'}`
-                    }
-                })
+                    };
+                });
                 console.log('\n');
                 console.table(lookupTable);
                 console.log('\n');
-                break
+                break;
             case 'help':
                 console.log("Command available:\n");
                 console.log("'stat', to see registered microservices topology");
                 console.log("'lookup', to see proxy table");
-                console.log("'cl', to clear console");
                 break;
             default:
-                line ? console.warn(`${line.trim()} is not a command, type 'help' to see the list of commands `) : null
+                if(line) console.warn(`${line.trim()} is not a command, type 'help' to see the list of commands `);
                 break;
         }
         rl.prompt();
     }).on('close', () => {
-        console.log('Bye');
-        process.exit(0);
+        console.log('Bye');     
     });
 };

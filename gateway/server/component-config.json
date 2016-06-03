@@ -2,8 +2,7 @@
   "loopback-component-explorer": {
     "mountPath": "/explorer"
   },
-  "./components/auth": {
-    "debug": "${debug}",
+  "./components/auth": {   
     "base": "/",
     "access_expired": 600000
   },

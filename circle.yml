@@ -16,6 +16,7 @@ test:
   override:     
      - docker-compose -f docker-compose_test_.yml run --no-deps cars
      - docker-compose -f docker-compose_test_.yml run --no-deps profile
+     - docker-compose -f docker-compose_test_.yml run --no-deps gateway
   post:   
      - docker-compose stop
 

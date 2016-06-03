@@ -1,0 +1,68 @@
+proxy:
+    - rule: '/fake1'
+      mapTo: 'fakeserver1'
+      withPath: '/api'
+      
+    - rule: '/fake2'
+      mapTo: 'fakeserver2'
+      withPath: '/blach/api'
+    
+    - rule: '/fake3'
+      mapTo: 'fakeserver2'
+      withPath: '/'
+    
+    - rule: '/fake4'
+      mapTo: 'fakeserver1'
+      withPath: '/api'
+    
+    - rule: '/fake5'
+      mapTo: 'fakeserver1'
+      withPath: '/api'
+    
+    - rule: '/fake6'
+      mapTo: 'fakeserver1'
+      withPath: '/api'
+    
+    - rule: '/fake7'
+      mapTo: 'fakeserver_err'
+      
+    - rule: '/unknown_role'
+      mapTo: 'fakeserver1'
+      withPath: '/api'
+    
+    - rule: '/testauth'
+      mapTo: 'authserver'
+      withPath: '/'
+      
+access:     
+    - url: /fake1
+      methods: '*'
+      grant: '*' 
+      
+    - url: /fake2
+      methods: '*'
+      grant: '*' 
+      
+    - url: /fake3
+      methods: '*'
+      grant: '*'  
+      
+    - url: /fake4
+      methods: ['post', 'get']
+      grant: ['read'] 
+      
+    - url: /fake5
+      methods: ['post']
+      grant: ['write'] 
+      
+    - url: /fake6    
+    
+    - url: /unknown_role  
+      grant: ['bite_elbow'] 
+
+rate: 
+# max 5 requests per minute    
+    - paths: ['/testauth*']
+      methods: ['post']
+      interval: 2000
+      limit: 2

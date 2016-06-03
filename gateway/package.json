@@ -4,9 +4,8 @@
   "main": "server/server.js",
   "license": "MIT",
   "scripts": {
-    "start": "node .",
-    "pretest": "jshint .",
-    "test": "mocha"
+    "start": "make run",
+    "test": "make test-cov"
   },
   "engines": {
     "node": ">= 6"
@@ -43,7 +42,9 @@
     "mocha": "^2.5.2",
     "nsp": "^2.1.0",
     "sinon": "^1.17.4",
-    "supertest": "^1.2.0"
+    "supertest": "^1.2.0",
+    "istanbul": "^0.4.3",
+    "mocha-lcov-reporter": "^1.2.0"
   },
   "repository": {
     "type": "",

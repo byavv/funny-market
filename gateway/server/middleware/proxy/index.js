@@ -1,9 +1,9 @@
-"use strict"
-const debug = require('debug')('proxy')
-    , httpProxy = require('http-proxy')
-    , HttpProxyRules = require('http-proxy-rules')
-    , GateWayError = require("../../lib/errors").err502
-    , registry = require('etcd-registry')
+/*jslint node: true */
+"use strict";
+const debug = require('debug')('proxy'),
+    httpProxy = require('http-proxy'),
+    HttpProxyRules = require('http-proxy-rules'),
+    GateWayError = require("../../lib/errors").err502
     ;
 
 /**
@@ -13,8 +13,7 @@ const debug = require('debug')('proxy')
  * @param {Object} options Options
  * @returns {Function} The express middleware handler
  */
-module.exports = function (options) {
-    const services = registry(`http://${options.etcd_host}:4001`);
+module.exports = function (options) {  
     const proxy = httpProxy.createProxyServer({});
     /**
      * For principle propogation's purposes, adds X-PRINCIPLE header to be consumed 
@@ -30,7 +29,7 @@ module.exports = function (options) {
     let proxyRules = {};
     let proxyTable = options.proxyTable || [];
     proxyTable.forEach((rule) => {
-        debug(`localion: ${rule.rule} \u2192 $(${rule.mapTo})${rule.withPath}`)
+        debug(`localion: ${rule.rule} \u2192 $(${rule.mapTo})${rule.withPath}`);
     });
     proxyTable.forEach((rule) => {
         proxyRules[rule.rule] = {
@@ -43,25 +42,14 @@ module.exports = function (options) {
     });
     /**
      * Find service url in etcd
-     */
-    let _lookupService = (name) => {
-        return new Promise((resolve, reject) => {
-            services.lookup(name, (err, service) => {
-                if (err || !service) {
-                    reject(err || new GateWayError(`Service ${name} is not found or unevailable`));
-                } else {
-                    resolve(service);
-                }
-            });
-        });
-    };
+     */  
     return (req, res, next) => {
         let target = proxyRules.match(req);
         if (target) {
-            _lookupService(target.mapTo).then(service => {
+            req.app.lookup(target.mapTo).then(service => {
                 proxy.web(req, res, {
                     target: service.url + (target.withPath || '/'),
-                    secure: options.signedSSLOnly || true // get rid of secure in this project
+                    secure: options.signedSSLOnly || true // todo
                 }, (err) => {
                     return next(err);
                 });

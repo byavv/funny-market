@@ -3,27 +3,27 @@ services:
   gateway:
     build: ./gateway
     ports:
-     - "3000:3000"     
+     - "3001:3001"     
     environment:        
-     - HTTP_PORT=3000       
+     - HTTP_PORT=3001       
   web:
     build: ./web
     ports:
-     - "3003:3003"     
+     - "3030:3030"     
     environment:        
-     - HTTP_PORT=3003      
+     - HTTP_PORT=3030      
   cars:
     build: ./microservices/cars
     ports:
-     - "3001:3001"     
+     - "3002:3002"     
     environment:        
-     - HTTP_PORT=3001            
+     - HTTP_PORT=3002            
   profile:
     build: ./microservices/profile
     ports:
-     - "3002:3002"     
+     - "3003:3003"     
     environment:        
-     - HTTP_PORT=3002     
+     - HTTP_PORT=3003     
   tracker:
     build: ./microservices/tracker
     ports:
