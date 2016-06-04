@@ -1,7 +1,6 @@
 import {Component} from '@angular/core';
 import {Http} from '@angular/http';
 import {Router, RouteConfig, ROUTER_DIRECTIVES} from "@angular/router-deprecated";
-
 import {LoginComponent} from './authentication/components/login/login';
 import {SignUpComponent} from './authentication/components/signup/signup';
 import {Identity, Storage, APP_SERVICES_PROVIDERS, AppController} from "./shared/services";
