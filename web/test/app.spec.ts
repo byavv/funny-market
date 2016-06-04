@@ -20,6 +20,8 @@ class MockAppController {
     init$: ReplaySubject<any> = new ReplaySubject<any>()
     start() { this.init$.next('fake') }
 }
+var fakeStorageValue = JSON.stringify({ token: 'fakeToken' });
+
 // Load the implementations that should be tested
 import { App } from '../client/app/app';
 import {Identity, Storage, APP_SERVICES_PROVIDERS, AppController} from "../client/app/shared/services";
@@ -41,15 +43,19 @@ describe('App', () => {
             deps: [MockBackend, BaseRequestOptions]
         })
     ]);
-    beforeEach(inject([AppController], (appController) => {
+    beforeEach(inject([AppController, Identity, Storage], (appController, identity, storage) => {
         spyOn(appController, "start").and.callThrough();
+        spyOn(storage, "getItem").and.returnValue(fakeStorageValue);
+        spyOn(identity, "update").and.callThrough();
     }));
 
-    it('app should run initialization', injectAsync([App, AppController], (app, appController) => {
+    it('app should initialize', async(inject([App, Identity, Storage, AppController], (app, identity, storage, appController) => {
         expect(app).toBeTruthy();
         app.appController.init$.subscribe(value => {
             expect(appController.start).toHaveBeenCalled();
             expect(value).toEqual('fake');
-        })
-    }));
+            expect(storage.getItem).toHaveBeenCalledWith('authorizationData');
+            expect(identity.update).toHaveBeenCalledWith(JSON.parse(fakeStorageValue));
+        });
+    })));
 });
