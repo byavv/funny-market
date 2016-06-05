@@ -13,34 +13,10 @@ var config = require("./webpack.config")();
 gulp.task("set_test", () => {
     process.env.NODE_ENV = 'test';
 })
-gulp.task("compile:tests", (done) => {
-    webpack(config.test_server).run(onWebpackCompleted(done));
-});
-gulp.task('test:server', ["set_test", "compile:tests"], () => {
-    var mochaError;
-    gulp.src(['./test/**/*.spec.js'], { read: false })
-        .pipe($.mocha({
-            reporter: 'spec'
-        }))
-        .on('error', (err) => {
-            mochaError = err;
-        })
-        .on('end', () => {
-            if (mochaError) {
-                $.util.log($.util.colors.bgRed('ERROR:'), $.util.colors.red(mochaError.message));
-                process.exit(1);
-            }
-            $.util.log($.util.colors.white.bgGreen.bold('INFO:'), 'Mocha completed');
-            process.exit();
-        });
-});
-gulp.task("test", ['test:client'], (done) => {
-    runSequence(['test:server'], done)
-});
-gulp.task("test:client", (done) => {
+gulp.task("test", (done) => {
     startClientTests(true, done);
 });
-gulp.task("test:client:watch", (done) => {
+gulp.task("test:watch", (done) => {
     startClientTests(false, done);
 });
 gulp.task('clean', (done) => {

@@ -1,7 +1,7 @@
 import {Injectable, NgZone} from '@angular/core';
 import {Http, Response} from '@angular/http';
 import {ExtHttp} from './extHttp';
-import * as converters from "../lib/converters"
+import * as converters from "../lib/converters";
 import {construct} from "../lib/helpers";
 import {ConverterBase} from "../lib/converters/ConverterBase";
 import {Api} from "./backEndApi";
@@ -33,11 +33,10 @@ export class AppController {
         });
         Observable.zip(
             this._backEnd.getMakers(),
-            // require all servers you need to start the app
             this._backEnd.getEngineTypes(),
             (makers, engineTypes) => [makers, engineTypes])
             .subscribe(value => {
-                [this.makers, this.engineTypes] = value; // <-- deprecate 
+                [this.makers, this.engineTypes] = value;
                 doneCallback({
                     makers: value[0],
                     engineTypes: value[1]

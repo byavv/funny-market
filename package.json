@@ -1,14 +1,16 @@
 {
-  "name": "strong-gateway",
+  "name": "funny-market",
   "version": "0.0.1",
   "description": "proof-of-concept microservices app",  
   "keywords": [
     "gateway",
-    "api",
+    "angular 2.0",
+    "microservices",    
     "authentication",
-    "loopback"
+    "loopback",
+    "node.js"    
   ],
   "author": "aksenchyk <aksenchyk.v@gmail.com>",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {}
 }
