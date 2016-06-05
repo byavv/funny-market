@@ -1,10 +1,11 @@
-FROM node:6.2.0
+FROM node
 MAINTAINER V.V. Aksenchyk <aksenchyk.v@gmail.com>
-WORKDIR /app
 ADD . /app
-RUN \    
-    npm install -g typings gulp --quiet \
-    && npm install \
-    && typings install \
-    && gulp build
+WORKDIR /app
+RUN \            
+    npm install -g typings gulp --depth 0 && \
+    npm install --depth 0 && \
+    typings install   
+RUN gulp build
+
 CMD ["npm","start"]

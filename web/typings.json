@@ -1,16 +1,7 @@
 {
-    "ambientDependencies": {
-        "es6-shim": "github:DefinitelyTyped/DefinitelyTyped/es6-shim/es6-shim.d.ts#7de6c3dd94feaeb21f20054b9f30d5dabc5efabd",
-        "express": "github:DefinitelyTyped/DefinitelyTyped/express/express.d.ts#7de6c3dd94feaeb21f20054b9f30d5dabc5efabd",
-        "express-serve-static-core": "github:DefinitelyTyped/DefinitelyTyped/express-serve-static-core/express-serve-static-core.d.ts#fb2e78984b7076eda628892770a4314d618ac0d7",
-        "mime": "github:DefinitelyTyped/DefinitelyTyped/mime/mime.d.ts#56295f5058cac7ae458540423c50ac2dcf9fc711",
-        "morgan": "github:DefinitelyTyped/DefinitelyTyped/morgan/morgan.d.ts#7de6c3dd94feaeb21f20054b9f30d5dabc5efabd",
-        "nconf": "github:DefinitelyTyped/DefinitelyTyped/nconf/nconf.d.ts#56295f5058cac7ae458540423c50ac2dcf9fc711",
-        "node": "github:DefinitelyTyped/DefinitelyTyped/node/node.d.ts#1c56e368e17bb28ca57577250624ca5bd561aa81",
-        "serve-static": "github:DefinitelyTyped/DefinitelyTyped/serve-static/serve-static.d.ts#7de6c3dd94feaeb21f20054b9f30d5dabc5efabd"
-    },
-    "dependencies": {
-        "jasmine": "github:DefinitelyTyped/DefinitelyTyped/jasmine/jasmine.d.ts#36a1be34dbe202c665b3ddafd50824f78c09eea3",
-        "moment": "github:typed-typings/npm-moment#a4075cd50e63efbedd850f654594f293ab81a385"
-    }
+  "globalDependencies": {
+    "es6-shim": "registry:dt/es6-shim#0.31.2+20160602141504",
+    "jasmine": "registry:dt/jasmine#2.2.0+20160505161446",
+    "node": "registry:dt/node#6.0.0+20160602155235"
+  }
 }

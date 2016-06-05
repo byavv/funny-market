@@ -29,14 +29,6 @@ testing.setBaseTestProviders(
 
 Object.assign(global, testing);
 
-/*var testContext = require.context('./test', true, /\.spec\.ts/);
-
-
-function requireAll(requireContext) {
-  return requireContext.keys().map(requireContext);
-}
-
-var modules = requireAll(testContext);*/
 
 var testContext = require.context('./test', true, /\.spec\.ts/);
 var appContext = require.context('./client', true, /\.spec\.ts/);

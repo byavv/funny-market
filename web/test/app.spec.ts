@@ -12,14 +12,9 @@ import { Router } from '@angular/router-deprecated';
 import { MockBackend } from '@angular/http/testing';
 import { provide } from '@angular/core';
 import { Observable, ReplaySubject } from "rxjs";
+import { MockRouter, MockAppController } from './helpers/mocks';
 let appControllerStart: jasmine.Spy;
-class MockRouter {
-    navigate(value) { }
-}
-class MockAppController {
-    init$: ReplaySubject<any> = new ReplaySubject<any>()
-    start() { this.init$.next('fake') }
-}
+
 var fakeStorageValue = JSON.stringify({ token: 'fakeToken' });
 
 // Load the implementations that should be tested
@@ -53,7 +48,7 @@ describe('App', () => {
         expect(app).toBeTruthy();
         app.appController.init$.subscribe(value => {
             expect(appController.start).toHaveBeenCalled();
-            expect(value).toEqual('fake');
+            expect(value.makers).toBeDefined();
             expect(storage.getItem).toHaveBeenCalledWith('authorizationData');
             expect(identity.update).toHaveBeenCalledWith(JSON.parse(fakeStorageValue));
         });

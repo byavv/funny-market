@@ -2,7 +2,7 @@ import {Component} from '@angular/core';
 import {Http} from '@angular/http';
 import {Router, RouteConfig, ROUTER_DIRECTIVES} from "@angular/router-deprecated";
 import {LoginComponent} from './authentication/components/login/login';
-import {SignUpComponent} from './authentication/components/signup/signup';
+import {SignUpComponent} from './authentication/components/signUp/signup';
 import {Identity, Storage, APP_SERVICES_PROVIDERS, AppController} from "./shared/services";
 import {Header} from "./shared/components/header/header";
 import {FORM_PROVIDERS} from '@angular/common';

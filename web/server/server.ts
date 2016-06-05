@@ -1,6 +1,6 @@
-import * as path from 'path';
-import * as express from 'express';
-const compression = require('compression');
+const express = require('express'),
+    compression = require('compression'),
+    path = require('path');
 
 const http_port = process.env.HTTP_PORT || 3000
     , etcd_host = process.env.ETCD_HOST || '192.168.99.100'

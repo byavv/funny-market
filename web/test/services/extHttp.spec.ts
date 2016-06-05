@@ -13,27 +13,14 @@ import { MockBackend, MockConnection } from '@angular/http/testing';
 import { provide, Injector } from '@angular/core';
 import { Observable, ReplaySubject } from "rxjs";
 import { User } from '../../client/app/shared/models/user';
+import { UnauthorizedAccessError, ServerError } from '../helpers/errors';
+import { MockRouter } from '../helpers/mocks';
 
 var fakeStorageValue = { token: 'fakeToken' };
 var _injector: Injector;
 import {Identity, ExtHttp, ResponseHandler, APP_SERVICES_PROVIDERS} from "../../client/app/shared/services";
-class MockRouter {
-    navigate(value) { }
-}
-class UnauthorizedAccessError extends Error {
-    constructor(message) {
-        super(message);
-    }
-    name = "UnauthorizedAccessError";
-    status = 401;
-}
 
-function ServerError(message) {
-    Error.call(this);
-    this.name = 'Server error';
-    this.message = message;
-    this.status = 500;
-}
+
 
 describe('Extended http tests', () => {
     beforeEachProviders(() => [

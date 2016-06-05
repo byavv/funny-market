@@ -23,9 +23,9 @@ export class DebounceInput implements ControlValueAccessor {
     @Input() id: string;
     @Input() placeholder: string;
     @Input() pattern: string;
-    set value(value) {       
+    set value(value) {
         this._value = value;
-    }   
+    }
     get value() {
         return this._value;
     }
@@ -36,7 +36,7 @@ export class DebounceInput implements ControlValueAccessor {
         if (ngControl) ngControl.valueAccessor = this;
     }
 
-    ngAfterViewInit() {      
+    ngAfterViewInit() {
         Observable.fromEvent(this.inputElement.nativeElement, 'input')
             .debounceTime(this.delay)
             .map((event: any) => event.target.value)

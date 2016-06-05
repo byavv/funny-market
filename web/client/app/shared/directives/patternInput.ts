@@ -16,6 +16,7 @@ export class PatternInput {
     private _regex: string;
     set regex(value) {
         this._expression = new RegExp(value);
+          console.log(value)
         this._regex = value;
     };
     get regex() {
