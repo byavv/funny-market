@@ -12,6 +12,9 @@ import {CarDetailsComponent} from "./carDetails/carDetails";
 import {PersonalBase} from "./account/components/accountBase";
 import {LoaderComponent} from "./shared/components/loader/loader";
 
+// applied to the whole app
+import '../assets/styles/main.scss';
+
 @Component({
   selector: 'app',
   directives: [ROUTER_DIRECTIVES, Header, LoaderComponent],
