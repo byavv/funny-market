@@ -5,8 +5,12 @@ const readline = require('readline'),
     debug = require('debug')('proxy'),
     registry = require('etcd-registry'),
     async = require('async'),
-    console = require('better-console')
+    console = require('better-console'),
+    os = require('os')
     ;
+function printStats(stats) {
+    process.stdout.write(EOL + stats.toString(STATS_OPTIONS) + EOL);
+}
 /**
  * Simplest client possible, handy for development. Only two command available: 
  * 'stat' to see microservices topology and current status,
@@ -21,10 +25,9 @@ module.exports = (app) => {
     rl.on('line', (line) => {
         switch (line.trim()) {
             case 'stat':
-                let ind = 0;
                 async.map(hosts, (host, callback) => {
+                    console.log(host)
                     app.lookup(host).then((service) => {
-                        console.log("LOOK", service);
                         if (!service) {
                             callback(null, { "NAME": host, "HOST": 'N/A', "STATUS": 'not registered' });
                         } else {
@@ -32,11 +35,20 @@ module.exports = (app) => {
                                 callback(null, { "NAME": host, "HOST": service.hostname, 'STATUS': isAlive ? 'alive' : 'dead' });
                             });
                         }
+                    }).catch(err => {
+                        callback(null, { "NAME": host, "HOST": 'n/a', 'STATUS': 'dead' });
                     });
                 }, (err, table) => {
-                    console.log('\n');
-                    console.table(table);
-                    console.log('\n');
+                    if (err) {
+                        process.stdout.write(os.EOL);
+                        console.log(err);
+                    }
+                    else {
+                        console.log('SOMETHING');
+                        console.log('\n');
+                        console.table(table);
+                        console.log('\n');
+                    }
                 });
                 break;
             case 'lookup':
@@ -59,11 +71,11 @@ module.exports = (app) => {
                 console.log("'lookup', to see proxy table");
                 break;
             default:
-                if(line) console.warn(`${line.trim()} is not a command, type 'help' to see the list of commands `);
+                if (line) console.warn(`${line.trim()} is not a command, type 'help' to see the list of commands `);
                 break;
         }
         rl.prompt();
     }).on('close', () => {
-        console.log('Bye');     
+        console.log('Bye');
     });
 };
