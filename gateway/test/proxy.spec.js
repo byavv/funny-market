@@ -96,11 +96,11 @@ describe('PROXY TESTS', function () {
             .expect(200, done);
     });
 
-    it('should throw 502 when target is not awailable', function (done) {
+    it('should throw 404 when target is not awailable', function (done) {
         request
             .get('/not/exists')
             .set('Content-Type', 'application/json')
-            .expect(502, done);
+            .expect(404, done);
     });
 
     it('should throw when target throw', function (done) {
