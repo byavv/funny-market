@@ -4,8 +4,7 @@ WORKDIR /app
 ADD . /app
 
 RUN \
-    apt-get install make && \  
-    && npm cache clear \
+    apt-get install make \     
     && apt-get update \
     && apt-get install -y
 
