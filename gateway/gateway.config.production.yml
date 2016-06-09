@@ -1,0 +1,118 @@
+# Roles and permissions defaults:
+#
+#    - admin: ['read', 'write']
+#    - user: ['read']
+#
+
+# Grant access options
+# ex. grants access for any user whose role has permission to 'read' or 'publish' for posting data on '/sampleapi':
+#
+#       - url: /sampleapi
+#         grant: ['read','write']   
+#         methods: ['post']  
+#
+# ex. grant for everyone. Proxy doesn't take into account user's authentication at all:
+#            
+#       - url: /sampleapi
+#         methods: *
+#         grant: '*'
+
+# NOTE! Bear in mind express middleware order, which does matter!
+
+access:     
+    - url: /public
+      methods: '*'
+      grant: '*' 
+      
+    - url: /profiles
+      methods: '*'
+      grant: ['read'] 
+      
+    - url: /auth*
+      methods: ['post']
+      grant: '*'  
+      
+    - url: /tracks
+      methods: ['get']
+      grant: '*'
+    
+    - url: /tracks
+      methods: ['post']
+      grant: ['read']
+    
+    - url: /users
+      methods: ['post']
+      grant: ['read']
+    
+    - url: /image
+      methods: ['post']
+      grant: ['read']
+      
+    - url: /_dashboard
+      methods: '*'
+      grant: ['write']
+      
+# Define path, client requests will be redirected to.
+# ex. 
+#    - rule: '.*/api'
+#      mapTo: 'https://my.remote.com:3004/'
+#      withPath: '/api'
+#
+# Any request to the proxy server with '/api' path will be mapped 
+# to the server running on https://my.remote.com:3004/api
+
+proxy:
+    - rule: '/public/cars'
+      mapTo: 'cars'
+      withPath: '/api/cars'
+      
+    - rule: '/public/makers'
+      mapTo: 'cars'
+      withPath: '/api/makers'
+    
+    - rule: '/public/enginetypes'
+      mapTo: 'cars'
+      withPath: '/api/enginetypes'      
+ 
+    - rule: '/profiles/cars'
+      mapTo: 'cars'
+      withPath: '/api/cars'
+      
+    - rule: '/auth'
+      mapTo: 'profile'
+      withPath: '/auth'
+        
+    - rule: '/profiles'
+      mapTo: 'profile'
+      withPath: '/profiles' 
+    
+    - rule: '/tracks'
+      mapTo: 'tracker'
+      withPath: '/tracks'
+    
+    - rule: '/users'
+      mapTo: 'profile'
+      withPath: '/users'
+      
+    - rule: '/image'
+      mapTo: 'image'
+      withPath: '/api' 
+       
+    - rule: '/'
+      mapTo: 'web'
+      withPath: '/'    
+      
+    - rule: '/_dashboard'
+      mapTo: 'admin'
+      withPath: '/' 
+      
+# Define rate limiting for any url, proxied by the server.
+# Uses https://github.com/jhurliman/node-rate-limiter, so
+# interval and limit options are equal to node-rate-limiter's (see link below)
+
+rate: 
+# max 5 requests per minute    
+    - paths: ['/auth*']
+      methods: ['post']
+      interval: 60000
+      limit: 5

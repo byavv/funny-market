@@ -4,7 +4,7 @@
   "main": "server/server.js",
   "license": "MIT",
   "scripts": {
-    "start": "make run",
+    "start": "make start",
     "test": "make test-cov"
   },
   "engines": {
