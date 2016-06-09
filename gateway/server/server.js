@@ -41,7 +41,6 @@ boot(app, __dirname, (err) => {
     app.emit('loaded');
 });
 
-
 function configure() {   
     const filename = process.env.NODE_ENV ? `gateway.config.${process.env.NODE_ENV}.yml` : `gateway.config.yml`;
     try {

@@ -31,6 +31,7 @@
   },
   "devDependencies": {
     "autoprefixer": "^6.3.6",
+    "compression-webpack-plugin": "^0.3.1",
     "copy-webpack-plugin": "^2.1.1",
     "css-loader": "^0.23.1",
     "extract-text-webpack-plugin": "^1.0.1",
@@ -40,7 +41,7 @@
     "gulp-nodemon": "^2.0.6",
     "gulp-typescript": "^2.13.0",
     "gulp-util": "^3.0.7",
-    "html-webpack-plugin": "^2.16.0",
+    "html-webpack-plugin": "^2.19.0",
     "istanbul-instrumenter-loader": "^0.2.0",
     "json-loader": "^0.5.4",
     "karma": "^0.13.22",
@@ -68,6 +69,7 @@
     "typescript": "^1.8.10",
     "url-loader": "^0.5.7",
     "webpack": "^1.13.0",
+    "webpack-md5-hash": "0.0.5",
     "webpack-merge": "^0.11.0",
     "webpack-node-externals": "^1.0.0"
   },
@@ -75,5 +77,6 @@
     "type": "",
     "url": ""
   },
-  "description": "web"
+  "license": "MIT",
+  "description": "angular2 client app"
 }

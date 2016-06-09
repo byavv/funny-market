@@ -8,8 +8,6 @@ var gulp = require('gulp'),
     nodemon = require('gulp-nodemon'),
     rx = require("rxjs");
 
-var config = require("./webpack.config")();
-
 gulp.task("set_test", () => {
     process.env.NODE_ENV = 'test';
 })
@@ -23,19 +21,26 @@ gulp.task('clean', (done) => {
     require('rimraf')('./build', done);
 });
 gulp.task("build:server", (done) => {
+    var config = require("./webpack.config")();
     webpack(config.server).run(onWebpackCompleted(done));
 });
 gulp.task("build:client", (done) => {
+    var config = require("./webpack.config")();
     webpack(config.client).run(onWebpackCompleted(done));
 });
-gulp.task("build:vendors", ["clean"], (done) => {
-    webpack(config.vendors).run(onWebpackCompleted(done));
+gulp.task("build", ['build:client'], (done) => {
+    runSequence(['build:server'], done);
 });
-gulp.task("build", ["build:vendors"], (done) => {
-    runSequence(['build:server', 'build:client'], done);
+gulp.task("build:production", (done) => {
+    var config = require("./webpack.config")('production');
+    webpack(config.server).run(onWebpackCompleted(() => {
+        webpack(config.client).run(onWebpackCompleted(done));
+    }));
 });
+
 gulp.task('default', () => {
     var nodemonRef;
+    var config = require("./webpack.config")();
     rx.Observable.create((observer) => {
         webpack(config.client).watch(500, onWebpackCompleted((err) => {
             if (err) observer.error(err);

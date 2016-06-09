@@ -3,7 +3,8 @@
 const debug = require('debug')('proxy'),
     httpProxy = require('http-proxy'),
     HttpProxyRules = require('http-proxy-rules'),
-    GateWayError = require("../../lib/errors").err502
+    GateWayError = require("../../lib/errors").err502,
+    NotFoundError = require("../../lib/errors").err404
     ;
 
 /**
@@ -13,7 +14,7 @@ const debug = require('debug')('proxy'),
  * @param {Object} options Options
  * @returns {Function} The express middleware handler
  */
-module.exports = function (options) {  
+module.exports = function (options) {
     const proxy = httpProxy.createProxyServer({});
     /**
      * For principle propogation's purposes, adds X-PRINCIPLE header to be consumed 
@@ -42,7 +43,7 @@ module.exports = function (options) {
     });
     /**
      * Find service url in etcd
-     */  
+     */
     return (req, res, next) => {
         let target = proxyRules.match(req);
         if (target) {
@@ -58,7 +59,7 @@ module.exports = function (options) {
                 return next(err);
             });
         } else {
-            return next(new GateWayError("service can't be found"));
+            return next(new NotFoundError());
         }
     };
 };

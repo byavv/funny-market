@@ -6,6 +6,6 @@ RUN \
     npm install -g typings gulp --depth 0 && \
     npm install --depth 0 && \
     typings install   
-RUN gulp build
+RUN gulp build:production
 
 CMD ["npm","start"]

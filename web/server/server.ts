@@ -46,9 +46,9 @@ app.use(compression());
 
 // Definition static resources folder '/build/client' and map to '/static' path
 app.use('/static', express.static(path.join(root, 'build', 'client'), { index: false }));
-app.use(require("serve-favicon")(path.join(__dirname, "./views/favicon.ico")));
+app.use(require("serve-favicon")(path.join(__dirname, "./static/favicon.ico")));
 app.engine('.html', expressEngine);
-app.set("views", path.join(__dirname, "./views"));
+app.set("views", path.join(__dirname, "../build/client"));
 app.set('view engine', 'html');
 
 function ngApp(req, res) {

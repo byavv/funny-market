@@ -1,31 +1,31 @@
 var webpackMerge = require('webpack-merge'),
     path = require('path'),
     webpack = require('webpack'),
-    nodeExternals = require('webpack-node-externals'),
-    autoprefixer = require('autoprefixer'),
-    precss = require('precss')
+    CompressionPlugin = require('compression-webpack-plugin'),
+    WebpackMd5Hash = require('webpack-md5-hash')
     ;
 
 var common = {
-    devServer: {
-        stats: 'errors-only',
-    },
+    externals: [path.join(__dirname, 'node_modules')],
     resolve: {
-        extensions: ['', '.ts', '.json', '.js', ".scss", ".css"]
+        extensions: ['', '.ts', '.js', '.json', ".scss", ".css"],
+        root: [
+            path.join(__dirname, 'node_modules')
+        ],
     },
     module: {
         loaders: [
             { test: /\.html$/, loader: "raw" },
             { test: /\.json$/, loader: 'json' },
-            { test: /\.css$/, loader: "raw!postcss" },
-            { test: /\.scss$/, loader: "raw!postcss!sass" },
             { test: /\.(png|jpg)$/, loader: "url?limit=25000" },
             { test: /\.jpe?g$|\.gif$|\.png$|\.wav$|\.mp3$|\.otf$/, loader: "file" },
             { test: /\.(ttf|eot|svg|woff|woff2)(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "file" },
             {
                 test: /\.ts$/,
                 loader: 'ts-loader',
-                exclude: [/node_modules/],
+                exclude: [
+                    /node_modules/
+                ],
                 query: {
                     ignoreDiagnostics: [
                         2403, // 2403 -> Subsequent variable declarations
@@ -35,73 +35,84 @@ var common = {
                         2502  // 2502 -> Referenced directly or indirectly
                     ]
                 },
-            },
-            {
-                test: /\.js$|\.css$/,
-                include: /node_modules/,
-                loaders: ['strip-sourcemap-loader']
             }
         ],
-        postLoaders: [],
-        noParse: [/.+zone\.js\/dist\/.+/, /.+@angular2\/.+/, /angular2-polyfills\.js/]
-    },
-    postcss: function () {
-        return [
-            autoprefixer({ browsers: ['last 2 versions'] }),
-            precss
-        ];
+        postLoaders: []
     },
     plugins: [
-        /*
-        * Plugin: OccurenceOrderPlugin
-        * Description: Varies the distribution of the ids to get the smallest id length
-        * for often used ids.
-        *
-        * See: https://webpack.github.io/docs/list-of-plugins.html#occurrenceorderplugin
-        * See: https://github.com/webpack/docs/wiki/optimization#minimize
-        */
-        new webpack.optimize.OccurenceOrderPlugin(true)
     ]
 };
 
 module.exports = function (env) {
     env = env || process.env.NODE_ENV || "development";
     var productionTools = {
+        debug: false,
         plugins: [
-            new webpack.optimize.DedupePlugin(),
+            /*
+             * Plugin: UglifyJsPlugin
+             * Description: Minimize all JavaScript output of chunks
+             * See: https://webpack.github.io/docs/list-of-plugins.html#uglifyjsplugin
+             */
             new webpack.optimize.UglifyJsPlugin({
-                mangle: false,
+                beautify: false,
+                mangle: {
+                    screw_ie8: true,
+                    keep_fnames: true
+                },
                 compress: {
+                    screw_ie8: true,
                     warnings: false
-                }
-            })
+                },
+                comments: false
+            }),
+            new CompressionPlugin({
+                regExp: /\.css$|\.html$|\.js$|\.map$/,
+                threshold: 2 * 1024
+            }),
+            /*
+             * Plugin: WebpackMd5Hash
+             * Description: Plugin to replace a standard webpack chunkhash with md5.             
+             * See: https://www.npmjs.com/package/webpack-md5-hash
+             */
+            new WebpackMd5Hash(),
+            /*
+             * Plugin: DedupePlugin
+             * Description: Prevents code duplicates
+             * See: https://github.com/webpack/docs/wiki/optimization#deduplication
+             */
+            new webpack.optimize.DedupePlugin(),
+            /*
+             * Plugin: OccurenceOrderPlugin
+             * Description: Varies the distribution of the ids to get the smallest id length
+             * for often used ids.
+             * See: https://github.com/webpack/docs/wiki/optimization#minimize
+             */
+            new webpack.optimize.OccurenceOrderPlugin(true),
         ]
     }
     var devTools = {
-        devtool: "source-map",
+        devtool: 'source-map',
         debug: true,
-        plugins: [new webpack.HotModuleReplacementPlugin()]
+        plugins: [
+            new webpack.HotModuleReplacementPlugin()
+        ]
     }
 
     var client, server, vendors, test;
     if (env === 'development') {
         client = webpackMerge(common, require('./webpack.config.client')(env), devTools);
         server = webpackMerge(common, require('./webpack.config.server')(env), devTools);
-        vendors = webpackMerge(common, require('./webpack.config.vendors')(env), {/*dev specific config */ });
     }
     if (env === 'production') {
-        client = webpackMerge(common, require('./webpack.config.client')(env), productionTools, {/*production specific config */ });
-        server = webpackMerge(common, require('./webpack.config.server')(env), {/*production specific config */ });
-        vendors = webpackMerge(common, require('./webpack.config.vendors')(env), productionTools, {/*production specific config */ });
+        client = webpackMerge(common, require('./webpack.config.client')(env), productionTools);
+        server = webpackMerge(common, require('./webpack.config.server')(env), {});
     }
     if (env === 'test') {
         test = webpackMerge(common, require('./webpack.config.client')(env));
     }
-
     return {
         server: server,
         client: client,
-        test: test,
-        vendors: vendors
+        test: test
     }
 }
