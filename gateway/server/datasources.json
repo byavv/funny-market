@@ -1,9 +1,0 @@
-{
-  "db": {
-    "host": "${mongo_host}",
-    "port": 27017,
-    "database": "profile-db",
-    "name": "db",
-    "connector": "mongodb"
-  }
-}
