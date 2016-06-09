@@ -5,6 +5,12 @@ machine:
     version: 6.2.0
   services:
      - docker 
+
+checkout:
+  post:
+    - git submodule sync
+    - git submodule update --init
+
 dependencies:  
   pre:
      - sudo pip install docker-compose     

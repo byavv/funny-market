@@ -1,0 +1,4 @@
+[submodule "gateway"]
+	path = gateway
+	url = git://github.com/byavv/gateway.git
+	branch = master
