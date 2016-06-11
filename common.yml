@@ -1,7 +1,7 @@
 version: '2'
 services:
   gateway:
-    build: ./gateway
+    build: ./200Loc-gate
     ports:
      - "3001:3001"     
     environment:        
