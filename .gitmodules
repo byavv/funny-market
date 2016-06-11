@@ -2,3 +2,6 @@
 	path = gateway
 	url = git://github.com/byavv/gateway.git
 	branch = master
+[submodule "200Loc-gate"]
+	path = 200Loc-gate
+	url = git://github.com/byavv/200Loc-gate.git
