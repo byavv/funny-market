@@ -1,31 +1,24 @@
-[submodule "gateway"]
-	path = gateway
-	url = git://github.com/byavv/gateway.git
-	branch = master
 [submodule "200Loc-gate"]
 	path = 200Loc-gate
-	url = git://github.com/byavv/200Loc-gate.git
-[submodule "microservices/cars/fm-cars"]
-	path = microservices/cars/fm-cars
-	url = git://github.com/byavv/fm-cars.git
+	url = git@github.com:byavv/200Loc-gate.git
 	branch = master
 [submodule "microservices/fm-cars"]
 	path = microservices/fm-cars
-	url = git://github.com/byavv/fm-cars.git
+	url = git@github.com:byavv/fm-cars.git
 	branch = master
 [submodule "microservices/fm-image"]
 	path = microservices/fm-image
-	url = git://github.com/byavv/fm-image.git
+	url = git@github.com:byavv/fm-image.git
 	branch = master
 [submodule "microservices/fm-profile"]
 	path = microservices/fm-profile
-	url = git://github.com/byavv/fm-profile.git
+	url = git@github.com:byavv/fm-profile.git
 	branch = master
 [submodule "microservices/fm-tracker"]
 	path = microservices/fm-tracker
-	url = git://github.com/byavv/fm-tracker.git
+	url = git@github.com:byavv/fm-tracker.git
 	branch = master
 [submodule "fm-web"]
 	path = fm-web
-	url = git://github.com/byavv/fm-web.git
+	url = git@github.com:byavv/fm-web.git
 	branch = master
