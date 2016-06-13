@@ -43,8 +43,21 @@ services:
     environment: 
       - DBSOURCE_HOST=profile-db
       - ETCD_HOST=etcd
+      - BROCKER_HOST=rabbitmq
     command: npm start
-    restart: always    
+    restart: always
+  tracker:    
+    extends:
+      file: common.yml
+      service: tracker        
+    depends_on:      
+      - etcd
+      - rabbitmq     
+    environment:      
+      - ETCD_HOST=etcd
+      - BROCKER_HOST=rabbitmq
+    command: npm start
+    restart: always      
   image:    
     extends:
       file: common.yml
@@ -54,6 +67,7 @@ services:
       - rabbitmq      
     environment:     
       - ETCD_HOST=etcd
+      - BROCKER_HOST=rabbitmq
     command: npm start
     restart: always    
   ######################################

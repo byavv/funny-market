@@ -7,31 +7,31 @@ services:
     environment:        
      - HTTP_PORT=3001       
   web:
-    build: ./web
+    build: ./fm-web
     ports:
      - "3030:3030"     
     environment:        
      - HTTP_PORT=3030      
   cars:
-    build: ./microservices/cars
+    build: ./microservices/fm-cars
     ports:
      - "3002:3002"     
     environment:        
      - HTTP_PORT=3002            
   profile:
-    build: ./microservices/profile
+    build: ./microservices/fm-profile
     ports:
      - "3003:3003"     
     environment:        
      - HTTP_PORT=3003     
   tracker:
-    build: ./microservices/tracker
+    build: ./microservices/fm-tracker
     ports:
      - "3004:3004"     
     environment:        
      - HTTP_PORT=3004
   image:
-    build: ./microservices/image
+    build: ./microservices/fm-image
     ports:
      - "3005:3005"     
     environment:        
