@@ -21,8 +21,7 @@ test:
      - git grep --color TODO | cat 
   override:     
      - docker-compose -f docker-compose_test_.yml run --no-deps cars
-     - docker-compose -f docker-compose_test_.yml run --no-deps profile
-     - docker-compose -f docker-compose_test_.yml run --no-deps gateway
+     - docker-compose -f docker-compose_test_.yml run --no-deps profile    
      - docker-compose -f docker-compose_test_.yml run --no-deps web
   post:   
      - docker-compose stop
