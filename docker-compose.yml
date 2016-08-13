@@ -1,23 +1,18 @@
 version: '2'
 services:
+  ######## gateway   ##################
+  gateway:
+    image: aksenchyk/fm-200loc:latest
+    ports:
+     - "3001:3001"     
+    environment:        
+     - HTTP_PORT=3001    
   ######## databases ##################
   cars-db:    
     image: mongo
   profile-db:    
     image: mongo
-  ######## microservices  #############
-  gateway:
-    extends:
-      file: common.yml
-      service: gateway        
-    depends_on:
-      - profile-db
-      - etcd
-    environment: 
-      - DBSOURCE_HOST=profile-db
-      - ETCD_HOST=etcd
-    command: npm start
-    restart: always    
+  ######## microservices  ############# 
   cars:    
     extends:
       file: common.yml

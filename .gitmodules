@@ -1,7 +1,3 @@
-[submodule "200Loc-gate"]
-	path = 200Loc-gate
-	url = git@github.com:byavv/200Loc-gate.git
-	branch = master
 [submodule "microservices/fm-cars"]
 	path = microservices/fm-cars
 	url = git@github.com:byavv/fm-cars.git

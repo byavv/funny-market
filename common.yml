@@ -1,11 +1,5 @@
 version: '2'
-services:
-  gateway:
-    build: ./200Loc-gate
-    ports:
-     - "3001:3001"     
-    environment:        
-     - HTTP_PORT=3001       
+services:        
   web:
     build: ./fm-web
     ports:
