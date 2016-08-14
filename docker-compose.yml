@@ -4,9 +4,14 @@ services:
   gateway:
     image: aksenchyk/fm-200loc:latest
     ports:
-     - "3001:3001"     
+     - "3001:3001"
+     - "5601:5601"     
     environment:        
-     - HTTP_PORT=3001    
+     - HTTP_PORT=3001
+     - DBSOURCE_HOST=profile-db
+     - ETCD_HOST=etcd
+    depends_on:
+     - profile-db    
   ######## databases ##################
   cars-db:    
     image: mongo
