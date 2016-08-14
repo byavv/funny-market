@@ -11,7 +11,8 @@ services:
      - DBSOURCE_HOST=profile-db
      - ETCD_HOST=etcd
     depends_on:
-     - profile-db    
+     - profile-db
+     - etcd     
   ######## databases ##################
   cars-db:    
     image: mongo
