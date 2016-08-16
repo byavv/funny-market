@@ -1,0 +1,60 @@
+cars:
+  command: npm start
+  environment:
+    - BROCKER_HOST=rabbitmq
+    - DBSOURCE_HOST=cars-db
+    - ETCD_HOST=etcd
+  image: 'aksenchyk/fm-cars:latest'
+  restart: always
+cars-db:
+  image: 'mongo:latest'
+  restart: always
+etcd:
+  command: '--name etcd -listen-client-urls http://0.0.0.0:2379,http://0.0.0.0:4001 -advertise-client-urls http://127.0.0.1:2379,http://127.0.0.1:4001'
+  image: 'quay.io/coreos/etcd:v2.3.7'
+  ports:
+    - '4001:4001'
+gateway:
+  command: npm start
+  environment:
+    - DBSOURCE_HOST=profile-db
+    - ETCD_HOST=etcd
+  image: 'aksenchyk/fm-200loc:latest'
+  ports:
+    - '80:3001'
+    - '5601:5601'
+  restart: always
+image:
+  command: npm start
+  environment:
+    - BROCKER_HOST=rabbitmq
+    - ETCD_HOST=etcd
+  image: 'aksenchyk/fm-image:latest'
+  restart: always
+profile:
+  command: npm start
+  environment:
+    - BROCKER_HOST=rabbitmq
+    - DBSOURCE_HOST=profile-db
+    - ETCD_HOST=etcd
+  image: 'aksenchyk/fm-profile:latest'
+  restart: always
+profile-db:
+  image: 'mongo:latest'
+  restart: always
+rabbitmq:
+  image: 'rabbitmq:latest'
+  restart: always
+tracker:
+  command: npm start
+  environment:
+    - BROCKER_HOST=rabbitmq
+    - ETCD_HOST=etcd
+  image: 'aksenchyk/fm-tracker:latest'
+  restart: always
+web:
+  command: npm start
+  environment:
+    - ETCD_HOST=etcd
+  image: 'aksenchyk/fm-web:latest'
+  restart: always

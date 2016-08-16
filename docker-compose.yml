@@ -1,42 +1,54 @@
 version: '2'
 services:
-  ######## gateway   ##################
+
+
+  #--------- gateway   -----------------#
   gateway:
     image: aksenchyk/fm-200loc:latest
     ports:
-     - "3001:3001"
+     - "80:3001"
      - "5601:5601"     
     environment:        
-     - HTTP_PORT=3001
+     - HTTP_PORT=80
      - DBSOURCE_HOST=profile-db
      - ETCD_HOST=etcd
     depends_on:
      - profile-db
-     - etcd     
-  ######## databases ##################
+     - etcd    
+  #------------------------------------#
+
+
+  #------- databases ------------------#
+  #------------------------------------#
   cars-db:    
     image: mongo
+  #------------------------------------#
   profile-db:    
     image: mongo
-  ######## microservices  ############# 
+  #------------------------------------# 
+
+
+  #-------- microservices  ------------#
+  #------------------------------------#
   cars:    
-    extends:
-      file: common.yml
-      service: cars   
+    image: aksenchyk/fm-cars:latest      
+    environment:        
+     - HTTP_PORT=80   
     depends_on:
       - cars-db
       - etcd
-      - rabbitmq
-    command: npm start
+      - rabbitmq    
     environment: 
       - DBSOURCE_HOST=cars-db
       - BROCKER_HOST=rabbitmq
       - ETCD_HOST=etcd
-    restart: always    
-  profile:    
-    extends:
-      file: common.yml
-      service: profile        
+    command: npm start
+    restart: always  
+  #------------------------------------#  
+  profile:
+    image: aksenchyk/fm-profile:latest
+    environment:        
+     - HTTP_PORT=80    
     depends_on:      
       - etcd
       - rabbitmq
@@ -45,12 +57,13 @@ services:
       - DBSOURCE_HOST=profile-db
       - ETCD_HOST=etcd
       - BROCKER_HOST=rabbitmq
-    command: npm start
+    command: npm start    
     restart: always
+  #------------------------------------#
   tracker:    
-    extends:
-      file: common.yml
-      service: tracker        
+    image: aksenchyk/fm-tracker:latest
+    environment:        
+     - HTTP_PORT=80      
     depends_on:      
       - etcd
       - rabbitmq     
@@ -58,40 +71,50 @@ services:
       - ETCD_HOST=etcd
       - BROCKER_HOST=rabbitmq
     command: npm start
-    restart: always      
+    restart: always
+  #------------------------------------# 
   image:    
-    extends:
-      file: common.yml
-      service: image        
+    image: aksenchyk/fm-image:latest
+    environment:        
+     - HTTP_PORT=80        
     depends_on:      
       - etcd
       - rabbitmq      
     environment:     
       - ETCD_HOST=etcd
       - BROCKER_HOST=rabbitmq
-    command: npm start
+    command: npm start     
     restart: always    
-  ######################################
+  #------------------------------------#
+
+
+  #-------- web client ----------------#
   web:
-    extends:
-      file: common.yml
-      service: web       
+    image: aksenchyk/fm-web:latest  
     depends_on:      
       - etcd
     environment:
       - ETCD_HOST=etcd
     command: npm start
-    restart: always    
-  ####### logical group  ###############
+    restart: always  
+  #------------------------------------#
+
+
+
+  #------- logical group  -------------#
+  #------------------------------------# 
   etcd:
-    image: microbox/etcd:latest   
-    command: '--name etcd'
+    command: '--name etcd -listen-client-urls http://0.0.0.0:2379,http://0.0.0.0:4001 -advertise-client-urls http://127.0.0.1:2379,http://127.0.0.1:4001'
+    image: 'quay.io/coreos/etcd:v2.3.7'
     ports:
+     - '2379:2379'
      - '4001:4001'
+   
+  #------------------------------------# 
   rabbitmq:    
     build: ./broker
     ports:
      - '5672:5672'
      - '15672:15672'
      - '1883:1883'
-  ######################################
+  #------------------------------------#
