@@ -1,42 +1,47 @@
 cars:
-  command: npm start
+  entrypoint: './wait-for-it.sh cars-db:27017 etcd0:4001 rabbitmq:5672 -s -- npm start'
   environment:
     - BROCKER_HOST=rabbitmq
     - DBSOURCE_HOST=cars-db
-    - ETCD_HOST=etcd
+    - ETCD_HOST=etcd0
   image: 'aksenchyk/fm-cars:latest'
   restart: always
+  target_num_containers: 2
 cars-db:
   image: 'mongo:latest'
   restart: always
-etcd:
-  command: '--name etcd -listen-client-urls http://0.0.0.0:2379,http://0.0.0.0:4001 -advertise-client-urls http://127.0.0.1:2379,http://127.0.0.1:4001'
+etcd0:
+  command: '--name etcd0 -listen-client-urls http://0.0.0.0:2379,http://0.0.0.0:4001 -advertise-client-urls http://etcd0:2379,http://etcd0:4001 -initial-advertise-peer-urls http://etcd0:2380 -listen-peer-urls http://0.0.0.0:2380 -initial-cluster-token etcd-cluster-1 -initial-cluster etcd0=http://etcd0:2380,etcd1=http://etcd1:2380,etcd2=http://etcd2:2380 -initial-cluster-state new'
   image: 'quay.io/coreos/etcd:v2.3.7'
-  ports:
-    - '4001:4001'
+etcd1:
+  command: '--name etcd1 -listen-client-urls http://0.0.0.0:2379,http://0.0.0.0:4001 -advertise-client-urls http://etcd1:2379,http://etcd1:4001 -initial-advertise-peer-urls http://etcd1:2380 -listen-peer-urls http://0.0.0.0:2380 -initial-cluster-token etcd-cluster-1 -initial-cluster etcd0=http://etcd0:2380,etcd1=http://etcd1:2380,etcd2=http://etcd2:2380 -initial-cluster-state new'
+  image: 'quay.io/coreos/etcd:v2.3.7'
+etcd2:
+  command: '--name etcd2 -listen-client-urls http://0.0.0.0:2379,http://0.0.0.0:4001 -advertise-client-urls http://etcd2:2379,http://etcd2:4001 -initial-advertise-peer-urls http://etcd2:2380 -listen-peer-urls http://0.0.0.0:2380 -initial-cluster-token etcd-cluster-1 -initial-cluster etcd0=http://etcd0:2380,etcd1=http://etcd1:2380,etcd2=http://etcd2:2380 -initial-cluster-state new'
+  image: 'quay.io/coreos/etcd:v2.3.7'
 gateway:
-  command: npm start
+  entrypoint: './wait-for-it.sh profile-db:27017 -s -- npm start'
   environment:
     - DBSOURCE_HOST=profile-db
-    - ETCD_HOST=etcd
+    - ETCD_HOST=etcd0
   image: 'aksenchyk/fm-200loc:latest'
   ports:
     - '80:3001'
     - '5601:5601'
   restart: always
 image:
-  command: npm start
+  entrypoint: './wait-for-it.sh cars-db:27017 etcd0:4001 rabbitmq:5672 -s -- npm start'
   environment:
     - BROCKER_HOST=rabbitmq
-    - ETCD_HOST=etcd
+    - ETCD_HOST=etcd0
   image: 'aksenchyk/fm-image:latest'
   restart: always
 profile:
-  command: npm start
+  entrypoint: './wait-for-it.sh profile-db:27017 etcd0:4001 rabbitmq:5672 -s -- npm start'
   environment:
     - BROCKER_HOST=rabbitmq
     - DBSOURCE_HOST=profile-db
-    - ETCD_HOST=etcd
+    - ETCD_HOST=etcd0
   image: 'aksenchyk/fm-profile:latest'
   restart: always
 profile-db:
@@ -46,15 +51,15 @@ rabbitmq:
   image: 'rabbitmq:latest'
   restart: always
 tracker:
-  command: npm start
+  entrypoint: './wait-for-it.sh etcd0:4001 rabbitmq:5672 -s -- npm start'
   environment:
     - BROCKER_HOST=rabbitmq
-    - ETCD_HOST=etcd
+    - ETCD_HOST=etcd0
   image: 'aksenchyk/fm-tracker:latest'
   restart: always
 web:
-  command: npm start
+  entrypoint: './wait-for-it.sh etcd0:4001 -s -- npm start'
   environment:
-    - ETCD_HOST=etcd
+    - ETCD_HOST=etcd0
   image: 'aksenchyk/fm-web:latest'
   restart: always

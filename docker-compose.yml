@@ -41,8 +41,8 @@ services:
     environment: 
       - DBSOURCE_HOST=cars-db
       - BROCKER_HOST=rabbitmq
-      - ETCD_HOST=etcd
-    command: npm start
+      - ETCD_HOST=etcd    
+    entrypoint: ./wait-for-it.sh cars-db:27017 etcd:4001 rabbitmq:5672 -s -- npm start
     restart: always  
   #------------------------------------#  
   profile:
@@ -57,7 +57,7 @@ services:
       - DBSOURCE_HOST=profile-db
       - ETCD_HOST=etcd
       - BROCKER_HOST=rabbitmq
-    command: npm start    
+    entrypoint: ./wait-for-it.sh profile-db:27017 etcd:4001 rabbitmq:5672 -s -- npm start    
     restart: always
   #------------------------------------#
   tracker:    
@@ -70,7 +70,7 @@ services:
     environment:      
       - ETCD_HOST=etcd
       - BROCKER_HOST=rabbitmq
-    command: npm start
+    entrypoint: ./wait-for-it.sh etcd:4001 rabbitmq:5672 -s -- npm start
     restart: always
   #------------------------------------# 
   image:    
@@ -83,7 +83,7 @@ services:
     environment:     
       - ETCD_HOST=etcd
       - BROCKER_HOST=rabbitmq
-    command: npm start     
+    entrypoint: ./wait-for-it.sh etcd:4001 rabbitmq:5672 -s -- npm start     
     restart: always    
   #------------------------------------#
 
@@ -95,7 +95,7 @@ services:
       - etcd
     environment:
       - ETCD_HOST=etcd
-    command: npm start
+    entrypoint: ./wait-for-it.sh etcd:4001 -s -- npm start
     restart: always  
   #------------------------------------#
 
