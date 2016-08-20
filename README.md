@@ -1,6 +1,6 @@
 [![CircleCI](https://circleci.com/gh/byavv/funny-market.svg?style=svg)](https://circleci.com/gh/byavv/funny-market)
 
-[DEMO](http://gateway-1.funny-market.6f1a08fe.cont.dockerapp.io/)
+[DEMO](http://gateway.funny-market.57a8d92e.svc.dockerapp.io/)
 
 ## Solution is under development, may contain bugs or even be broken
 
