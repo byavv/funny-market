@@ -32,6 +32,8 @@ gateway:
 image:
   entrypoint: './wait-for-it.sh cars-db:27017 etcd0:4001 rabbitmq:5672 -s -- npm start'
   environment:
+    - AWS_ACCESS_KEY=xxxxxxxxx
+    - AWS_SECRET_KEY=xxxxxxxxx+xxxxxxxxxxxxxxxxxxxxxxxxx
     - BROCKER_HOST=rabbitmq
     - ETCD_HOST=etcd0
   image: 'aksenchyk/fm-image:latest'
