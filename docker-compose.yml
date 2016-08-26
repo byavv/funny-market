@@ -14,7 +14,8 @@ services:
      - ETCD_HOST=etcd
     depends_on:
      - profile-db
-     - etcd    
+     - etcd
+    entrypoint: ./wait-for-it.sh cars-db:27017 etcd:4001 rabbitmq:5672 -s -- npm run dev    
   #------------------------------------#
 
 
@@ -42,7 +43,7 @@ services:
       - DBSOURCE_HOST=cars-db
       - BROCKER_HOST=rabbitmq
       - ETCD_HOST=etcd    
-    entrypoint: ./wait-for-it.sh cars-db:27017 etcd:4001 rabbitmq:5672 -s -- npm start
+    entrypoint: ./wait-for-it.sh cars-db:27017 etcd:4001 rabbitmq:5672 -s -- npm run dev
     restart: always  
   #------------------------------------#  
   profile:
@@ -57,7 +58,7 @@ services:
       - DBSOURCE_HOST=profile-db
       - ETCD_HOST=etcd
       - BROCKER_HOST=rabbitmq
-    entrypoint: ./wait-for-it.sh profile-db:27017 etcd:4001 rabbitmq:5672 -s -- npm start    
+    entrypoint: ./wait-for-it.sh profile-db:27017 etcd:4001 rabbitmq:5672 -s -- npm run dev    
     restart: always
   #------------------------------------#
   tracker:    
@@ -70,7 +71,7 @@ services:
     environment:      
       - ETCD_HOST=etcd
       - BROCKER_HOST=rabbitmq
-    entrypoint: ./wait-for-it.sh etcd:4001 rabbitmq:5672 -s -- npm start
+    entrypoint: ./wait-for-it.sh etcd:4001 rabbitmq:5672 -s -- npm run dev
     restart: always
   #------------------------------------# 
   image:    
@@ -83,7 +84,7 @@ services:
     environment:     
       - ETCD_HOST=etcd
       - BROCKER_HOST=rabbitmq
-    entrypoint: ./wait-for-it.sh etcd:4001 rabbitmq:5672 -s -- npm start     
+    entrypoint: ./wait-for-it.sh etcd:4001 rabbitmq:5672 -s -- npm run dev     
     restart: always    
   #------------------------------------#
 
@@ -95,7 +96,7 @@ services:
       - etcd
     environment:
       - ETCD_HOST=etcd
-    entrypoint: ./wait-for-it.sh etcd:4001 -s -- npm start
+    entrypoint: ./wait-for-it.sh etcd:4001 -s -- npm run dev
     restart: always  
   #------------------------------------#
 
