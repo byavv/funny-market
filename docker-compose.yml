@@ -15,7 +15,7 @@ services:
     depends_on:
      - profile-db
      - etcd
-    entrypoint: ./wait-for-it.sh cars-db:27017 etcd:4001 rabbitmq:5672 -s -- npm run dev    
+    entrypoint: ./wait-for-it.sh profile-db:27017 etcd:4001 -s -- npm run dev    
   #------------------------------------#
 
 
