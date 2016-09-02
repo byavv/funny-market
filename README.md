@@ -7,27 +7,25 @@ This is a proof-of-concept application, which demonstrates Microservice Architec
 
 # Documentation
 
-## Table Of Contents
+## Table of Contents
 
 - [Introduction](#introduction)
 - [Before You Start](#before-you-start)
 - [Overview](#overview)
   - [Stack](#stack)
   - [Project Structure](#project-structure) 
-- [Api Gateway and Request flow](#api-gateway-and-request-flow) 
-  - [Plugins](#plugins)
-  - [Сaveats](#caveats)
+- [Api Gateway and Request Flow](#api-gateway-and-request-flow) 
 - [Service registry](#service-registry)
 - [Messaging](#messaging)
 - [Security](#security)
-- [Continious Delivery](#continious-delivery) 
+- [Continuous Delivery](#continuous-delivery) 
 - [Testing](#testing)
 - [Development](#development)
 - [Web Client](#web-client)
 
 ## Introduction
 
-Monolithic structure is easy to understand and develop. But, it becomes a different story when we 
+Monolithic structure is easy to understand and develop. It may become a different story when we 
 try to implement more and more features and keep our app coherent. Comparing to monolith, 
 microservices architecture [has many benefits](http://eugenedvorkin.com/seven-micro-services-architecture-advantages/). 
 Because of Docker's fast growing it becomes easier and more practical to apply microservises 
@@ -38,12 +36,12 @@ to understand the requirements of the new architecture. That is why this project
 To estimate different approaches, and find optimal stack of tecnologies. That is why this solution 
 is very opinionated, because what fits to me, may not fit to you. So, if you are interested...
 
-## Before you start:
+## Before You Start:
 Install [docker](https://docs.docker.com/engine/installation/) and [docker-compose](https://docs.docker.com/compose/install/) in your system.
 
 ## Overview
 ### Stack
-#### Technologies, Being Used in This Project:
+#### Technologies Being Used in This Project:
  - [Loopback Node.js Framework](https://loopback.io/) - awesome solution for creating dynamic REST APIs without efforts.
  - [RabbitMQ](http://www.rabbitmq.com/) - as messaging platform for inter-service communication.
  - [Etcd2](https://github.com/coreos/etcd/blob/master/Documentation/v2/README.md) as key-storage for service discovery metadata.
@@ -79,7 +77,7 @@ Install [docker](https://docs.docker.com/engine/installation/) and [docker-compo
 ## API Gateway and Request Flow
 
 There are four core services, exposing external API to clients in this project. 
-In real-world systems, this number can grow quickly as well as system complexity on the whole. 
+In real-world systems, this number can grow quickly as well as system complexity as a whole. 
 Actually, dozens of services might be involved in processing request or rendering a complex webpage.
 We need some kind of routing. In theory, a client application could not use routing at all and call 
 microservices directly, but, there are serious drawbacks and limitations 
@@ -97,12 +95,11 @@ dynamic routing table. Request flow and its real management in gateway's dashboa
   <img src="doc/req_flow.png" width="800px"/>
 </div>
 
-### Plugins
 There are three plugins in our case:
  - **Authentication** uses Loopback's authentication api in part of extracting user metadata from request and 
 checking permissions. Permission checking [implements](https://en.wikipedia.org/wiki/Role-based_access_control) 
 [RBAC](https://blog.nodeswat.com/implement-access-control-in-node-js-8567e7b484d1#0685) model.
- - **Discovery**. Following from its name tries to find already [registered](#service-registry) microservice metadata in the key-storage (etcd2 in our case).
+ - **Discovery**. Requests key-storage for [registered](#service-registry) microservice metadata (etcd2 in our case).
  - **Proxy**. Using popular [node-http-proxy](https://github.com/nodejitsu/node-http-proxy) proxies request to the microservice 
  instance based on found metadata.
 
@@ -112,8 +109,7 @@ settings in the gateway dashboard. So, as you can see, gateway in reality just a
 table for the API, provided by number of microservices. Plugins, in their turn borrow main 
 responsibility for gateway's functionality.
 
-### Сaveats
-The gateway [fm-200loc](https://github.com/byavv/fm-200loc) project was build as part of this POC and is **not** production ready. It've never been used in 
+>The gateway [fm-200loc](https://github.com/byavv/fm-200loc) project was build as part of this POC and is **not** production ready. It've never been used in 
 production and has a lot of disadvantages. If I see community's interest in this project, I'll consider its maintenance.
 
 **[Back to top](#table-of-contents)**
@@ -132,7 +128,7 @@ of necessary microservice if you need.
 ## Messaging
 Next problem we need to solve is how microservices communicate to each other to process complex request.
 There are a lot of cases where we need both async and sync operations. For instance, we need confirmation on client side 
-that all client's images uploaded into Amazon S3. There are two microservices involved in this process: [fm-cars](https://github.com/byavv/fm-cars), which holds all
+that all client's images uploaded into Amazon S3. There are two microservices involved into this process: [fm-cars](https://github.com/byavv/fm-cars), which holds all
 newly created or updated car's fields and [fm-image](https://github.com/byavv/fm-image) which process upload. 
 In more complex solutions there can be dozens of microservices handling one request. The best option here ([opinionated](#introduction)) is implementing 
 [Service Bus pattern](http://microservices.io/patterns/data/event-driven-architecture.html) via RabbitMQ with ability to perform RPC operations. 
@@ -141,7 +137,7 @@ your system when one of your microservices is down. Microservices are so loosely
 know nothing about it. If one of them happen to perform some operation which relies on this fallen microservice 
 and this operation is synchronous it cause troubles. And what if there are dozens microservices involved?
 We need to hold the request living in a [queue](https://www.rabbitmq.com/ha.html) until required microservice is up. 
-That is why RabbitMq is so valuable. Other reasons (flexibility, scalability, etc.) are also important. For example, 
+Delivery guarantee is why RabbitMq is so valuable. Other reasons (flexibility, scalability, etc.) are also important. For example, 
 how to conclude, what instance of the microservice should receive a message when we have ... 10 of them. 
 Rabbit covers us here by means of its [round-robin](https://www.rabbitmq.com/tutorials/amqp-concepts.html#exchange-direct)
 routing mechanism.
@@ -155,22 +151,21 @@ As was [mentioned](#plugins) the project uses [loopback's authentication](https:
 system with custom RBAC logic. This is POC, and you unlikely want to use this as is. 
 But plugin-based approach alows you to implement you own logic of any kind. 
 The most interesting part here in terms of architecture is how your microservices share this permissions. 
-Or how one microservice know that user, requiresting api is authorized for that. 
-In this project it is done via [identity propagation](http://nordicapis.com/how-to-control-user-identity-within-microservices/) by means of JSON web token (JWT).
+Or how exact microservice know that user, requesting api is authorized for that. 
+In this project it is done via [identity propagation](http://nordicapis.com/how-to-control-user-identity-within-microservices/) by means of JSON web token* (JWT).
 The main idea is that if each microservice can understand a token, then you have distributed 
-identity mechanism which allows you to transport identity throughout your system. 
-This tokens may be issued by the gateway which performs authentication. At each microservice, 
-we might have a middleware (in our case we use node.js and express) that process the Jwt token. Jwt token may contain
+identity mechanism which allows you to transport identity throughout your system. At each microservice, 
+we might have a middleware (in our case we use node.js and express) that process the JWT token. JWT token may contain
 data in its scope field which is used to verify request permissions on microservice side.
 
-> It is not implemented directly in this POC. To keep simplicity the userId is propagated instead of JWT token.
+> *It is not implemented directly in this POC. To keep simplicity the userId is propagated instead of JWT token.
 
 **[Back to top](#table-of-contents)**
 
-## Continious Delivery
+## Continuous Delivery
 
-Continuous Delivery is very important for building robust and reliable aplications 
-particularly in relation to microservices. But there is no ready-to-use receipt of how to organize 
+Continuous Delivery is very important for building robust applications
+especially in relation to microservices. But there is no ready-to-use receipt of how to organize 
 continious delivery when your application is loosely coupled. At least because of differencies 
 of your dev team structure and way to work. This project is split to isolated git repositories 
 for each microservice, repositories for api gateway, web client and this one wich contains all 
@@ -184,7 +179,7 @@ Each microservice uses this simple and fully automated Continuous Delivery workf
 
 It is pretty standard, just as like as for typical monolithic aplication. And used for 
 testing, building and deploying microservices separately to cloud hosting provider(s), 
-managed by docker cloud service.
+managed by [Docker Cloud](https://cloud.docker.com) service.
 
 **[Back to top](#table-of-contents)**
 
@@ -193,16 +188,15 @@ managed by docker cloud service.
 There is nothing special about **unit** tests. Stick them, if your exact microservice is 
 small and do not communicate to others. But if it doesn't - you need **integration** tests. 
 Integration testing of microservices, with their interdependence, is much more complex process.
-It involves more then one microservice into the testing flow. We take an advantage 
-of **docker-compose** utility to build isolated testing environment for each microservice.
-
+Integration tests collect modules together and test them as a subsystem or part of it. 
+We take an advantage of **docker-compose** utility to build isolated testing environment for each microservice.
 In context of testing this container orchestrating tool allows us to run tests 
 within docker container with all dependencies bound together via virtual network. 
 For example see [this](https://github.com/byavv/fm-cars) microservice. To properly
-choose your integration testing strategy you have to answer two questions:
+choose your integration testing strategy these two questions have to be answered:
   > What application blocks (microservices, databases, external api, etc.) are used by the microservice under test.
 
-It is standard scheme here. As was mentioned above we use composition of services to run test of this kind.
+It is standard scheme here. As was mentioned above we use composition of services to run integration tests of this kind.
  > Which microservices use the microservice being tested. 
 
 Here is tricky. Even if our CI is green, what can guarantee that other microservices which 
@@ -256,7 +250,8 @@ cd fm-web
 # cd fm-tracker
 
 # more info about microservices commands in a appropriate repo docs:
-npm run dev
+gulp build # build client
+npm run dev # run
 
 ```
 
@@ -268,7 +263,7 @@ npm run dev
 
 Web client is Angular2 application and may be used as example for those 
 who need something a little bit more advanced then 'todo app'. 
-"Car's market app" was build as part of my 'learning angular2' process. 
+"Car's market app" was build as part of my 'Learning Angular2' process and migrated from very beta. 
 
 You may be interesting in:
   - Server rendering via angular-universal sample.
