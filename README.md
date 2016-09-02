@@ -274,4 +274,7 @@ You may be interesting in:
 
 > ...documents are not completed...
 
+- [ ] Monitoring
+- [ ] Logging
+
 **[Back to top](#table-of-contents)**
