@@ -1,4 +1,4 @@
-[DEMO](http://gateway.funny-market.57a8d92e.svc.dockerapp.io/)
+[DEMO](http://aksenchyk.com/)
 
 
 > ## Solution is under development
