@@ -1,16 +1,17 @@
 {
   "name": "funny-market",
   "version": "0.0.1",
-  "description": "proof-of-concept microservices app",  
+  "description": "proof-of-concept microservices app",
   "keywords": [
     "gateway",
     "angular 2.0",
-    "microservices",    
+    "microservices",
     "authentication",
     "loopback",
-    "node.js"    
+    "node.js"
   ],
   "author": "aksenchyk <aksenchyk.v@gmail.com>",
   "license": "MIT",
-  "dependencies": {}
+  "dependencies": {},
+  "devDependencies": {}
 }
