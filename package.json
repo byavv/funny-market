@@ -9,7 +9,7 @@
     "authentication",
     "loopback",
     "node.js"
-  ],
+  ],  
   "author": "aksenchyk <aksenchyk.v@gmail.com>",
   "license": "MIT",
   "dependencies": {},

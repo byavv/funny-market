@@ -37,7 +37,7 @@ To estimate different approaches, and find optimal stack of tecnologies. That is
 is very opinionated, because what fits to me, may not fit to you. So, if you are interested...
 
 ## Before You Start:
-Install [docker](https://docs.docker.com/engine/installation/) and [docker-compose](https://docs.docker.com/compose/install/) in your system.
+- Install [docker](https://docs.docker.com/engine/installation/) and [docker-compose](https://docs.docker.com/compose/install/) in your system.
 
 ## Overview
 ### Stack

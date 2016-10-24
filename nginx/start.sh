@@ -10,12 +10,13 @@ echo replacing ___WEB_SERVER_HOST___/$WEB_SERVER_HOST
 echo replacing ___WEB_SERVER_PORT___/$WEB_SERVER_PORT
 echo replacing ___GATEWAY_SERVER_HOST___/$GATEWAY_SERVER_HOST
 echo replacing ___GATEWAY_SERVER_PORT___/$GATEWAY_SERVER_PORT
-echo replacing ___WEBROOT_PATH___/$WEBROOT_PATH
 echo replacing ___LETSENCRYPT_HOST___/$LETSENCRYPT_HOST
 echo replacing ___LETSENCRYPT_PORT___/$LETSENCRYPT_PORT
 
 # Put your domain name into the nginx reverse proxy config.
 sed -i "s/___DOMAIN_NAME___/$DOMAIN_NAME/g" /etc/nginx/nginx.conf
+sed -i "s/___DOMAIN_NAME___/$DOMAIN_NAME/g" /etc/nginx/nginx-secure.conf
+sed -i "s/___DOMAIN_NAME___/$DOMAIN_NAME/g" /etc/nginx/system/ssl.conf
 
 # Add your web server's container IP and port into config
 sed -i "s/___WEB_SERVER_HOST___/$WEB_SERVER_HOST/g" /etc/nginx/locations/web.conf
@@ -30,12 +31,6 @@ sed -i "s/___LETSENCRYPT_PORT___/$LETSENCRYPT_PORT/g" /etc/nginx/nginx.conf
 # Add gateway container IP and port into config
 sed -i "s/___GATEWAY_SERVER_HOST___/$GATEWAY_SERVER_HOST/g" /etc/nginx/locations/gateway.conf
 sed -i "s/___GATEWAY_SERVER_PORT___/$GATEWAY_SERVER_PORT/g" /etc/nginx/locations/gateway.conf
-
-# Apply letsencrypt root folder
-sed -i "s/___WEBROOT_PATH___/$WEBROOT_PATH/g" /etc/nginx/locations/letsencrypt.conf
-
-# Put your domain name into the nginx reverse proxy config.
-sed -i "s/___DOMAIN_NAME___/$DOMAIN_NAME/g" /etc/nginx/system/ssl.conf
 
 cat /etc/nginx/nginx.conf
 echo .

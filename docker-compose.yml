@@ -2,77 +2,59 @@ version: '2'
 services:
 
   #------------- proxy -----------------#
-  nginx:
-    restart: always
-    image: aksenchyk/nginx:build
-    ports:
-      - '80:80'
-      - '443:443'   
-    environment:
-      - DOMAIN_NAME=aksenchyk.com
-      - WEB_SERVER_HOST=web
-      - WEB_SERVER_PORT=80
-      - GATEWAY_SERVER_HOST=gateway
-      - GATEWAY_SERVER_PORT=3001 
-      - WEBROOT_PATH=/etc/letsencrypt
-      - LETSENCRYPT_HOST=letsencrypt
-      - LETSENCRYPT_PORT=80
-    depends_on:
-      - gateway
-      - web 
-      - letsencrypt     
-    volumes_from:
-      - letsencrypt
-    entrypoint: ./wait-for-it.sh gateway:3001 web:3000 -s -- /start.sh
-
-  letsencrypt:
-    restart: always
-    image: 'aksenchyk/letsencrypt:build'
-    volumes:
-      - /etc/letsencrypt
-      - /var/lib/letsencrypt
-  # letsencrypt:    
-  #   image: quay.io/letsencrypt/letsencrypt:latest
-  #   command:  bash -c "sleep 6 && certbot certonly --standalone -d aksenchyk.com --text --agree-tos --email aksenchyk.v@gmail.com --server https://acme-v01.api.letsencrypt.org/directory --rsa-key-size 4096 --verbose --renew-by-default --standalone-supported-challenges http-01"
-  #   volumes:
-  #     - /etc/letsencrypt
-  #     - /var/lib/letsencrypt
-  #   ports:
-  #     - "80"
-  #     - "443"
-  #   entrypoint: ""
+  # nginx:    
+  #   entrypoint: './wait-for-it.sh gateway:3001 web:3000 -s -- /start.sh'
   #   environment:
-  #     - TERM=xterm
-  # letsencrypt:
+  #       - DOMAIN_NAME=aksenchyk.com
+  #       - GATEWAY_SERVER_HOST=gateway
+  #       - GATEWAY_SERVER_PORT=3001
+  #       - LETSENCRYPT_HOST=letsencrypt
+  #       - LETSENCRYPT_PORT=80
+  #       - WEBROOT_PATH=/etc/letsencrypt
+  #       - WEB_SERVER_HOST=web
+  #       - WEB_SERVER_PORT=3000
+  #   image: 'aksenchyk/fm-nginx:latest'
+  #   ports:
+  #       - '80:80'
+  #       - '443:443'
   #   restart: always
-  #   image: letsencrypt-webroot:build
+  #   volumes_from:
+  #       - letsencrypt
+  #   depends_on:
+  #       - gateway
+  #       - web 
+  #       - letsencrypt 
+  # letsencrypt:
   #   environment:
   #     - DOMAINS=aksenchyk.com www.aksenchyk.com
   #     - EMAIL=aksenchyk.v@gmail.com
-  #     - WEBROOT_PATH=/tmp/letsencrypt
-  #     - EXP_LIMIT=30
-  #     - CHECK_FREQ=30
-  #   depends_on:
-  #     - nginx
+  #   image: 'aksenchyk/fm-letsencrypt:latest'  
   #   volumes:
-  #     - /data/letsencrypt:/etc/letsencrypt
-  #     - /data/letsencrypt-www:/tmp/letsencrypt   
-  #   entrypoint: ./wait-for-it.sh nginx:80 -s -- /start.sh   
+  #     - /var/lib/letsencrypt
+  #     - /etc/letsencrypt
 
   #--------- gateway   -----------------#
   gateway:
     image: aksenchyk/fm-200loc:latest
     ports:
-     - "3001:3001"
-     - "5601:5601"     
+     - "3001:3001"     
     environment:        
      - HTTP_PORT=3001
-     - DBSOURCE_HOST=profile-db
-     - ETCD_HOST=etcd
+     - MONGO_HOST=profile-db
+     - REDIS_HOST=redis
+     - DEBUG=gateway,plugins:*
     depends_on:
      - profile-db
-     - etcd
-    entrypoint: ./wait-for-it.sh profile-db:27017 etcd:4001 -s -- npm run dev    
+     - redis
+    entrypoint: ./wait-for-it.sh profile-db:27017 redis:6379 -s -- npm run dev  
+
+  dashboard:
+    entrypoint: './wait-for-it.sh redis:6379 -s -- npm start -- p 5601 --link gateway:3001'
+    environment:
+      - REDIS_HOST=redis
+    image: 'aksenchyk/200loc-dashboard:latest'
+    ports:
+      - '5601:5601'  
   #------------------------------------#
 
 
@@ -83,7 +65,10 @@ services:
   #------------------------------------#
   profile-db:    
     image: mongo
-  #------------------------------------# 
+  #-------gateway persistance----------# 
+  redis:
+    image: 'redis:latest'
+  #------------------------------------#
 
 
   #-------- microservices  ------------#
