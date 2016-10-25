@@ -67,9 +67,9 @@ is very opinionated, because what fits to me, may not fit to you. So, if you are
    - [Fm-image](https://github.com/byavv/fm-image)
  - [Web client application](https://github.com/byavv/fm-web)
 
-#### The Big Picture:
+#### The Conceptual Model:
 <p align="center">
-  <img src="doc/big_image.png" width="700px"/>
+  <img src="doc/big_picture.png" width="400px"/>
 </p>
 
 **[Back to top](#table-of-contents)**
@@ -165,11 +165,9 @@ data in its scope field which is used to verify request permissions on microserv
 ## Continuous Delivery
 
 Continuous Delivery is very important for building robust applications
-especially in relation to microservices. But there is no ready-to-use receipt of how to organize 
-continious delivery when your application is loosely coupled. At least because of differencies 
-of your dev team structure and way to work. This project is split to isolated git repositories 
+especially in relation to microservices. This project is split to isolated git repositories 
 for each microservice, repositories for api gateway, web client and this one wich contains all 
-composition files for the [Compose](https://docs.docker.com/compose/) and [Docker Swarm](https://docs.docker.com/swarm/). 
+composition files for [docker-compose](https://docs.docker.com/compose/) and [docker-cloud](https://docs.docker.com/swarm/). 
 
 Each microservice uses this simple and fully automated Continuous Delivery workflow: 
 
