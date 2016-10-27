@@ -84,8 +84,8 @@ services:
     environment:     
       - ETCD_HOST=etcd
       - BROCKER_HOST=rabbitmq
-      - AWS_ACCESS_KEY=AKIAIKZKAJI7EZL3LBUQ
-      - AWS_SECRET_KEY=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
+      - AWS_ACCESS_KEY=xxxxxxxxxxx
+      - AWS_SECRET_KEY=xxxxxxxxxx+xxxxxxxxxxxxxxxxxxxxxxxxxxx
     entrypoint: ./wait-for-it.sh etcd:4001 rabbitmq:5672 -s -- npm run dev     
     restart: always    
   #------------------------------------#
