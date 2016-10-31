@@ -34,6 +34,7 @@ services:
   #     - /etc/letsencrypt
 
   #--------- gateway   -----------------#
+  #--------- to use it without nginx add '/' path directed to web server ----------#
   gateway:
     image: aksenchyk/fm-200loc:latest
     ports:

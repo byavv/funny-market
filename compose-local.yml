@@ -1,21 +1,29 @@
 version: '2'
 services:
 
-
   #--------- gateway   -----------------#
+  #--------- to use it without nginx add '/' path directed to web server ----------#
   gateway:
     image: aksenchyk/fm-200loc:build
     ports:
-     - "80:3001"
-     - "5601:5601"     
+     - "3001:3001"     
     environment:        
-     - HTTP_PORT=80
-     - DBSOURCE_HOST=profile-db
-     - ETCD_HOST=etcd
+     - HTTP_PORT=3001
+     - MONGO_HOST=profile-db
+     - REDIS_HOST=redis
+     - DEBUG=gateway,plugins:*
     depends_on:
      - profile-db
-     - etcd
-    entrypoint: ./wait-for-it.sh profile-db:27017 etcd:4001 -s -- npm run dev    
+     - redis
+    entrypoint: ./wait-for-it.sh profile-db:27017 redis:6379 -s -- npm run dev  
+
+  dashboard:
+    entrypoint: './wait-for-it.sh redis:6379 -s -- npm start -- p 5601 --link gateway:3001'
+    environment:
+      - REDIS_HOST=redis
+    image: 'aksenchyk/200loc-dashboard:build'
+    ports:
+      - '5601:5601'  
   #------------------------------------#
 
 
@@ -26,20 +34,22 @@ services:
   #------------------------------------#
   profile-db:    
     image: mongo
-  #------------------------------------# 
+  #-------gateway persistance----------# 
+  redis:
+    image: 'redis:latest'
+  #------------------------------------#
 
 
   #-------- microservices  ------------#
   #------------------------------------#
   cars:    
-    image: aksenchyk/fm-cars:latest      
-    environment:        
-     - HTTP_PORT=80   
+    image: aksenchyk/fm-cars:build
     depends_on:
       - cars-db
       - etcd
       - rabbitmq    
-    environment: 
+    environment:
+      - HTTP_PORT=3002  
       - DBSOURCE_HOST=cars-db
       - BROCKER_HOST=rabbitmq
       - ETCD_HOST=etcd    
@@ -47,14 +57,13 @@ services:
     restart: always  
   #------------------------------------#  
   profile:
-    image: aksenchyk/fm-profile:latest
-    environment:        
-     - HTTP_PORT=80    
+    image: aksenchyk/fm-profile:build      
     depends_on:      
       - etcd
       - rabbitmq
       - profile-db
     environment: 
+      - HTTP_PORT=3003
       - DBSOURCE_HOST=profile-db
       - ETCD_HOST=etcd
       - BROCKER_HOST=rabbitmq
@@ -62,30 +71,28 @@ services:
     restart: always
   #------------------------------------#
   tracker:    
-    image: aksenchyk/fm-tracker:latest
-    environment:        
-     - HTTP_PORT=80      
+    image: aksenchyk/fm-tracker:build  
     depends_on:      
       - etcd
       - rabbitmq     
-    environment:      
+    environment: 
+      - HTTP_PORT=3004       
       - ETCD_HOST=etcd
       - BROCKER_HOST=rabbitmq
     entrypoint: ./wait-for-it.sh etcd:4001 rabbitmq:5672 -s -- npm run dev
     restart: always
   #------------------------------------# 
   image:    
-    image: aksenchyk/fm-image:latest
-    environment:        
-     - HTTP_PORT=80        
+    image: aksenchyk/fm-image:build  
     depends_on:      
       - etcd
       - rabbitmq      
-    environment:     
+    environment: 
+      - HTTP_PORT=3005        
       - ETCD_HOST=etcd
       - BROCKER_HOST=rabbitmq
-      - AWS_ACCESS_KEY=AKIAIKZKAJI7EZL3LBUQ
-      - AWS_SECRET_KEY=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
+      - AWS_ACCESS_KEY=xxxxxxx
+      - AWS_SECRET_KEY=xxxxxxxxx+xxxxxxxxxxxxxxxxxxxxxxxx
     entrypoint: ./wait-for-it.sh etcd:4001 rabbitmq:5672 -s -- npm run dev     
     restart: always    
   #------------------------------------#
@@ -93,11 +100,12 @@ services:
 
   #-------- web client ----------------#
   web:
-    image: aksenchyk/fm-web:latest  
+    image: aksenchyk/fm-web:build  
     depends_on:      
       - etcd
     environment:
       - ETCD_HOST=etcd
+      - HTTP_PORT=3000 
     entrypoint: ./wait-for-it.sh etcd:4001 -s -- npm start
     restart: always  
   #------------------------------------#
@@ -115,11 +123,9 @@ services:
    
   #------------------------------------# 
   rabbitmq:    
-    build: ./broker
+    image: rabbitmq:latest
     ports:
      - '5672:5672'
      - '15672:15672'
      - '1883:1883'
   #------------------------------------#
-
- 
