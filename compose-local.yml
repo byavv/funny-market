@@ -91,8 +91,8 @@ services:
       - HTTP_PORT=3005        
       - ETCD_HOST=etcd
       - BROCKER_HOST=rabbitmq
-      - AWS_ACCESS_KEY=xxxxxxx
-      - AWS_SECRET_KEY=xxxxxxxxx+xxxxxxxxxxxxxxxxxxxxxxxx
+      - AWS_ACCESS_KEY=xxxxxxxxxxx
+      - AWS_SECRET_KEY=xxxxxxxxxx+xxxxxxxxxxxxxxxxxxxxxxxxxxx
     entrypoint: ./wait-for-it.sh etcd:4001 rabbitmq:5672 -s -- npm run dev     
     restart: always    
   #------------------------------------#
