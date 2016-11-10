@@ -121,7 +121,11 @@ network. How the storage gets this microservice metadata? When microservice star
 metadata and maintains it by means of 'heartbeat' request. If microservice goes down, **etcd** automatically
 removes it from registry. In addition **etcd** automatically balances microservices if you have more then 
 one instance of it. This feature makes scaling of this architecture very straightforward. Just run more instances 
-of necessary microservice if you need.
+of necessary microservice if you need. This is actual only if you run this infrastructure out of Docker Swarm. When Docker 1.1.12 
+released and it stared to support clustering, providing services discovery you only need to set microservice name (```cars``` for example) as target of your microservice 
+like this: ```http://cars:3044```  when configuring your api gateway entry and Docker Swarm will do the rest. 
+(this solution uses [Docker Cloud](https://cloud.docker.com) to manage services, which is Swarm in it's core).
+
 
 **[Back to top](#table-of-contents)**
 
@@ -131,7 +135,7 @@ There are a lot of cases where we need both async and sync operations. For insta
 that all client's images uploaded into Amazon S3. There are two microservices involved into this process: [fm-cars](https://github.com/byavv/fm-cars), which holds all
 newly created or updated car's fields and [fm-image](https://github.com/byavv/fm-image) which process upload. 
 In more complex solutions there can be dozens of microservices handling one request. The best option here ([opinionated](#introduction)) is implementing 
-[Service Bus pattern](http://microservices.io/patterns/data/event-driven-architecture.html) via RabbitMQ with ability to perform RPC operations. 
+[Service Bus pattern](http://microservices.io/patterns/data/event-driven-architecture.html) via RabbitMQ with ability to perform [RPC](https://www.rabbitmq.com/tutorials/tutorial-six-python.html) operations. 
 It makes solution much more complex, but there are reasons why you should pay the price. Let imagine state of 
 your system when one of your microservices is down. Microservices are so loosely coupled, that the working ones 
 know nothing about it. If one of them happen to perform some operation which relies on this fallen microservice 
